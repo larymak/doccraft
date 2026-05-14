@@ -1,0 +1,123 @@
+.link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.link:hover .card {
+  border-color: rgba(241, 190, 50, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.card {
+  background: var(--fcc-blue-dark);
+  border: 1px solid var(--fcc-blue-mid);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.completed {
+  border-color: rgba(0, 71, 27, 0.5);
+}
+
+.locked {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: none;
+  border: none;
+  text-align: left;
+  color: inherit;
+}
+
+.unitNum {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--fcc-blue-mid);
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  font-weight: 800;
+  color: var(--fcc-gold);
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--fcc-text-light);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.badgePip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid;
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.05);
+}
+
+.desc {
+  font-size: var(--text-sm);
+  color: var(--fcc-gray-400);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.stat {
+  font-size: var(--text-xs);
+  color: var(--fcc-gray-400);
+  font-weight: 600;
+}
+
+.arrow {
+  font-size: var(--text-base);
+  color: var(--fcc-gray-400);
+  flex-shrink: 0;
+  margin-top: 4px;
+  transition: color 0.15s, transform 0.15s;
+}
+
+.link:hover .arrow {
+  color: var(--fcc-gold);
+  transform: translateX(3px);
+}

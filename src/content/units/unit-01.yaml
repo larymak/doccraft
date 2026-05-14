@@ -1,0 +1,41 @@
+id: unit-01
+order: 1
+title: Knowledge Chaos and Knowledge Debt
+description: >
+  Understand what knowledge debt is, how it accumulates, and why missing or
+  stale documentation costs organizations time, trust, and key people.
+goal: >
+  Identify the five failure modes of a documentation system and calculate
+  knowledge debt for a simulated team at Northstar Apps.
+prerequisiteUnitId: null
+tier: beginner
+badge:
+  id: badge-chaos-tamer
+  label: Chaos Tamer
+  description: Identified five categories of knowledge debt and created a recovery plan
+  color: "#f1be32"
+  iconSlug: chaos-tamer
+  earnedCondition: Complete the Unit 1 boss mission with score >= 80
+totalXP: 400
+missions:
+  - u01-m01
+  - u01-m02
+  - u01-m03
+  - u01-m04
+bossMissionId: u01-m04
+contentBlocks:
+  - type: callout
+    variant: warning
+    content: >
+      When key people leave, documentation is the only bridge between what they
+      knew and what the team still needs to operate.
+  - type: text
+    content: >
+      Knowledge debt is the accumulated cost of deferred documentation. Like
+      technical debt, it compounds: the longer you wait, the worse it gets.
+      In this unit, you will learn to spot it, measure it, and start reducing it.
+  - type: callout
+    variant: tip
+    content: >
+      Knowledge debt is not just about missing docs. It also shows up as stale
+      docs, undiscoverable docs, unowned docs, and conflicting docs.

@@ -1,0 +1,252 @@
+id: u09-m01
+unitId: unit-09
+order: 1
+slug: u09-m01
+title: "Identify What Makes a Good ADR"
+scenario: >
+  A new engineer at Northstar Apps has been asked to write the team's first
+  Architecture Decision Record but has never seen one before. They have drafted
+  a list of candidate fields — some essential to every ADR, some optional but
+  useful, and some that do not belong in an ADR at all. Before you can mentor
+  them on writing ADRs, you need to sort these fields yourself and then explain
+  the purpose of each required field so the engineer understands why the structure
+  exists and is not just filling in a template.
+objectives:
+  - Identify the required fields of a well-formed Architecture Decision Record
+  - Distinguish between required, optional, and irrelevant ADR fields
+  - Explain why each required field exists and what happens if it is missing
+  - Understand how ADRs differ from meeting notes, design docs, and changelogs
+materials:
+  - id: doc-adr-example
+    filename: adr-template.md
+    title: Northstar Apps ADR Template
+    trustScore: 80
+    findabilityScore: 65
+    issues:
+      - Template is correct but engineers do not understand why each field is required
+    frontmatter:
+      title: "ADR Template — Northstar Apps"
+      doc_type: "template"
+      status: "active"
+      owner: "architecture-team"
+      last_reviewed: "2026-01-01"
+      next_review: "2026-07-01"
+      tags:
+        - adr
+        - template
+        - architecture
+    body: |
+      # ADR-{number}: {Title}
+
+      **Date:** YYYY-MM-DD
+      **Status:** Proposed | Accepted | Deprecated | Superseded by ADR-{n}
+      **Deciders:** {Names or teams who made the decision}
+
+      ## Context
+
+      {What is the problem or situation that forced this decision? What constraints exist?}
+
+      ## Decision
+
+      {What was decided? State it clearly in one or two sentences.}
+
+      ## Consequences
+
+      {What happens as a result of this decision? Include both positive and negative consequences.}
+
+      ---
+
+      ## Options Considered (optional)
+
+      {List the alternatives that were evaluated and why they were rejected.}
+
+      ## Implementation Notes (optional)
+
+      {Any technical details needed to implement the decision.}
+successCriteria:
+  - Required fields (number, title, date, status, context, decision, consequences) all sorted correctly
+  - Optional fields (options considered, implementation notes, deciders) sorted correctly
+  - Irrelevant fields sorted correctly
+  - At least one required field explanation is accurate and complete
+estimatedMinutes: 14
+prerequisiteMissionId: null
+assessments:
+  - id: u09-m01-a1
+    type: sorting
+    title: Sort ADR Fields into Required, Optional, and Irrelevant
+    description: >
+      Sort each candidate field into the correct category: required in every ADR,
+      optional but useful, or not appropriate for an ADR at all.
+    xpReward: 70
+    masteryThreshold: 80
+    debtReduction: 6
+    hints:
+      - level: 1
+        text: >
+          A required ADR field is one where its absence would make the ADR useless
+          for its primary purpose: explaining what was decided, why, and what the
+          long-term consequences are.
+      - level: 2
+        text: >
+          ADRs are about decisions, not about implementations. Fields that describe
+          how to build something belong in a design doc, not an ADR.
+    data:
+      instruction: >
+        Sort each candidate ADR field into the correct category.
+      categories:
+        - id: required
+          label: Required — Every ADR Must Have This
+          description: Without this field the ADR cannot serve its purpose of capturing and communicating an architectural decision
+        - id: optional
+          label: Optional — Useful But Not Always Needed
+          description: Adds value in many situations but not every ADR needs it
+        - id: irrelevant
+          label: Irrelevant — Does Not Belong in an ADR
+          description: This information belongs in a different document type, not an ADR
+      items:
+        - id: i1
+          text: "ADR number — a sequential identifier (e.g., ADR-042)"
+          categoryId: required
+          explanation: >
+            The ADR number provides a stable, citable reference. When an ADR is
+            superseded, the new ADR references the old one by number. Without a
+            stable identifier, ADRs cannot be linked across the docs system.
+        - id: i2
+          text: "Title — a short descriptive name for the decision"
+          categoryId: required
+          explanation: >
+            The title is how engineers find and reference the ADR. A good title
+            states what was decided: "Use PostgreSQL for the primary data store"
+            not just "Database decision."
+        - id: i3
+          text: "Date — when the decision was made"
+          categoryId: required
+          explanation: >
+            The date places the decision in historical context. A 2019 decision to
+            use a monolith is read very differently than a 2026 decision.
+            Without the date, the ADR cannot be correctly sequenced in the decision log.
+        - id: i4
+          text: "Status — Proposed, Accepted, Deprecated, or Superseded"
+          categoryId: required
+          explanation: >
+            Status is critical for anyone reading the ADR later. An ADR with no status
+            leaves the reader uncertain whether this decision is still in effect.
+            Superseded ADRs must point to their replacement.
+        - id: i5
+          text: "Context — what problem or situation forced this decision"
+          categoryId: required
+          explanation: >
+            Context is the most important field in an ADR. Decisions divorced from
+            their context look arbitrary years later. Context explains the constraints,
+            requirements, and forces that made one option better than another at that moment.
+        - id: i6
+          text: "Decision — a clear statement of what was decided"
+          categoryId: required
+          explanation: >
+            The decision field should be unambiguous. Readers should be able to
+            read this one field and know exactly what was chosen. Vague decisions
+            ("we will consider using PostgreSQL") are not useful ADRs.
+        - id: i7
+          text: "Consequences — the expected results of the decision, positive and negative"
+          categoryId: required
+          explanation: >
+            Consequences document the trade-offs accepted when the decision was made.
+            This field is what makes ADRs valuable years later — it explains what the
+            team knew they were giving up and what they expected to gain.
+        - id: i8
+          text: "Deciders — the names or teams who made the decision"
+          categoryId: optional
+          explanation: >
+            Knowing who made a decision is useful for follow-up questions, but the
+            decision, context, and consequences are more important than the names.
+            In small teams this is often obvious from the date and subject matter.
+        - id: i9
+          text: "Options considered — alternative approaches that were evaluated"
+          categoryId: optional
+          explanation: >
+            Documenting rejected options prevents future engineers from re-litigating
+            already-considered alternatives. Very useful, but not required — some
+            decisions are clear enough that the context explains why other options
+            were not viable.
+        - id: i10
+          text: "Implementation notes — code snippets and technical details for building the solution"
+          categoryId: optional
+          explanation: >
+            High-level implementation notes can be useful context, but detailed
+            technical implementation belongs in a design doc or README. An ADR
+            should focus on the decision, not the implementation.
+        - id: i11
+          text: "Sprint number — which sprint the work was completed in"
+          categoryId: irrelevant
+          explanation: >
+            Sprint numbers are project management metadata, not architectural context.
+            They belong in a ticket or release note, not an ADR. ADRs are timeless
+            records; sprint numbers are ephemeral.
+        - id: i12
+          text: "Estimated engineering hours — how long it took to implement"
+          categoryId: irrelevant
+          explanation: >
+            Implementation effort belongs in project management tools or postmortems.
+            ADRs record architectural decisions, not project costs. Future readers
+            care about the decision rationale, not the implementation hours.
+        - id: i13
+          text: "Ticket link — the Jira ticket associated with this work"
+          categoryId: irrelevant
+          explanation: >
+            Ticket links rot quickly as projects are archived and Jira instances are
+            migrated. They provide context that is already captured in the ADR's context
+            field. Ticket links do not belong as a core ADR field.
+  - id: u09-m01-a2
+    type: multiple-choice
+    title: How Does an ADR Differ from a Design Doc?
+    description: Test your understanding of when to write an ADR versus other document types.
+    xpReward: 40
+    masteryThreshold: 75
+    debtReduction: 3
+    hints:
+      - level: 1
+        text: >
+          An ADR records a decision that was made. A design doc explores options
+          and proposes a solution. They serve different purposes and different audiences.
+    data:
+      question: >
+        An engineer writes a document that lists five database options, compares their
+        performance characteristics, includes benchmark results, and recommends PostgreSQL.
+        Is this an ADR?
+      options:
+        - id: a
+          text: >
+            Yes — it makes a recommendation, which is the same as a decision.
+          isCorrect: false
+          explanation: >
+            A recommendation is not the same as a decision. ADRs record decisions
+            that have been made and accepted. This document is a design doc or
+            proposal — it becomes an ADR only after the recommendation is accepted
+            by the team and the decision is recorded separately.
+        - id: b
+          text: >
+            No — this is a design doc. The ADR should be written after the team
+            decides, recording the chosen option, the context that drove the decision,
+            and the consequences accepted.
+          isCorrect: true
+          explanation: >
+            Correct. A design doc explores options and makes a case. An ADR records
+            what was decided after that exploration is complete. The benchmark data
+            and option comparison belong in the design doc, which the ADR can reference.
+        - id: c
+          text: >
+            No — this should be a changelog entry, since it records a change to the
+            technology stack.
+          isCorrect: false
+          explanation: >
+            A changelog records what changed in a product or system, not why an
+            architectural decision was made. A decision to adopt PostgreSQL warrants
+            an ADR, not a changelog entry.
+        - id: d
+          text: >
+            It depends — if the team approves it in a meeting, it becomes an ADR automatically.
+          isCorrect: false
+          explanation: >
+            Meeting approval converts a proposal into a decision, but the ADR still
+            needs to be written as a separate, structured document. Approval in a meeting
+            does not automatically produce an ADR — someone must write it.

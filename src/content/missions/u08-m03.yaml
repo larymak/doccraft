@@ -1,0 +1,287 @@
+id: u08-m03
+unitId: unit-08
+order: 3
+slug: u08-m03
+title: "Handle Overdue Document Reviews"
+scenario: >
+  Three Northstar Apps documents have passed their next_review date and are now
+  flagged as overdue in the docs health dashboard. The engineering manager wants
+  each one triaged before the end of the week. For each document you must decide:
+  update it (the content is mostly right and worth fixing), archive it (the content
+  is obsolete and should be retired), or escalate it (the content is high-risk and
+  needs a subject-matter expert before you can decide). Each decision carries
+  different follow-up actions.
+objectives:
+  - Read overdue documents and assess whether they are worth updating, archiving, or escalating
+  - Apply the correct triage action with an appropriate rationale
+  - Understand when a documentation decision needs to be escalated to an SME
+  - Write a triage note that documents your decision and its reasoning
+materials:
+  - id: doc-overdue-1
+    filename: slack-integration-setup.md
+    title: Slack Integration Setup Guide
+    trustScore: 35
+    findabilityScore: 42
+    issues:
+      - Overdue by 4 months
+      - References Slack's legacy OAuth flow which was deprecated in 2024
+      - New hires follow this guide and get blocked when the old OAuth steps fail
+      - Owner left the company — no one has been assigned to replace them
+    frontmatter:
+      title: "Slack Integration Setup Guide"
+      doc_type: "how-to"
+      status: "active"
+      owner: "unassigned"
+      last_reviewed: "2024-10-15"
+      next_review: "2025-04-15"
+      tags:
+        - slack
+        - integration
+        - oauth
+    body: |
+      # Slack Integration Setup Guide
+
+      ## Prerequisites
+
+      You will need a Slack workspace admin account and your Northstar API key.
+
+      ## Create a Slack App
+
+      1. Go to https://api.slack.com/apps and click **Create New App**.
+      2. Choose **From scratch** and name your app.
+      3. Under **OAuth & Permissions**, add the bot token scopes: `channels:read`,
+         `chat:write`, `users:read`.
+
+      ## Install and Authorize (Legacy Flow)
+
+      4. Click **Install to Workspace**.
+      5. Copy the **OAuth Access Token** (starts with `xoxp-`).
+      6. In the Northstar dashboard, go to **Settings > Integrations > Slack**
+         and paste the `xoxp-` token.
+
+      _Note: The xoxp- token type was used in the 2023 Northstar integration.
+      Contact integrations@northstarapps.com for the new setup flow._
+  - id: doc-overdue-2
+    filename: vagrant-dev-setup.md
+    title: Local Development with Vagrant
+    trustScore: 15
+    findabilityScore: 20
+    issues:
+      - Overdue by 18 months
+      - Northstar Apps migrated to Docker 2 years ago — Vagrant is no longer used
+      - Document describes tooling that no longer exists in the platform
+      - Several engineers have added comments in PR reviews saying this is confusing new hires
+    frontmatter:
+      title: "Local Development with Vagrant"
+      doc_type: "how-to"
+      status: "active"
+      owner: "platform-engineering"
+      last_reviewed: "2024-10-01"
+      next_review: "2025-04-01"
+      tags:
+        - vagrant
+        - local-dev
+        - environment
+    body: |
+      # Local Development with Vagrant
+
+      Northstar Apps uses Vagrant to provide a consistent local development
+      environment. The Vagrantfile is maintained by the platform team.
+
+      ## Prerequisites
+
+      - VirtualBox 6.1+
+      - Vagrant 2.3+
+
+      ## Setup
+
+      ```bash
+      vagrant up
+      vagrant ssh
+      cd /var/www/platform
+      npm install
+      npm run dev
+      ```
+
+      The local stack will be available at http://192.168.56.10:3000.
+  - id: doc-overdue-3
+    filename: pci-dss-compliance-checklist.md
+    title: PCI DSS Compliance Checklist
+    trustScore: 40
+    findabilityScore: 30
+    issues:
+      - Overdue by 2 months
+      - References PCI DSS v3.2.1 — PCI DSS v4.0 was released in 2022 with significant changes
+      - Compliance documentation with potential legal and financial risk
+      - Must be reviewed by the legal team before any update
+    frontmatter:
+      title: "PCI DSS Compliance Checklist"
+      doc_type: "policy"
+      status: "active"
+      owner: "payments-team"
+      last_reviewed: "2025-10-01"
+      next_review: "2026-04-01"
+      tags:
+        - pci-dss
+        - compliance
+        - payments
+        - security
+    body: |
+      # PCI DSS Compliance Checklist
+
+      This checklist tracks Northstar Apps compliance with PCI DSS v3.2.1.
+
+      ## Requirement 1 — Install and Maintain Network Security Controls
+
+      - [x] Firewall rules documented and reviewed quarterly
+      - [x] Network segmentation in place for cardholder data environment
+
+      ## Requirement 6 — Develop and Maintain Secure Systems and Software
+
+      - [x] Vulnerability scanning monthly
+      - [ ] Penetration test completed in the last 12 months — due June 2026
+
+      _Last external audit: October 2025. Next scheduled audit: October 2026._
+successCriteria:
+  - slack-integration-setup.md triaged as "update" with correct follow-up actions specified
+  - vagrant-dev-setup.md triaged as "archive" with rationale
+  - pci-dss-compliance-checklist.md triaged as "escalate" with correct escalation target
+  - Triage notes are written for each document
+estimatedMinutes: 20
+prerequisiteMissionId: u08-m02
+assessments:
+  - id: u08-m03-a1
+    type: sorting
+    title: Triage the Overdue Documents
+    description: >
+      Sort each overdue document into the correct triage action: update, archive, or escalate.
+    xpReward: 70
+    masteryThreshold: 100
+    debtReduction: 6
+    hints:
+      - level: 1
+        text: >
+          Archive when the content describes something that no longer exists.
+          Update when the content is mostly right but needs corrections.
+          Escalate when the risk is too high to decide without an SME.
+      - level: 2
+        text: >
+          Legal and compliance documents should almost always be escalated to the
+          legal or compliance team before changes are made — not updated by engineers alone.
+    data:
+      instruction: >
+        For each overdue document, choose the correct triage action.
+      categories:
+        - id: update
+          label: Update
+          description: Content is mostly accurate and worth fixing; assign to an owner and correct the specific issues
+        - id: archive
+          label: Archive
+          description: Content is obsolete — the technology, process, or feature no longer exists; retire the document
+        - id: escalate
+          label: Escalate
+          description: High-risk content that cannot be updated safely without subject-matter expert review
+      items:
+        - id: i1
+          text: "Slack Integration Setup — references legacy OAuth flow that was deprecated; new hires are getting blocked"
+          categoryId: update
+          explanation: >
+            The guide is valuable and the integration still exists — only the OAuth flow
+            changed. Update the guide to the current token type (xoxp- → xoxb- bot tokens),
+            assign a new owner from the integrations team, and reset the review date.
+        - id: i2
+          text: "Local Development with Vagrant — Vagrant was replaced by Docker 2 years ago; no one uses Vagrant"
+          categoryId: archive
+          explanation: >
+            Vagrant is no longer used at Northstar Apps. Keeping this document "active"
+            actively harms new hires who find it and follow instructions that no longer work.
+            Archive it with a note pointing to the current Docker setup guide.
+        - id: i3
+          text: "PCI DSS Compliance Checklist — references an outdated standard version; compliance risk if wrong"
+          categoryId: escalate
+          explanation: >
+            PCI DSS compliance documentation has legal and financial risk. An engineer
+            cannot safely update this document without a legal review. Escalate to the
+            legal/compliance team and the payments team security lead.
+  - id: u08-m03-a2
+    type: writing
+    title: Write Triage Notes for All Three Documents
+    description: >
+      Write a short triage note for each document explaining your decision and
+      what the next owner needs to do. These notes go into the docs health dashboard
+      and will be read by the docs team lead and document owners.
+    xpReward: 110
+    masteryThreshold: 70
+    debtReduction: 9
+    hints:
+      - level: 1
+        text: >
+          Each triage note should state: (1) the triage action (update/archive/escalate),
+          (2) the specific reason, and (3) the next action and who should do it.
+      - level: 2
+        text: >
+          For the escalation note, name the specific person or team to escalate to
+          and explain what question they need to answer before the doc can be updated.
+    data:
+      scenarioContext: >
+        Write a triage note for each of the three overdue documents. Your notes will
+        be logged in the docs health dashboard and assigned to the relevant team.
+      docTemplate: |
+        ## Triage Notes — Overdue Review Queue
+
+        **Reviewed by:** [Your name / role]
+        **Date:** 2026-05-04
+
+        ---
+
+        ### slack-integration-setup.md
+
+        **Triage decision:** [Update / Archive / Escalate]
+
+        **Reason:** [Why you made this decision]
+
+        **Next action:** [Who does what by when]
+
+        ---
+
+        ### vagrant-dev-setup.md
+
+        **Triage decision:** [Update / Archive / Escalate]
+
+        **Reason:** [Why you made this decision]
+
+        **Next action:** [Who does what by when]
+
+        ---
+
+        ### pci-dss-compliance-checklist.md
+
+        **Triage decision:** [Update / Archive / Escalate]
+
+        **Reason:** [Why you made this decision]
+
+        **Next action:** [Who should be escalated to and what they need to decide]
+      wordCountMin: 180
+      acceptedPatterns:
+        - update
+        - archive
+        - escalate
+        - legal
+        - OAuth
+        - Vagrant
+        - Docker
+        - PCI
+        - owner
+      rubric:
+        - id: r1
+          label: Correct triage decision stated for all three documents
+          description: Each note clearly states the triage decision (update, archive, or escalate)
+          weight: 30
+        - id: r2
+          label: Specific rationale for each decision
+          description: Each note explains why that action is the right one for this document
+          weight: 35
+        - id: r3
+          label: Actionable next step with owner named
+          description: Each note specifies what happens next and who is responsible for it
+          weight: 35

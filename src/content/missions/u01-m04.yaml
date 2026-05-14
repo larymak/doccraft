@@ -1,0 +1,234 @@
+id: u01-m04
+unitId: unit-01
+order: 4
+slug: u01-m04
+title: "Boss: Help! Kai Is on Vacation"
+scenario: >
+  It's Monday morning and you are barely through your second coffee when Jordan
+  rushes over. "Small situation," she says, trying to stay calm. "Kai — our billing
+  engineer — started his two-week vacation on Friday. Spotty cell service, basically
+  unreachable. And this morning the finance team flagged a discrepancy in last month's
+  reconciliation report." She takes a breath. "Nobody else knows how to run the
+  reconciliation process. At all." She looks at you. "You've been doing great this
+  week. Can you help us figure out what we need to document — and who can own it
+  while Kai is away?" You pull up the two files she found in the wiki and take a
+  deep breath. This is exactly what you have been learning about all week.
+objectives:
+  - Read the two documents and spot the knowledge gaps
+  - Identify which gap is the most urgent right now
+  - Write a short recovery plan Jordan can take to leadership today
+materials:
+  - id: doc-billing-notes
+    filename: billing-misc-notes.md
+    title: Billing Misc Notes
+    trustScore: 10
+    findabilityScore: 5
+    issues:
+      - Informal notes, not a proper step-by-step process
+      - No owner, no date, no audience
+      - Mixes process steps, decisions, and random notes together
+      - No status field — is this current?
+    frontmatter: {}
+    body: |
+      # Billing Misc Notes
+
+      reconciliation happens every month end
+      kai runs it — ask him
+      the script is somewhere in /billing/scripts i think
+      uses the stripe API — need the secret key from 1password (ask kai for access)
+      sometimes there are rounding errors, just ignore ones under $0.50
+      had a problem in march where it double-counted refunds, kai fixed it
+      new payment processor (adyen) still not fully set up i think
+      TODO: write actual SOP for this
+  - id: doc-stripe-setup
+    filename: stripe-api-setup-OLD.md
+    title: Stripe API Setup (OLD)
+    trustScore: 8
+    findabilityScore: 15
+    issues:
+      - Filename says OLD but the status field says Active — which is it?
+      - References API v1 credentials that were rotated to v2 in 2024
+      - No owner listed
+      - Last reviewed in 2023 — over 2 years ago
+    frontmatter:
+      title: Stripe API Setup
+      status: Active
+      last_reviewed: "2023-03-15"
+    body: |
+      # Stripe API Setup
+
+      ## Credentials
+      Store the Stripe API key in the STRIPE_SECRET_KEY environment variable.
+      Use the v1 key format: sk_live_...
+
+      ## Webhook Configuration
+      Set up webhooks at: https://northstar-apps.com/webhooks/stripe
+
+      Last reviewed: March 2023
+successCriteria:
+  - Identify the highest-risk knowledge gap
+  - Write a recovery plan with a score of 70 or higher
+estimatedMinutes: 20
+prerequisiteMissionId: u01-m03
+assessments:
+  - id: u01-m04-a1
+    type: multiple-choice
+    title: What Is the Biggest Risk Right Now?
+    description: >
+      Jordan needs to know what to escalate first.
+      Based on the two documents, which gap creates the most risk today?
+    xpReward: 40
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: >
+          The finance team found a discrepancy and needs to investigate it today.
+          What makes that investigation impossible?
+    data:
+      question: >
+        Jordan asks: "If I'm walking into a meeting with the CFO in an hour,
+        what is the single biggest problem I need to tell her about?"
+        What do you say?
+      options:
+        - id: a
+          text: The Adyen payment processor setup is still incomplete
+          isCorrect: false
+          explanation: >
+            A real issue — but it's a future risk. The reconciliation discrepancy
+            is happening right now and needs an answer today.
+        - id: b
+          text: The rounding error rule ($0.50 threshold) is not written down
+          isCorrect: false
+          explanation: >
+            Worth documenting — but this rule is at least known by the team.
+            The bigger problem is that nobody can even run the process to investigate.
+        - id: c
+          text: Only Kai knows how to run the reconciliation process and access the credentials
+          isCorrect: true
+          explanation: >
+            Exactly right. The process, the script location, and the credentials are all
+            in one person's head — and that person is unreachable. The finance team
+            cannot investigate the discrepancy without this.
+        - id: d
+          text: The Stripe setup document is outdated
+          isCorrect: false
+          explanation: >
+            A stale document is a real risk — but it's secondary. The immediate crisis
+            is that nobody can run the reconciliation process at all.
+  - id: u01-m04-a2
+    type: writing
+    title: Write the Recovery Plan
+    description: >
+      Jordan needs a short document she can take to leadership today. Fill in
+      the template below — replace each [bracket] with your own words.
+
+
+      Not sure what type of document to recommend? Here are three simple options:
+
+      • Step-by-step process guide — how to do something, in order
+
+      • Reference doc — facts, rules, or policies people need to look up
+
+      • Troubleshooting guide — what to do when something goes wrong
+
+
+      There is no single right answer. Just write what makes sense based on
+      what you found in the two documents above.
+    xpReward: 150
+    masteryThreshold: 70
+    debtReduction: 12
+    trustDelta: 15
+    hints:
+      - level: 1
+        text: >
+          Look at billing-misc-notes.md — what three things are mentioned that
+          nobody else knows how to do? Each one is a gap worth listing.
+      - level: 2
+        text: >
+          For each gap, ask yourself: what document would fix this? A step-by-step
+          guide for the reconciliation process? A reference doc for the credentials?
+          Write that down next to each gap.
+      - level: 3
+        text: >
+          For "Actions for Right Now," think about what can be done TODAY without
+          Kai. Example: can someone else locate the script? Can a manager get
+          temporary access to 1Password?
+    data:
+      scenarioContext: >
+        Using the two documents you reviewed, fill in the plan below.
+        Replace each [bracket] with your own words based on what you found.
+        Aim for at least 80 words.
+      docTemplate: |
+        # Billing Knowledge Recovery Plan
+
+        Prepared by: [Your name]
+        Date: 2026-05-06
+
+        ## What Happened
+
+        [Write 2-3 sentences: what is the situation and why is it urgent today?]
+
+        ## Knowledge Gaps Found
+
+        **Gap 1:** [What knowledge or process is missing or only known to Kai?]
+        - Risk level: [High / Medium / Low]
+        - What we need: [Describe the document — e.g., a step-by-step process guide]
+        - Who should own it: [A role or team — e.g., billing team lead]
+        - When: [This week / Next sprint]
+
+        **Gap 2:** [What else is missing?]
+        - Risk level:
+        - What we need:
+        - Who should own it:
+        - When:
+
+        **Gap 3:** [Any other gaps you noticed?]
+        - Risk level:
+        - What we need:
+        - Who should own it:
+        - When:
+
+        ## Actions for Right Now
+
+        1. [What can someone do TODAY to reduce the immediate risk?]
+        2. [What should happen this week?]
+        3. [What can wait until next sprint?]
+
+        ## How We Know It Is Fixed
+
+        - [ ] [What does success look like?]
+        - [ ] [One more thing that means we are done]
+      wordCountMin: 80
+      acceptedPatterns:
+        - reconciliation
+        - risk
+        - process
+        - missing
+        - owner
+        - document
+        - credentials
+        - billing
+      rubric:
+        - id: r1
+          label: Situation clearly described
+          description: Explains what happened and why it is urgent right now
+          weight: 20
+          checkFn: keyword-check
+        - id: r2
+          label: Knowledge gaps identified
+          description: At least two specific gaps are named with their risk level
+          weight: 30
+          checkFn: keyword-check
+        - id: r3
+          label: Documents recommended
+          description: Each gap has a suggested document type and an owner
+          weight: 20
+        - id: r4
+          label: Actions listed
+          description: At least two concrete next steps are included
+          weight: 20
+        - id: r5
+          label: Done criteria included
+          description: The plan says what success looks like
+          weight: 10

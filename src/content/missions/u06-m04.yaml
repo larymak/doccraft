@@ -1,0 +1,380 @@
+id: u06-m04
+unitId: unit-06
+order: 4
+slug: u06-m04
+title: "Boss: Full Metadata Overhaul"
+scenario: >
+  The Northstar Apps docs health dashboard has flagged two high-traffic documents
+  as critically under-maintained. The first is the Mobile SDK getting-started guide —
+  it has stale metadata, wrong doc_type, and tags that match nothing users search for.
+  The second is an internal API change log that has never had front matter at all.
+  Both documents are read hundreds of times per week. Your task is to perform a full
+  metadata overhaul on both, then write a brief metadata standards memo explaining
+  the three most important rules you applied so future contributors get it right.
+objectives:
+  - Perform a complete metadata audit on two high-traffic documents
+  - Fix doc_type, status, tags, audience, and review dates on the first document
+  - Add full front matter from scratch to the second document
+  - Write a short standards memo explaining metadata best practices applied
+materials:
+  - id: doc-mobile-sdk-start
+    filename: mobile-sdk-getting-started.md
+    title: Getting Started
+    trustScore: 42
+    findabilityScore: 22
+    issues:
+      - Title is just "Getting Started" with no product context — ambiguous in search
+      - doc_type is "reference" but the content is a tutorial
+      - status is "draft" despite being the primary mobile onboarding doc for 10 months
+      - Tags are all internal codenames — no user-facing search terms
+      - audience field is missing entirely
+      - next_review is 3 years in the future
+    frontmatter:
+      title: "Getting Started"
+      doc_type: "reference"
+      status: "draft"
+      owner: "mobile-team"
+      last_reviewed: "2025-07-15"
+      next_review: "2029-07-15"
+      tags:
+        - falcon-sdk
+        - ios-client
+        - android-client
+    body: |
+      # Getting Started
+
+      This guide walks you through installing the Northstar Mobile SDK and making
+      your first API call.
+
+      ## Requirements
+
+      - iOS 15+ or Android 10+
+      - Xcode 14+ or Android Studio Flamingo+
+      - A Northstar Apps API key (obtain from the developer dashboard)
+
+      ## Installation
+
+      ### iOS (Swift Package Manager)
+
+      In Xcode, go to **File > Add Packages** and enter:
+
+      ```
+      https://github.com/northstarapps/sdk-ios
+      ```
+
+      Select version `2.4.0` or higher.
+
+      ### Android (Gradle)
+
+      Add to your `build.gradle`:
+
+      ```groovy
+      implementation 'com.northstarapps:sdk-android:2.4.0'
+      ```
+
+      ## Your First API Call
+
+      ```swift
+      import NorthstarSDK
+
+      let client = NorthstarClient(apiKey: "YOUR_API_KEY")
+      client.getAccountSummary { result in
+          switch result {
+          case .success(let summary): print(summary.balance)
+          case .failure(let error): print(error.localizedDescription)
+          }
+      }
+      ```
+
+      ## Next Steps
+
+      - Read the Authentication guide
+      - Explore the SDK reference
+      - Join #mobile-developers on Slack for help
+  - id: doc-api-changelog
+    filename: api-changelog.md
+    title: API Changelog
+    trustScore: 35
+    findabilityScore: 8
+    issues:
+      - No front matter at all — search indexer has skipped it entirely
+      - High-traffic document (engineers check it after every deploy)
+      - No owner assigned — unclear who updates it when the API changes
+      - Changelog entries lack consistent date formatting
+    frontmatter: {}
+    body: |
+      # API Changelog
+
+      ## v2.9.0
+      **Breaking:** The `GET /payments` endpoint now requires the `currency` query
+      parameter. Requests without it return a 400 error. Update all callers.
+
+      New: Added `POST /refunds/bulk` endpoint for processing up to 100 refunds
+      in a single request.
+
+      ## v2.8.2
+      Fixed: Resolved a race condition in webhook delivery that caused duplicate
+      `payment.completed` events under high load.
+
+      ## v2.8.0
+      **Breaking:** Removed the deprecated `POST /legacy/charge` endpoint.
+      Use `POST /payments` instead.
+
+      New: Added cursor-based pagination to `GET /customers`. The `page` parameter
+      is now deprecated; migrate to `cursor` before v3.0.
+
+      ## v2.7.1
+      Fixed: The `refund.completed` webhook now correctly includes the
+      `original_payment_id` field that was missing in v2.7.0.
+successCriteria:
+  - mobile-sdk-getting-started.md has corrected doc_type (tutorial), status (active), and a meaningful title
+  - mobile-sdk-getting-started.md tags include user-facing terms (mobile, sdk, ios, android, getting-started)
+  - api-changelog.md has complete front matter including owner, doc_type (changelog), audience, and review dates
+  - Writing task memo scores 70 or higher
+estimatedMinutes: 25
+prerequisiteMissionId: u06-m03
+assessments:
+  - id: u06-m04-a1
+    type: metadata-edit
+    title: Overhaul the Mobile SDK Doc
+    description: Fix all metadata problems in mobile-sdk-getting-started.md.
+    xpReward: 90
+    masteryThreshold: 80
+    debtReduction: 9
+    findabilityDelta: 20
+    trustDelta: 15
+    hints:
+      - level: 1
+        text: Start with the biggest trust-killers first — status "draft" and a 3-year review gap.
+      - level: 2
+        text: >
+          The doc teaches the reader step-by-step how to install and call the SDK.
+          That is the definition of a tutorial, not a reference.
+      - level: 3
+        text: >
+          A title like "Getting Started with the Northstar Mobile SDK" includes the product
+          name and the action — both critical for search relevance.
+    data:
+      scenarioContext: >
+        Fix all metadata issues in mobile-sdk-getting-started.md. The content is
+        accurate and widely used — only the metadata is broken.
+      initialFrontmatter:
+        title: "Getting Started"
+        doc_type: "reference"
+        status: "draft"
+        owner: "mobile-team"
+        last_reviewed: "2025-07-15"
+        next_review: "2029-07-15"
+        tags:
+          - falcon-sdk
+          - ios-client
+          - android-client
+      requiredFields:
+        - title
+        - doc_type
+        - status
+        - owner
+        - audience
+        - last_reviewed
+        - next_review
+        - tags
+        - canonical
+      optionalFields:
+        - description
+        - synonyms
+      validationRules:
+        - field: title
+          rule: contains
+          value: "SDK"
+          feedback: >
+            The title must include "SDK" and ideally "Mobile" — "Getting Started" alone
+            is ambiguous and returns no results for mobile or sdk searches.
+        - field: doc_type
+          rule: oneOf
+          value: "tutorial"
+          feedback: >
+            This document walks through installation and a first API call step-by-step.
+            That is a tutorial, not a reference. Reference docs list specifications
+            without teaching.
+        - field: status
+          rule: oneOf
+          value: "active"
+          feedback: This document has been in production use for 10 months. Set status to "active".
+        - field: next_review
+          rule: withinMonths
+          value: "12"
+          feedback: >
+            A 3-year review gap is far too long for a getting-started guide in an
+            actively-developed SDK. Set next_review within 12 months of last_reviewed.
+        - field: tags
+          rule: contains
+          value: "mobile"
+          feedback: Add "mobile" to tags — it is the primary user-language search term.
+        - field: tags
+          rule: minItems
+          value: "5"
+          feedback: >
+            Include at least 5 tags: the product (mobile, sdk), platforms (ios, android),
+            and the use case (getting-started, tutorial).
+        - field: audience
+          rule: nonempty
+          feedback: Set audience to "developers" or "mobile-developers" so routing works correctly.
+  - id: u06-m04-a2
+    type: metadata-edit
+    title: Add Front Matter to the API Changelog
+    description: Add complete front matter to api-changelog.md from scratch.
+    xpReward: 80
+    masteryThreshold: 80
+    debtReduction: 8
+    findabilityDelta: 18
+    hints:
+      - level: 1
+        text: >
+          A changelog is its own doc_type. Think about who owns the API — that team
+          should own the changelog too.
+      - level: 2
+        text: >
+          Changelogs are read after every deploy by engineers checking what changed.
+          The audience is narrow and technical.
+    data:
+      scenarioContext: >
+        api-changelog.md has no front matter at all. Add a complete front matter
+        block appropriate for a high-traffic technical changelog document.
+      initialFrontmatter: {}
+      requiredFields:
+        - title
+        - doc_type
+        - status
+        - owner
+        - audience
+        - last_reviewed
+        - next_review
+        - tags
+        - canonical
+      optionalFields:
+        - description
+        - related_docs
+      validationRules:
+        - field: title
+          rule: nonempty
+          feedback: Add a descriptive title such as "Northstar Apps API Changelog".
+        - field: doc_type
+          rule: oneOf
+          value: "changelog"
+          feedback: >
+            This document is a changelog — a dated list of version changes.
+            Use doc_type "changelog", not "reference" or "how-to".
+        - field: status
+          rule: oneOf
+          value: "active"
+          feedback: The changelog is actively updated. Set status to "active".
+        - field: owner
+          rule: nonempty
+          feedback: >
+            The payments and platform API team should own this document. Assign the team
+            that is responsible for making API changes.
+        - field: tags
+          rule: contains
+          value: "api"
+          feedback: Tags must include "api" as the primary search term.
+        - field: tags
+          rule: contains
+          value: "changelog"
+          feedback: Tags must include "changelog" so engineers can filter to changelogs specifically.
+        - field: next_review
+          rule: withinMonths
+          value: "3"
+          feedback: >
+            A changelog for an active API should be reviewed quarterly at most.
+            API changes can make old changelog entries misleading quickly.
+  - id: u06-m04-a3
+    type: writing
+    title: Write a Metadata Standards Memo
+    description: >
+      Write a short internal memo to Northstar Apps documentation contributors
+      explaining the three most important metadata rules you applied in this mission.
+      New contributors will read this before submitting their first doc.
+    xpReward: 140
+    masteryThreshold: 70
+    debtReduction: 11
+    trustDelta: 20
+    hints:
+      - level: 1
+        text: >
+          Write for a new engineer, not for a docs expert. Assume they know Markdown
+          but have never thought about metadata or searchability.
+      - level: 2
+        text: >
+          Each rule should include a "why it matters" sentence. Rules without rationale
+          get ignored.
+      - level: 3
+        text: >
+          Use a concrete example for at least one rule. "Don't title a doc 'Getting Started'
+          — say 'Getting Started with the Northstar Mobile SDK'" is much more memorable
+          than an abstract rule.
+    data:
+      scenarioContext: >
+        You have just finished auditing two high-traffic documents and fixing their
+        metadata. Write a short memo to the Northstar Apps engineering team explaining
+        the three most important metadata rules contributors must follow when submitting
+        new documentation.
+      docTemplate: |
+        # Northstar Apps Documentation Metadata Standards
+
+        **To:** All contributors
+        **From:** Documentation Systems
+        **Date:** 2026-05-04
+        **Subject:** Three metadata rules every doc must follow
+
+        ## Why metadata matters
+
+        [1-2 sentences explaining why metadata is not just bureaucracy]
+
+        ## Rule 1: [Title your rule]
+
+        [Explanation of the rule]
+
+        **Why it matters:** [1 sentence]
+
+        **Example:** [Concrete good/bad example]
+
+        ## Rule 2: [Title your rule]
+
+        [Explanation of the rule]
+
+        **Why it matters:** [1 sentence]
+
+        ## Rule 3: [Title your rule]
+
+        [Explanation of the rule]
+
+        **Why it matters:** [1 sentence]
+
+        ---
+        Questions? Post in #docs-systems on Slack.
+      wordCountMin: 200
+      acceptedPatterns:
+        - status
+        - title
+        - tags
+        - search
+        - owner
+        - review
+        - audience
+      rubric:
+        - id: r1
+          label: Three distinct rules stated clearly
+          description: Memo covers exactly three rules, each in its own section, with a clear imperative statement
+          weight: 25
+        - id: r2
+          label: Rationale provided for each rule
+          description: Each rule includes a "why it matters" explanation that connects to user impact or system behavior
+          weight: 30
+        - id: r3
+          label: At least one concrete example
+          description: At least one rule includes a specific good/bad example, not just abstract guidance
+          weight: 25
+        - id: r4
+          label: Appropriate tone and format for an internal memo
+          description: Written for engineers unfamiliar with docs systems; clear, concise, not condescending
+          weight: 20

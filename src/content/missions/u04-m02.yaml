@@ -1,0 +1,188 @@
+id: u04-m02
+unitId: unit-04
+order: 2
+slug: u04-m02
+title: What Is This Runbook Missing?
+scenario: >
+  The platform team's on-call engineer got paged at 3am for a checkout API error spike.
+  She opened the checkout runbook and could not complete the diagnosis because it was
+  missing three critical sections. By the time she figured out what to do, the incident
+  had lasted 47 minutes longer than it should have. Review the runbook and identify
+  every gap that made it fail under pressure.
+objectives:
+  - Evaluate a runbook against a quality rubric for operational documents
+  - Identify which required runbook sections are missing
+  - Explain the operational consequence of each missing section
+materials:
+  - id: doc-checkout-runbook
+    filename: runbook-checkout-api.md
+    title: Runbook — Checkout API Error Spike
+    trustScore: 28
+    findabilityScore: 60
+    issues:
+      - No severity levels defined — engineer does not know if they are in a P1 or P3
+      - No diagnostic decision tree — flat list of checks with no if/then logic
+      - No escalation path — who to call if the engineer cannot resolve in 30 minutes
+      - No rollback procedure — what to do if a fix makes things worse
+      - No "last known good state" reference — no baseline to compare against
+      - Owner listed but no backup owner
+    frontmatter:
+      title: Runbook — Checkout API Error Spike
+      status: Active
+      owner: Platform Engineering
+      last_reviewed: "2025-09-04"
+    body: |
+      # Runbook — Checkout API Error Spike
+
+      Use this runbook when Datadog alerts on elevated error rates in the checkout API.
+
+      ## Checks to Run
+
+      1. Check Datadog for the error rate graph — is it above the alert threshold?
+      2. Check the recent deploys in GitHub Actions — was anything deployed in the last 2 hours?
+      3. Check Redis connection pool status in the platform dashboard
+      4. Check the Postgres connection count — it should be below 80
+      5. Check the Stripe webhook endpoint — is it responding?
+      6. Check the CDN status page for any upstream issues
+      7. Look at the application logs in CloudWatch for error patterns
+
+      ## Common Fixes
+
+      - If Redis is degraded: restart the cache warmer job in GitHub Actions
+      - If Postgres connections are high: kill idle connections via the maintenance script
+      - If a recent deploy is suspected: roll back using the GitHub Actions rollback workflow
+
+      ## After the Incident
+
+      Write a postmortem within 48 hours.
+      Post the incident summary in #incidents.
+successCriteria:
+  - All missing sections correctly identified in the sorting task
+  - Multiple-choice question answered correctly
+  - Sorting task score of 75 or higher
+estimatedMinutes: 16
+prerequisiteMissionId: u04-m01
+assessments:
+  - id: u04-m02-a1
+    type: sorting
+    title: What Is Missing from This Runbook?
+    description: Sort each item into whether it is present in the runbook, missing and critical, or missing but nice-to-have.
+    xpReward: 90
+    masteryThreshold: 75
+    debtReduction: 8
+    hints:
+      - level: 1
+        text: A runbook is used by someone under pressure at 2am. Critical gaps are things that will cause the engineer to pause, guess, or make the incident worse.
+      - level: 2
+        text: "Nice-to-have gaps are things that would improve the runbook but whose absence does not directly extend the incident."
+    data:
+      instruction: >
+        Sort each runbook element into its correct status for the Checkout API runbook.
+      categories:
+        - id: present
+          label: Present
+          description: This element already exists in the runbook
+        - id: missing-critical
+          label: Missing — Critical
+          description: Absent and its absence directly extends or worsens the incident
+        - id: missing-nice
+          label: Missing — Nice to Have
+          description: Absent but its absence does not directly block incident resolution
+      items:
+        - id: i1
+          text: Severity levels with definitions and response time expectations
+          categoryId: missing-critical
+          explanation: >
+            Without severity levels, the on-call engineer cannot calibrate their urgency.
+            Should they wake up the engineering lead at 3am or handle it alone? A P1 vs.
+            P3 distinction is critical to appropriate response.
+        - id: i2
+          text: Diagnostic decision tree with if/then logic (if X shows Y, then check Z)
+          categoryId: missing-critical
+          explanation: >
+            The runbook lists checks as a flat numbered list but gives no guidance on what
+            to do when a check reveals a problem. "Check Postgres connections" with no follow-up
+            logic forces the engineer to improvise under pressure.
+        - id: i3
+          text: Escalation path — who to contact and when if the engineer cannot resolve
+          categoryId: missing-critical
+          explanation: >
+            The on-call engineer has no documented escalation path. If none of the common
+            fixes work after 30 minutes, they are stuck. The missing escalation section is
+            why this incident ran 47 minutes longer than it should have.
+        - id: i4
+          text: Rollback procedure — what to do if a fix attempt makes things worse
+          categoryId: missing-critical
+          explanation: >
+            The runbook mentions rollback for deploys but does not describe the rollback
+            procedure for the Redis or Postgres fixes. A failed fix can extend a P1 into a P0.
+        - id: i5
+          text: List of recent deploys in GitHub Actions as a check
+          categoryId: present
+          explanation: Step 2 in the runbook covers checking recent deploys. This is present.
+        - id: i6
+          text: Redis and Postgres checks
+          categoryId: present
+          explanation: Steps 3 and 4 cover Redis and Postgres. These checks are present, even though they lack decision logic.
+        - id: i7
+          text: After-incident postmortem reminder
+          categoryId: present
+          explanation: The "After the Incident" section covers postmortem and incident channel notification. Present.
+        - id: i8
+          text: Baseline metrics — what normal error rates, connection counts, and response times look like
+          categoryId: missing-nice
+          explanation: >
+            Knowing what "normal" looks like would help the engineer calibrate their diagnosis faster,
+            but the runbook checks still work without it. This is a useful enhancement, not a critical gap.
+        - id: i9
+          text: Contact information for the checkout team product manager
+          categoryId: missing-nice
+          explanation: >
+            A PM contact might be useful for customer communication during a prolonged incident, but
+            it is not something the on-call engineer needs to resolve the technical problem.
+  - id: u04-m02-a2
+    type: multiple-choice
+    title: The Most Dangerous Missing Section
+    description: Of all the missing sections, which one most directly caused the 47-minute delay?
+    xpReward: 50
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: Think about the moment the engineer finished all the checks and none of the common fixes worked. What happened next?
+    data:
+      question: >
+        The on-call engineer ran all seven checks and tried two of the three common fixes.
+        Neither worked. The incident ran 47 minutes longer than expected. Which missing
+        section most directly caused this delay?
+      options:
+        - id: a
+          text: Missing severity levels
+          isCorrect: false
+          explanation: >
+            Severity levels help calibrate urgency and response, but the engineer already knew
+            this was serious — checkout was failing for customers. The missing levels added
+            ambiguity but did not cause the 47-minute delay.
+        - id: b
+          text: Missing diagnostic decision tree
+          isCorrect: false
+          explanation: >
+            A decision tree would have helped the engineer work through the checks faster, but
+            she did complete all the checks. The bottleneck was not diagnosis speed — it was
+            what happened after diagnosis failed.
+        - id: c
+          text: Missing escalation path
+          isCorrect: true
+          explanation: >
+            Correct. After the common fixes did not work, the engineer had no documented
+            escalation path. She spent 47 minutes searching Slack for the right person to
+            contact, trying one person who didn't respond, and finally finding the right
+            engineer through a chain of DMs. An escalation section with names, roles, and
+            contact methods would have resolved this in minutes.
+        - id: d
+          text: Missing rollback procedure
+          isCorrect: false
+          explanation: >
+            A rollback procedure matters if a fix attempt makes things worse. In this case
+            the fixes did not make things worse — they just did not work. The delay was in
+            not knowing who to call next.

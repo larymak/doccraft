@@ -1,0 +1,212 @@
+.page {
+  padding: var(--space-8) 0;
+}
+
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.spinnerRing {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--fcc-gold);
+  border-radius: var(--radius-full);
+  animation: spin 0.8s linear infinite;
+}
+
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.welcomeTitle {
+  font-size: var(--text-3xl);
+  font-weight: 900;
+  color: var(--fcc-text-light);
+  margin: 0;
+}
+
+.welcomeTitle span {
+  color: var(--fcc-gold);
+}
+
+.streakBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  background: rgba(241, 190, 50, 0.1);
+  border: 1px solid var(--fcc-gold);
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--fcc-gold);
+}
+
+.debtSection {
+  margin-bottom: var(--space-8);
+}
+
+.sectionTitle {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--fcc-text-light);
+  margin: 0 0 var(--space-4);
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.statCard {
+  background: var(--fcc-blue-dark);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.statLabel {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fcc-gray-400);
+  font-weight: 700;
+}
+
+.statValue {
+  font-size: var(--text-3xl);
+  font-weight: 900;
+  color: var(--fcc-gold);
+  line-height: 1;
+}
+
+.statSub {
+  font-size: var(--text-xs);
+  color: var(--fcc-gray-400);
+}
+
+.continueRow {
+  margin-bottom: var(--space-8);
+}
+
+.continueBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
+  background: var(--fcc-gold);
+  color: var(--fcc-navy);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+
+.continueBtn:hover {
+  background: var(--fcc-gold-light);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.badgesSection,
+.unitsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+
+.noBadges {
+  color: var(--fcc-gray-400);
+  font-size: var(--text-sm);
+  font-style: italic;
+  padding: var(--space-4);
+  background: var(--fcc-blue-dark);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.unitProgressList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.unitProgressItem {
+  background: var(--fcc-blue-dark);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+}
+
+.unitProgressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.unitProgressName {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--fcc-text-light);
+}
+
+.unitProgressPct {
+  font-size: var(--text-xs);
+  color: var(--fcc-gold);
+  font-weight: 700;
+}
+
+.unitProgressLocked {
+  font-size: var(--text-xs);
+  color: var(--fcc-gray-400);
+  font-style: italic;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .statsRow {
+    grid-template-columns: 1fr;
+  }
+
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}

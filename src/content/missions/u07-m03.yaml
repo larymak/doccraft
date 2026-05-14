@@ -1,0 +1,243 @@
+id: u07-m03
+unitId: unit-07
+order: 3
+slug: u07-m03
+title: "Review a Pull Request for the Onboarding Guide"
+scenario: >
+  A senior engineer has opened a pull request updating the backend engineer
+  onboarding guide. The PR adds a new "Local Development Setup" section and
+  removes a section about the old Vagrant-based workflow. You have been assigned
+  as the reviewer. Your job is to read the diff carefully and flag the issues
+  that need to be addressed before this merges — specifically the three
+  documentation quality problems that would affect new hires reading the doc.
+objectives:
+  - Read a document diff and identify documentation-specific review concerns
+  - Distinguish between style preferences and blocking doc quality issues
+  - Write actionable reviewer comments that explain what to fix and why
+  - Identify accessibility and accuracy issues, not just formatting nits
+materials:
+  - id: doc-pr-diff
+    filename: onboarding-pr-diff.md
+    title: PR Diff — Backend Onboarding Guide Update
+    trustScore: 0
+    findabilityScore: 0
+    issues:
+      - PR introduces three documentation quality problems that must be caught in review
+    frontmatter: {}
+    body: |
+      # PR #847 — Update backend onboarding guide
+
+      **Branch:** feat/NP-2201-update-backend-onboarding
+      **Author:** jamie.chen@northstarapps.com
+      **Reviewer:** [you]
+
+      ## Changed file: docs/onboarding/backend-engineer.md
+
+      ### Removed section (Vagrant Setup — deprecated)
+
+      ```diff
+      - ## Local Development (Vagrant)
+      - Set up your Vagrant environment by running `vagrant up`.
+      - The Vagrant image is pre-configured with all dependencies.
+      ```
+
+      ### Added section (Docker Setup — new)
+
+      ```diff
+      + ## Local Development Setup
+      +
+      + Install Docker Desktop 4.x and then run:
+      +
+      + ```
+      + docker compose up -d
+      + ```
+      +
+      + Once the stack is running, open the internal dashboard at the link
+      + in the Confluence page: https://northstar.atlassian.net/wiki/spaces/ENG/pages/48291
+      +
+      + For troubleshooting, see the platform team's runbook.
+      ```
+
+      ### Updated prerequisites section
+
+      ```diff
+      - You will need Git 2.38+, Node.js 18 LTS, and Docker Desktop.
+      + You will need git, node, and docker.
+      ```
+
+      ### Updated metadata
+
+      ```diff
+      - last_reviewed: "2025-08-01"
+      - next_review: "2026-02-01"
+      + last_reviewed: "2026-05-04"
+      + next_review: "2026-11-04"
+      ```
+successCriteria:
+  - Identifies all three documentation quality issues in the diff
+  - Each issue is flagged with a specific line reference and an explanation
+  - Comments are actionable — they tell the author what to do, not just what is wrong
+  - Review does not flag the metadata update as an issue (that part is correct)
+estimatedMinutes: 20
+prerequisiteMissionId: u07-m02
+assessments:
+  - id: u07-m03-a1
+    type: sorting
+    title: Is This a Blocking Issue or a Non-Issue?
+    description: >
+      Sort each observation about the PR into "blocking — must fix before merge"
+      or "acceptable — not a documentation quality problem".
+    xpReward: 60
+    masteryThreshold: 80
+    debtReduction: 5
+    hints:
+      - level: 1
+        text: >
+          A blocking doc issue is one that would cause a new hire to fail, get confused,
+          or be blocked when following the document. Style preferences are not blocking.
+      - level: 2
+        text: >
+          External links to Confluence pages are a documentation debt risk — if the
+          page moves or requires separate access, the doc becomes useless.
+    data:
+      instruction: >
+        Sort each observation about the PR. Some are real doc quality problems that
+        must be fixed before merge. Others are not documentation issues at all.
+      categories:
+        - id: blocking
+          label: Blocking — Must Fix Before Merge
+          description: This issue would cause a new hire to fail, be confused, or get blocked
+        - id: acceptable
+          label: Acceptable — Not a Blocking Issue
+          description: This is either correct, a minor preference, or not a documentation concern
+      items:
+        - id: i1
+          text: >
+            The Confluence link (https://northstar.atlassian.net/wiki/...) may not be
+            accessible to new hires who have not yet been granted Confluence access
+          categoryId: blocking
+          explanation: >
+            New hires follow onboarding docs before IT provisioning is complete.
+            A link to a Confluence page that requires access they do not yet have
+            will block them during setup. The content must either be included inline
+            or linked to a public docs site page.
+        - id: i2
+          text: >
+            The code block for "docker compose up -d" has no language identifier —
+            it will not get syntax highlighting on the docs site
+          categoryId: blocking
+          explanation: >
+            Missing language identifiers on code blocks are a documentation quality
+            issue. While minor here (it is a short command), it also signals the author
+            may have more unfenced code elsewhere. Flag it with the fix: add "bash"
+            after the opening triple-backtick.
+        - id: i3
+          text: >
+            The prerequisites section changed from "Git 2.38+, Node.js 18 LTS, Docker Desktop"
+            to "git, node, and docker" — removing version numbers and capitalisation
+          categoryId: blocking
+          explanation: >
+            Version numbers in prerequisites are not nit-picks — they prevent new
+            hires from installing incompatible versions. Removing "2.38+", "18 LTS",
+            and "Desktop" makes the prerequisites less useful and potentially misleading.
+        - id: i4
+          text: >
+            The "for troubleshooting, see the platform team's runbook" line does not
+            include a link to the runbook
+          categoryId: blocking
+          explanation: >
+            Referring a reader to a document without linking to it forces them to
+            search for it at exactly the moment they are already frustrated by a broken
+            environment. This is a blocking issue — add the link.
+        - id: i5
+          text: >
+            The metadata last_reviewed and next_review dates were updated to today
+          categoryId: acceptable
+          explanation: >
+            Updating review dates when you make substantive changes is exactly correct
+            practice. This is not an issue — it is good docs hygiene.
+        - id: i6
+          text: >
+            The Vagrant section was removed without being archived or redirected
+          categoryId: acceptable
+          explanation: >
+            Removing deprecated content is good docs practice. Vagrant is no longer
+            used at Northstar Apps, so removing its section cleans up the doc.
+            No redirect is needed for a removed section within a document.
+  - id: u07-m03-a2
+    type: writing
+    title: Write Your Reviewer Comments
+    description: >
+      Write three specific reviewer comments for the PR — one for each blocking
+      issue. Each comment should cite the specific line or section, explain what
+      the problem is, and tell the author exactly what to do to fix it.
+    xpReward: 110
+    masteryThreshold: 70
+    debtReduction: 8
+    hints:
+      - level: 1
+        text: >
+          A good reviewer comment has three parts: location (which line or section),
+          problem (what is wrong), and fix (what to do instead).
+      - level: 2
+        text: >
+          Be direct but collegial. "This link may not be accessible to new hires
+          who haven't been provisioned yet — can you inline this content or link to
+          the public docs page instead?" is better than "broken link".
+    data:
+      scenarioContext: >
+        Write three reviewer comments for PR #847. Each comment should address one
+        of the blocking documentation quality issues you identified. Write them as
+        you would in a real GitHub PR review.
+      docTemplate: |
+        ## PR Review — Backend Onboarding Update (PR #847)
+
+        **Overall:** [One sentence summary of your review]
+
+        ---
+
+        **Comment 1 — [Section/line reference]**
+
+        [Your comment]
+
+        ---
+
+        **Comment 2 — [Section/line reference]**
+
+        [Your comment]
+
+        ---
+
+        **Comment 3 — [Section/line reference]**
+
+        [Your comment]
+
+        ---
+
+        **Verdict:** [Approve / Request Changes]
+      wordCountMin: 150
+      acceptedPatterns:
+        - Confluence
+        - access
+        - version
+        - bash
+        - link
+        - runbook
+        - prerequisite
+      rubric:
+        - id: r1
+          label: Three distinct issues addressed
+          description: Each comment addresses a different blocking issue — not three comments about the same problem
+          weight: 25
+        - id: r2
+          label: Location cited for each comment
+          description: Each comment references the specific section, line, or element being flagged
+          weight: 25
+        - id: r3
+          label: Actionable fix specified
+          description: Each comment tells the author what to do, not just what is wrong
+          weight: 35
+        - id: r4
+          label: Professional and collegial tone
+          description: Comments are direct and clear without being harsh; written as peer feedback
+          weight: 15

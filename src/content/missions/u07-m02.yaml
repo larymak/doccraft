@@ -1,0 +1,172 @@
+id: u07-m02
+unitId: unit-07
+order: 2
+slug: u07-m02
+title: "Write Good Commit Messages for Docs Changes"
+scenario: >
+  You are reviewing the recent commit history on the Northstar Apps docs repository.
+  Five commits were merged last week and every single commit message is unhelpful —
+  vague verbs, no context, and no indication of what actually changed or why.
+  Engineers who run `git log` to understand what changed in a doc will find nothing
+  useful. Your task is to diagnose what is wrong with each bad commit message, then
+  write better versions that follow the Northstar Apps docs commit message standard.
+objectives:
+  - Identify the specific failure mode in each of five bad commit messages
+  - Apply the imperative mood, present tense, and what-and-why convention
+  - Write improved commit messages for at least two docs commits
+  - Distinguish between commit messages that are vague vs. those that are misleading
+materials:
+  - id: doc-commit-history
+    filename: git-log-excerpt.txt
+    title: Recent Docs Commit History
+    trustScore: 0
+    findabilityScore: 0
+    issues:
+      - All five commit messages fail to explain what changed or why
+    frontmatter: {}
+    body: |
+      commit a1f3c9 — "updated docs"
+      commit b2e7d1 — "fix"
+      commit c4a812 — "changes to onboarding"
+      commit d9f023 — "WIP"
+      commit e1b345 — "final version"
+successCriteria:
+  - Identifies the correct failure mode for at least 4 of 5 bad commit messages
+  - Written commit messages use imperative mood and describe what changed
+  - At least one written message includes a brief why clause
+  - No written message uses vague verbs (update, fix, change, tweak)
+estimatedMinutes: 16
+prerequisiteMissionId: u07-m01
+assessments:
+  - id: u07-m02-a1
+    type: sorting
+    title: Diagnose the Bad Commit Messages
+    description: >
+      Match each bad commit message to the failure mode it represents.
+    xpReward: 55
+    masteryThreshold: 75
+    debtReduction: 5
+    hints:
+      - level: 1
+        text: >
+          There are four failure modes: too vague to be useful, misleading about scope,
+          a work-in-progress committed to main, and no imperative mood.
+    data:
+      instruction: >
+        Sort each bad commit message into the category that best describes
+        what is wrong with it.
+      categories:
+        - id: vague
+          label: Too Vague — No Information
+          description: The message says nothing about what file or concept changed
+        - id: wip
+          label: WIP Committed to Main
+          description: Work-in-progress commits should never land on main — they break git log as a changelog
+        - id: misleading
+          label: Misleading Scope
+          description: The message implies a minor fix but could cover anything; or implies completion when it may not be
+        - id: no-imperative
+          label: Wrong Tense or Voice
+          description: Does not use the imperative present tense that git log and PR tooling expect
+      items:
+        - id: i1
+          text: '"updated docs" — on a commit that rewrote the entire API authentication guide'
+          categoryId: vague
+          explanation: >
+            "updated docs" tells a reader nothing. Every commit in a docs repo updates
+            docs. A useful message says which doc changed and what about it changed:
+            "Rewrite API authentication guide for OAuth 2.0 flow changes in v2.9"
+        - id: i2
+          text: '"fix" — on a commit that corrected three broken links in the onboarding guide'
+          categoryId: vague
+          explanation: >
+            "fix" names the action type but nothing else. Fix what? In which document?
+            A better message: "Fix three broken links in backend onboarding guide"
+        - id: i3
+          text: '"changes to onboarding" — on a commit where the author added a prerequisites section'
+          categoryId: no-imperative
+          explanation: >
+            "changes to onboarding" uses noun phrase structure instead of imperative verb.
+            Git log reads best as a series of imperatives: "Add prerequisites section to
+            backend onboarding guide"
+        - id: i4
+          text: '"WIP" — on a commit pushed to the main branch with half-written content'
+          categoryId: wip
+          explanation: >
+            WIP commits on main break the docs site and make git log useless as a
+            changelog. Use a feature branch. If you must commit unfinished work,
+            do it on your branch with a clear note: never on main.
+        - id: i5
+          text: '"final version" — on a commit that may or may not be the last revision'
+          categoryId: misleading
+          explanation: >
+            "final version" is almost always wrong — docs are never truly final and
+            this message will be false the moment the next commit lands. It also conveys
+            no information about what was finalized or changed.
+  - id: u07-m02-a2
+    type: writing
+    title: Write Better Commit Messages
+    description: >
+      Write improved commit messages for three of the five bad examples. Each message
+      should follow the Northstar Apps standard: imperative mood, present tense,
+      specific about what changed and ideally why.
+    xpReward: 95
+    masteryThreshold: 70
+    debtReduction: 7
+    hints:
+      - level: 1
+        text: >
+          Start every commit message with a verb in imperative mood: Add, Fix, Rewrite,
+          Remove, Update (when specific), Clarify, Correct.
+      - level: 2
+        text: >
+          The subject line should complete this sentence: "If applied, this commit will..."
+          Example: "If applied, this commit will Rewrite API auth guide for OAuth 2.0 changes."
+      - level: 3
+        text: >
+          For docs commits, the subject line format is: [Verb] [what changed] in [document name].
+          Optionally add "to [fix X / because Y]" at the end.
+    data:
+      scenarioContext: >
+        Write improved commit messages for three of the five bad examples from the
+        git log. Use what you know about each commit's actual content:
+        (1) rewrote the entire API auth guide for v2.9 OAuth changes,
+        (2) fixed three broken links in the onboarding guide,
+        (3) added a prerequisites section to the onboarding guide.
+      docTemplate: |
+        ## Improved Commit Messages
+
+        **Original:** "updated docs"
+        **Improved:** [Write your improved message here]
+
+        ---
+
+        **Original:** "fix"
+        **Improved:** [Write your improved message here]
+
+        ---
+
+        **Original:** "changes to onboarding"
+        **Improved:** [Write your improved message here]
+      wordCountMin: 60
+      acceptedPatterns:
+        - Rewrite
+        - Fix
+        - Add
+        - auth
+        - onboarding
+        - link
+        - prerequisite
+      rubric:
+        - id: r1
+          label: Imperative mood used in all three messages
+          description: Each message starts with a verb in imperative present tense (Add, Fix, Rewrite — not Added, Fixed, Rewrote)
+          weight: 30
+        - id: r2
+          label: Specific about what changed
+          description: Each message names the document and the specific change — not just "docs" or "onboarding"
+          weight: 40
+        - id: r3
+          label: At least one message includes a why clause
+          description: One of the three messages adds context about why the change was made (e.g., "for v2.9 OAuth changes")
+          weight: 30

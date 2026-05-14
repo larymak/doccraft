@@ -1,0 +1,44 @@
+.card {
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Padding */
+.card--pad-sm {
+  padding: var(--space-3);
+}
+
+.card--pad-md {
+  padding: var(--space-6);
+}
+
+.card--pad-lg {
+  padding: var(--space-10);
+}
+
+/* Variants */
+.card--default {
+  background-color: var(--fcc-white);
+  color: var(--fcc-text-dark);
+  border-color: var(--fcc-gray-200);
+}
+
+.card--dark {
+  background-color: var(--fcc-blue-dark);
+  color: var(--fcc-text-light);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.card--workspace {
+  background-color: var(--fcc-blue-mid);
+  color: var(--fcc-text-light);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.card--mission {
+  background-color: var(--fcc-blue-dark);
+  color: var(--fcc-text-light);
+  border-color: var(--fcc-gold);
+  box-shadow: 0 0 0 1px var(--fcc-gold), var(--shadow-md);
+}

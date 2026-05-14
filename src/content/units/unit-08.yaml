@@ -1,0 +1,41 @@
+id: unit-08
+order: 8
+title: Ownership and Maintenance Models
+description: >
+  Assign owners, set review cadences, and design a governance model that keeps
+  documentation healthy without overwhelming contributors.
+goal: >
+  Assign owners to 20 unowned documents, set risk-based review cadences, and
+  design a lightweight governance model for Northstar Apps.
+prerequisiteUnitId: unit-05
+tier: advanced
+badge:
+  id: badge-governance-planner
+  label: Governance Planner
+  description: Designed a sustainable ownership and review system for a growing team
+  color: "#ef4444"
+  iconSlug: governance-planner
+  earnedCondition: Complete the Unit 8 boss mission with score >= 80
+totalXP: 380
+missions:
+  - u08-m01
+  - u08-m02
+  - u08-m03
+  - u08-m04
+bossMissionId: u08-m04
+contentBlocks:
+  - type: text
+    content: >
+      Documentation without owners becomes documentation without trust. If no
+      one is responsible for a document, no one will update it, no one will
+      notice when it goes stale, and no one will feel accountable when it
+      causes an incident.
+  - type: example
+    label: Risk-based review cadences
+    content: |
+      Critical runbook: monthly
+      Security SOP: quarterly
+      Compliance policy: quarterly or as required
+      Onboarding guide: quarterly
+      Low-risk explanation doc: every 6 to 12 months
+      Archived doc: no review, but replacement link required

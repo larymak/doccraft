@@ -1,0 +1,339 @@
+id: u08-m04
+unitId: unit-08
+order: 4
+slug: u08-m04
+title: "Boss: Design an Ownership Model"
+scenario: >
+  Northstar Apps is growing fast. The company has gone from 12 engineers to 60 in
+  18 months and the docs library has ballooned to over 200 documents — most of them
+  with no owner, no review cadence, and no one accountable. The Head of Engineering
+  has asked you to design an ownership model for 15 key documents spread across 4
+  teams. You will sort each document to its correct team, then write a brief ownership
+  model proposal that the engineering leads can review and approve at their next
+  all-hands meeting.
+objectives:
+  - Assign 15 documents to 4 teams using content and risk as the primary criteria
+  - Identify documents that require cross-team ownership and propose a primary owner
+  - Write an ownership model proposal that engineering leads can act on
+  - Recommend review cadences as part of the ownership assignment
+materials:
+  - id: doc-ownership-list
+    filename: docs-inventory.md
+    title: Docs Inventory — 15 Key Documents
+    trustScore: 0
+    findabilityScore: 0
+    issues:
+      - All 15 documents currently unowned
+    frontmatter: {}
+    body: |
+      # Documents Requiring Ownership Assignment
+
+      1. Payment API Reference
+      2. Refund Processing Runbook
+      3. PCI DSS Compliance Checklist
+      4. Fraud Detection Rules Overview
+      5. Mobile SDK Getting Started
+      6. Push Notification Integration Guide
+      7. Mobile App Release Checklist
+      8. Biometric Authentication ADR
+      9. Backend Engineer Onboarding
+      10. System Architecture Overview
+      11. Deployment Runbook
+      12. Incident Response Runbook
+      13. Design System Component Library
+      14. Design Tokens Reference
+      15. Accessibility Standards Policy
+successCriteria:
+  - All 15 documents sorted to one of the four teams with correct rationale
+  - No team assigned more than 6 documents (ownership must be distributed)
+  - Ownership model proposal covers decision criteria, escalation path, and review cadences
+  - Writing task scores 70 or higher
+estimatedMinutes: 25
+prerequisiteMissionId: u08-m03
+assessments:
+  - id: u08-m04-a1
+    type: sorting
+    title: Sort 15 Documents to 4 Teams
+    description: >
+      Assign each of the 15 documents to the team that should own it.
+      Remember: owner = accountable for accuracy, not just the team that reads it.
+    xpReward: 100
+    masteryThreshold: 75
+    debtReduction: 9
+    hints:
+      - level: 1
+        text: >
+          When a document could belong to two teams, assign it to the team that is
+          most accountable if the document is wrong. The other team becomes a reviewer,
+          not an owner.
+      - level: 2
+        text: >
+          The platform engineering team owns infrastructure and operations — deployments,
+          incidents, and system architecture. Payments team owns payments domain content.
+          Mobile team owns mobile SDK and app content. Design team owns UI standards.
+    data:
+      instruction: >
+        Sort all 15 documents to one of the four teams. Aim for a roughly even
+        distribution — no team should own more than 6 documents.
+      categories:
+        - id: payments-team
+          label: Payments Team
+          description: Payment APIs, refunds, fraud, PCI compliance, financial infrastructure
+        - id: mobile-team
+          label: Mobile Team
+          description: Mobile SDK, mobile app, push notifications, mobile release process, mobile ADRs
+        - id: platform-engineering
+          label: Platform Engineering
+          description: System architecture, deployment, incidents, onboarding, backend infrastructure
+        - id: design-team
+          label: Design Team
+          description: Design system, component library, design tokens, accessibility standards
+      items:
+        - id: i1
+          text: "Payment API Reference"
+          categoryId: payments-team
+          explanation: >
+            The payments team owns the payment API and is accountable for its documentation
+            being accurate when it changes.
+        - id: i2
+          text: "Refund Processing Runbook"
+          categoryId: payments-team
+          explanation: >
+            Refund processing is a payments-domain operational concern. The payments team
+            runs the runbook during incidents and is accountable for its accuracy.
+        - id: i3
+          text: "PCI DSS Compliance Checklist"
+          categoryId: payments-team
+          explanation: >
+            PCI DSS applies to payment card data. The payments team is accountable for
+            compliance in their domain, with legal/compliance as co-reviewer.
+        - id: i4
+          text: "Fraud Detection Rules Overview"
+          categoryId: payments-team
+          explanation: >
+            Fraud detection is owned by the payments team. The rules are part of
+            payment processing logic and change when fraud patterns change.
+        - id: i5
+          text: "Mobile SDK Getting Started"
+          categoryId: mobile-team
+          explanation: >
+            The mobile team owns the SDK and is accountable for keeping the getting-started
+            guide accurate when the SDK API changes.
+        - id: i6
+          text: "Push Notification Integration Guide"
+          categoryId: mobile-team
+          explanation: >
+            Push notification integration is a mobile SDK feature. The mobile team owns
+            the integration guide and updates it when the SDK or APNs/FCM requirements change.
+        - id: i7
+          text: "Mobile App Release Checklist"
+          categoryId: mobile-team
+          explanation: >
+            The mobile team runs the release process and is accountable for the checklist
+            being accurate for each release. Platform engineering may own the deployment
+            step, but the mobile team owns the overall release checklist.
+        - id: i8
+          text: "Biometric Authentication ADR"
+          categoryId: mobile-team
+          explanation: >
+            ADRs are owned by the team that made the decision. Biometric authentication
+            is a mobile feature decision — the mobile team owns this ADR.
+        - id: i9
+          text: "Backend Engineer Onboarding"
+          categoryId: platform-engineering
+          explanation: >
+            Backend onboarding covers the platform monorepo, tooling, and development
+            environment — all owned by platform engineering. They are accountable when
+            the setup steps change.
+        - id: i10
+          text: "System Architecture Overview"
+          categoryId: platform-engineering
+          explanation: >
+            System architecture is owned by platform engineering. They are responsible
+            for the overall technical architecture and keeping this document accurate
+            when the architecture evolves.
+        - id: i11
+          text: "Deployment Runbook"
+          categoryId: platform-engineering
+          explanation: >
+            Deployment is owned by platform engineering. They run deployments, maintain
+            the CI/CD pipeline, and are accountable for the runbook being accurate.
+        - id: i12
+          text: "Incident Response Runbook"
+          categoryId: platform-engineering
+          explanation: >
+            Incident response is owned by platform engineering, who maintains the on-call
+            rotation and is accountable for incident process documentation.
+        - id: i13
+          text: "Design System Component Library"
+          categoryId: design-team
+          explanation: >
+            The design system component library is owned by the design team. They define
+            components, update specifications, and are accountable when components change.
+        - id: i14
+          text: "Design Tokens Reference"
+          categoryId: design-team
+          explanation: >
+            Design tokens are owned by the design team. Token values and naming conventions
+            are design decisions, not engineering decisions.
+        - id: i15
+          text: "Accessibility Standards Policy"
+          categoryId: design-team
+          explanation: >
+            Accessibility standards are owned by the design team, who sets UI/UX
+            requirements. Engineering implements them, but design is accountable for
+            the policy being correct and current with WCAG standards.
+  - id: u08-m04-a2
+    type: multiple-choice
+    title: Cross-Team Ownership Dispute
+    description: Resolve a realistic ownership dispute between two teams.
+    xpReward: 55
+    masteryThreshold: 100
+    debtReduction: 5
+    hints:
+      - level: 1
+        text: >
+          Primary owner = the team accountable when the document is wrong.
+          Secondary reviewer = the team that contributes expertise but is not on the hook.
+    data:
+      question: >
+        The payments team and the platform engineering team both claim ownership of
+        the "Incident Response Runbook — Payment Processing Failures." The payments team
+        says they know the most about payment failures. Platform engineering says all
+        incident runbooks belong to them. How should ownership be resolved?
+      options:
+        - id: a
+          text: >
+            Split ownership 50/50 — both teams co-own the document and both must approve changes.
+          isCorrect: false
+          explanation: >
+            Shared 50/50 ownership creates diffusion of responsibility. When the document
+            is wrong, neither team feels fully accountable. Split ownership is an
+            antipattern in docs systems.
+        - id: b
+          text: >
+            Platform engineering owns the runbook as primary, with payments team as
+            mandatory reviewer for any changes to payment-specific diagnostic steps.
+          isCorrect: true
+          explanation: >
+            Correct. Platform engineering owns all incident runbooks as the team
+            accountable for incident response. The payments team provides expert review
+            for the payment-specific sections. One owner; one informed reviewer.
+        - id: c
+          text: >
+            Payments team owns it because they have the most domain knowledge about
+            payment failures and their engineers write the diagnostic steps.
+          isCorrect: false
+          explanation: >
+            Domain knowledge is about who writes the content, not who owns it.
+            Ownership is about accountability. Platform engineering runs incidents
+            and is accountable for runbook accuracy — they should own it even if
+            payments engineers write the payment-specific sections.
+        - id: d
+          text: >
+            Create two separate runbooks — one owned by payments team for payment
+            failures, one owned by platform engineering for infrastructure failures.
+          isCorrect: false
+          explanation: >
+            Splitting by failure type is a reasonable approach if the runbooks
+            truly differ. But the question describes a single runbook for payment
+            processing incidents, which is an infrastructure incident with a payments
+            context. One runbook with clear ownership is simpler.
+  - id: u08-m04-a3
+    type: writing
+    title: Write the Ownership Model Proposal
+    description: >
+      Write a brief ownership model proposal for the engineering leads to review.
+      It should explain the criteria you used, how cross-team docs are handled,
+      and include recommended review cadences for each team's document set.
+    xpReward: 150
+    masteryThreshold: 70
+    debtReduction: 12
+    trustDelta: 20
+    hints:
+      - level: 1
+        text: >
+          The engineering leads are busy. Lead with the decision criteria (how you
+          decided who owns what), then the team assignments, then the cadence recommendations.
+          Keep each section to 2-4 sentences or a short list.
+      - level: 2
+        text: >
+          Address the "what if we disagree?" question directly. Leads will ask it.
+          Your escalation path should name a role (docs systems lead, Head of Engineering)
+          not just say "escalate to leadership."
+      - level: 3
+        text: >
+          The proposal should be persuasive. Explain why a clear ownership model
+          reduces toil — estimate how many stale docs this will prevent over 12 months
+          if review reminders go to actual owners.
+    data:
+      scenarioContext: >
+        Write a 1-page ownership model proposal for the Northstar Apps engineering leads.
+        It should be clear enough to approve or reject at the next all-hands meeting.
+      docTemplate: |
+        # Documentation Ownership Model Proposal
+
+        **Prepared by:** Documentation Systems
+        **For:** Engineering Leads All-Hands
+        **Date:** 2026-05-04
+
+        ## The Problem
+
+        [1-2 sentences describing the current state and why it needs fixing]
+
+        ## Ownership Assignment Criteria
+
+        [How was "owner" defined? What criteria determined which team owns which doc?]
+
+        ## Team Assignments Summary
+
+        | Team | Documents Owned | Recommended Review Cadence |
+        |------|----------------|---------------------------|
+        | Payments Team | [list or count] | [cadence] |
+        | Mobile Team | [list or count] | [cadence] |
+        | Platform Engineering | [list or count] | [cadence] |
+        | Design Team | [list or count] | [cadence] |
+
+        ## Handling Cross-Team Documents
+
+        [How are documents that span two teams handled? Who is primary? Who reviews?]
+
+        ## Escalation Path
+
+        [What happens when two teams disagree on ownership?]
+
+        ## Expected Impact
+
+        [What does this model prevent? What toil does it reduce?]
+
+        ## Requested Approval
+
+        Please review and approve this model by [date] so ownership can be assigned
+        in the docs system and review reminders can begin.
+      wordCountMin: 250
+      acceptedPatterns:
+        - owner
+        - criteria
+        - review
+        - escalat
+        - cadence
+        - accountab
+        - primary
+        - cross-team
+      rubric:
+        - id: r1
+          label: Ownership criteria clearly stated
+          description: The proposal defines what "owner" means and how the team-to-doc assignment decisions were made
+          weight: 25
+        - id: r2
+          label: All four teams represented with assignments and cadences
+          description: The summary table or equivalent covers all four teams with document counts and review frequencies
+          weight: 25
+        - id: r3
+          label: Cross-team and escalation handled
+          description: The proposal addresses what happens for cross-team docs and who resolves disputes
+          weight: 25
+        - id: r4
+          label: Business case made for the model
+          description: The proposal explains the expected impact — what problems this prevents or toil it reduces
+          weight: 25

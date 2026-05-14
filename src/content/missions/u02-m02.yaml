@@ -1,0 +1,166 @@
+id: u02-m02
+unitId: unit-02
+order: 2
+slug: u02-m02
+title: SOPs and Runbooks
+scenario: >
+  Marcus from the platform team stops by your desk looking a little stressed.
+  "We had a minor incident last night," he says. "Nothing critical, but the
+  on-call engineer spent 20 minutes trying to figure out what to do because
+  our deployment docs are just… a wall of text." Jordan overhears and leans
+  over. "This is a great time to talk about the difference between an SOP and
+  a runbook. They both describe processes — but they're designed for completely
+  different situations." You pull up a chair. This is exactly the kind of
+  practical problem you're here to solve.
+objectives:
+  - Understand what an SOP is and when to use one
+  - Understand what a runbook is and when to use one
+  - Recognise which type a situation calls for
+materials:
+  - id: doc-deploy-wall
+    filename: deployment-stuff.md
+    title: Deployment Stuff (current)
+    trustScore: 20
+    findabilityScore: 15
+    issues:
+      - Mixes step-by-step process with incident troubleshooting
+      - No owner, no review date
+      - SOP content and runbook content crammed into one page
+    frontmatter:
+      title: Deployment Stuff
+      status: Active
+    body: |
+      # Deployment Stuff
+
+      ## How to Deploy
+
+      1. Merge your PR to main
+      2. GitHub Actions runs the test suite automatically
+      3. If tests pass, staging deploys automatically
+      4. Check https://staging.northstar-apps.com
+      5. Click "Approve Production Deploy" in GitHub Actions
+      6. Production deploys take about 8 minutes
+
+      ## When Things Go Wrong
+
+      Tests failing in CI but passing locally? Usually an environment variable.
+      Check .env.test matches .env.ci.
+
+      Staging deploy stuck at "Building"? The runner may be overloaded.
+      If stuck more than 20 minutes, cancel and re-run.
+
+      Production deploy failed? DO NOT re-deploy immediately. Check Datadog
+      error logs first. If it's a database migration failure, ping #platform-oncall.
+successCriteria:
+  - Multiple-choice question answered correctly
+  - Sorting task score of 75 or higher
+estimatedMinutes: 14
+prerequisiteMissionId: u02-m01
+assessments:
+  - id: u02-m02-a1
+    type: multiple-choice
+    title: When Is an SOP Not Enough?
+    description: >
+      Jordan explains the core difference. Then she asks you a question
+      to make sure you've got it.
+    xpReward: 45
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: >
+          An SOP works great when you follow the same steps every time.
+          What changes during an incident that makes a flat list of steps fail?
+    data:
+      question: >
+        Jordan says: "Imagine following an SOP during a production outage at 2am.
+        Step 5 says 'Check the database.' But what if the database is fine?
+        What does the SOP tell you to do next?"
+
+        Why is a runbook better for incident response?
+      options:
+        - id: a
+          text: Runbooks are longer so they cover more scenarios
+          isCorrect: false
+          explanation: >
+            Length isn't the difference. An SOP could be very long. The difference
+            is whether the document makes decisions for you under pressure.
+        - id: b
+          text: >
+            Runbooks use if/then logic — "if X, do Y; if not, do Z" — so the
+            document makes decisions for you when you can't think clearly
+          isCorrect: true
+          explanation: >
+            Exactly right. A runbook is designed for pressure situations. It uses
+            decision trees and conditional steps so the engineer doesn't have to
+            reason from scratch at 2am.
+        - id: c
+          text: Runbooks are written by engineers, SOPs are written by managers
+          isCorrect: false
+          explanation: >
+            Who writes a document doesn't determine its type. The structure and
+            purpose do.
+        - id: d
+          text: Runbooks have more screenshots and visuals
+          isCorrect: false
+          explanation: >
+            Visuals can appear in any document type. The distinguishing feature
+            of a runbook is its decision-tree structure for operational scenarios.
+  - id: u02-m02-a2
+    type: sorting
+    title: SOP or Runbook?
+    description: >
+      Four situations from Northstar Apps. Which type of document does each one need?
+    xpReward: 90
+    masteryThreshold: 75
+    debtReduction: 7
+    hints:
+      - level: 1
+        text: >
+          SOP = the same steps every time, no decisions needed.
+          Runbook = pressure situation with if/then branches and escalation paths.
+    data:
+      instruction: >
+        Drag each situation into SOP or Runbook. Think about whether the person
+        following the doc needs to make decisions — or just follow fixed steps.
+      categories:
+        - id: sop
+          label: SOP
+          description: Fixed steps, same process every time, no branching needed
+        - id: runbook
+          label: Runbook
+          description: Incident or operational scenario with if/then logic and escalation
+      items:
+        - id: i1
+          text: >
+            Processing a standard customer refund: verify identity, check eligibility,
+            issue via Billing Dashboard, send confirmation email within 24 hours.
+          categoryId: sop
+          explanation: >
+            Same steps every time, no branching. The refund process doesn't change
+            based on what you find along the way. This is an SOP.
+        - id: i2
+          text: >
+            API response times are spiking. Could be the database, a memory leak,
+            a bad deploy, or an external dependency. Each cause has different fix steps.
+          categoryId: runbook
+          explanation: >
+            Multiple possible causes, each with different diagnosis and fix paths.
+            The engineer needs if/then logic to navigate this under pressure. Runbook.
+        - id: i3
+          text: >
+            Onboarding a new support team member: give system access, schedule
+            shadowing sessions, assign first tickets on day 5.
+          categoryId: sop
+          explanation: >
+            Same onboarding steps for every new hire, in order. No branching needed.
+            This is an SOP.
+        - id: i4
+          text: >
+            The payment processor is returning errors. Need to diagnose whether it's
+            a credentials issue, a network issue, or an outage on the provider's side —
+            and escalate to different teams depending on the cause.
+          categoryId: runbook
+          explanation: >
+            Three possible root causes, three different paths, and a time-sensitive
+            escalation decision. This needs a runbook with decision logic.

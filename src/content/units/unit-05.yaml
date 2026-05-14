@@ -1,0 +1,39 @@
+id: unit-05
+order: 5
+title: Naming Conventions and Folder Structure
+description: >
+  Create predictable naming conventions and logical folder structures so any
+  team member can find the right document in under 30 seconds.
+goal: >
+  Rename 10 ambiguous documents, reorganize a chaotic folder structure, and
+  design an information architecture for Northstar Apps.
+prerequisiteUnitId: unit-02
+tier: intermediate
+badge:
+  id: badge-search-fixer
+  label: Search Fixer
+  description: Made the Northstar Apps doc repository navigable for any team member
+  color: "#10b981"
+  iconSlug: search-fixer
+  earnedCondition: Complete the Unit 5 boss mission with score >= 80
+totalXP: 360
+missions:
+  - u05-m01
+  - u05-m02
+  - u05-m03
+  - u05-m04
+bossMissionId: u05-m04
+contentBlocks:
+  - type: text
+    content: >
+      A naming convention is a promise. It tells readers what to expect before
+      they open a file. A well-named document answers: what type is it, what
+      does it cover, who uses it, and what is its current status.
+  - type: example
+    label: Good naming patterns
+    content: |
+      SOP - Refund Processing - Support - Active
+      ADR-004 - Use PostgreSQL for Billing Events
+      Runbook - API Error Spike - Platform
+      Onboarding - Support Engineer - First 30 Days
+      Postmortem - 2026-04-18 - Checkout Latency Incident

@@ -1,0 +1,163 @@
+id: u05-m02
+unitId: unit-05
+order: 2
+slug: u05-m02
+title: Reorganize the Chaos
+scenario: >
+  The Northstar Apps wiki has a folder called "Misc" containing 22 documents that were
+  never filed anywhere. There are also three top-level folders — "Engineering", "Support",
+  and "Company" — that have grown into dumping grounds with no sub-structure. Your job
+  is to propose a logical folder hierarchy and sort the documents into their correct locations.
+objectives:
+  - Design a logical two-level folder hierarchy for a software company wiki
+  - Sort documents into the correct folder based on audience and document type
+  - Identify why flat folder structures fail as documentation libraries grow
+materials: []
+successCriteria:
+  - Folder structure sorting task score of 75 or higher
+  - All documents sorted into the correct folders
+  - Multiple-choice question answered correctly
+estimatedMinutes: 16
+prerequisiteMissionId: u05-m01
+assessments:
+  - id: u05-m02-a1
+    type: sorting
+    title: Sort Documents into the Right Folders
+    description: Sort each document into the correct folder in the proposed Northstar Apps wiki hierarchy.
+    xpReward: 95
+    masteryThreshold: 75
+    debtReduction: 8
+    hints:
+      - level: 1
+        text: The primary sort key is audience — who reads this document as part of their normal work? The secondary sort key is document type.
+      - level: 2
+        text: "Runbooks, SOPs, and how-to guides are operational documents — they go under the team that executes them. ADRs and postmortems go under Engineering. Company-wide policies go under Company."
+    data:
+      instruction: >
+        Sort each document into the correct folder in the Northstar Apps wiki structure.
+        The proposed hierarchy is: Engineering > {Platform, Backend, ADRs, Postmortems},
+        Support > {SOPs, Runbooks, Reference}, Company > {Policies, Onboarding, Reports}.
+      categories:
+        - id: eng-platform
+          label: "Engineering > Platform"
+          description: Platform team operational docs — runbooks, deployment SOPs, infrastructure guides
+        - id: eng-backend
+          label: "Engineering > Backend"
+          description: Backend team docs — API guides, service-specific SOPs, backend how-tos
+        - id: eng-adrs
+          label: "Engineering > ADRs"
+          description: Architecture Decision Records for all technical and infrastructure decisions
+        - id: eng-postmortems
+          label: "Engineering > Postmortems"
+          description: All incident postmortems regardless of which system was affected
+        - id: support-sops
+          label: "Support > SOPs"
+          description: Standard operating procedures for support specialist workflows
+        - id: support-runbooks
+          label: "Support > Runbooks"
+          description: Escalation and diagnostic runbooks for support-facing issues
+        - id: support-reference
+          label: "Support > Reference"
+          description: Lookup docs for support — policies, limits, pricing, feature flags
+        - id: company-policies
+          label: "Company > Policies"
+          description: Company-wide rules, legal policies, and compliance requirements
+        - id: company-onboarding
+          label: "Company > Onboarding"
+          description: Role-based onboarding guides for all teams
+        - id: company-reports
+          label: "Company > Reports"
+          description: Quarterly reports, board materials, and executive summaries
+      items:
+        - id: i1
+          text: "Runbook — Checkout API Error Spike — Platform"
+          categoryId: eng-platform
+          explanation: A runbook for a platform system (checkout API) belongs under Engineering > Platform.
+        - id: i2
+          text: "SOP — Refund Processing — Support Specialists"
+          categoryId: support-sops
+          explanation: A support specialist SOP belongs under Support > SOPs. Support team members are the readers.
+        - id: i3
+          text: "ADR-007 — Adopt PagerDuty for On-Call Rotation"
+          categoryId: eng-adrs
+          explanation: All ADRs go in Engineering > ADRs regardless of which team they affect. ADRs are written by and for engineers.
+        - id: i4
+          text: "Postmortem — 2026-04-18 — Checkout 503 Redis Eviction"
+          categoryId: eng-postmortems
+          explanation: All postmortems go in Engineering > Postmortems. They are written by engineers and referenced by engineers.
+        - id: i5
+          text: "Reference — Refund Eligibility Rules and Limits — Support"
+          categoryId: support-reference
+          explanation: A lookup document about refund rules is a reference document used by support specialists.
+        - id: i6
+          text: "Policy — Customer Data Retention and Deletion — All Staff"
+          categoryId: company-policies
+          explanation: Data retention policies are company-wide compliance documents that apply to all staff, not just one team.
+        - id: i7
+          text: "Onboarding — Support Engineer — First 30 Days"
+          categoryId: company-onboarding
+          explanation: Role-based onboarding guides belong under Company > Onboarding so new hires from any team can find them.
+        - id: i8
+          text: "Report — API Error Budget — Q1 2026 — Platform"
+          categoryId: company-reports
+          explanation: Quarterly status reports are company-level documents consumed by leadership. They belong under Company > Reports.
+        - id: i9
+          text: "SOP — On-Call Handoff — Platform"
+          categoryId: eng-platform
+          explanation: A platform team SOP for an operational procedure (on-call handoff) belongs under Engineering > Platform.
+        - id: i10
+          text: "How-To — Export Customer Data via API — Backend"
+          categoryId: eng-backend
+          explanation: A how-to guide for an API feature used by backend engineers belongs under Engineering > Backend.
+        - id: i11
+          text: "Runbook — Chargeback Escalation — Support"
+          categoryId: support-runbooks
+          explanation: A runbook for escalating support-facing issues belongs under Support > Runbooks, not Engineering.
+        - id: i12
+          text: "Onboarding — Backend Engineer — First 30 Days [Draft]"
+          categoryId: company-onboarding
+          explanation: All role-specific onboarding guides belong under Company > Onboarding regardless of the role.
+  - id: u05-m02-a2
+    type: multiple-choice
+    title: Why Flat Folders Fail
+    description: What is the primary reason flat folder structures break down as a wiki grows?
+    xpReward: 45
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: Think about what a new engineer does when they open a folder with 80 files in alphabetical order.
+    data:
+      question: >
+        The Northstar Apps "Engineering" folder currently has 80 documents in a single flat
+        list. A new backend engineer tries to find the API authentication guide and gives up
+        after 3 minutes of scrolling. What is the primary problem a hierarchical structure
+        solves that a flat folder cannot?
+      options:
+        - id: a
+          text: Hierarchical folders prevent duplicate document names.
+          isCorrect: false
+          explanation: >
+            Document naming conventions prevent duplicates, not folder structure. A flat folder
+            with good naming conventions can still have unique names — it just cannot be browsed efficiently.
+        - id: b
+          text: >
+            Hierarchical folders provide progressive narrowing — a reader can filter by team or
+            function before scanning individual documents, reducing the cognitive load of browsing.
+          isCorrect: true
+          explanation: >
+            Correct. A hierarchy lets readers navigate by audience or function first, then by topic.
+            A new backend engineer opens Engineering > Backend and scans 12 documents, not 80.
+            Progressive narrowing is the key benefit of hierarchy over flat structure.
+        - id: c
+          text: Hierarchical folders make documents easier to search by keyword.
+          isCorrect: false
+          explanation: >
+            Full-text search works the same regardless of folder structure. Hierarchy improves
+            browsability, not search relevance.
+        - id: d
+          text: Hierarchical folders ensure documents are kept up to date.
+          isCorrect: false
+          explanation: >
+            Folder structure has no relationship to document freshness. An outdated doc in a
+            well-organized folder is still outdated.

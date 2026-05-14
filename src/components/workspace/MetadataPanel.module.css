@@ -1,0 +1,81 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.fieldRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  color: var(--fcc-gray-400);
+}
+
+.required {
+  color: var(--fcc-red);
+  font-weight: 700;
+}
+
+.input {
+  background: var(--fcc-navy);
+  border: 1px solid var(--fcc-blue-mid);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  color: var(--fcc-text-light);
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.input:focus {
+  border-color: var(--fcc-gold);
+}
+
+.input--valid {
+  border-color: var(--fcc-green);
+}
+
+.input--invalid {
+  border-color: var(--fcc-red);
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.validationRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+}
+
+.validationRow--valid {
+  color: #2a7a4b;
+}
+
+.validationRow--invalid {
+  color: var(--fcc-red);
+}
+
+.readOnlyValue {
+  padding: var(--space-2) var(--space-3);
+  background: var(--fcc-blue-mid);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  color: var(--fcc-text-light);
+  word-break: break-word;
+}

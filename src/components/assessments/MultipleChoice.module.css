@@ -1,0 +1,233 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 720px;
+}
+
+.question {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--fcc-text-light);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--fcc-blue-mid);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  text-align: left;
+  width: 100%;
+  color: var(--fcc-text-light);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  animation: optionIn 0.3s ease both;
+  animation-delay: var(--option-delay, 0ms);
+}
+
+@keyframes optionIn {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.option:hover:not(.option--disabled) {
+  border-color: var(--fcc-gray-400);
+}
+
+.option--selected {
+  border-color: var(--fcc-gold);
+  background: rgba(241, 190, 50, 0.08);
+}
+
+.option--correct {
+  border-color: var(--fcc-green);
+  background: rgba(0, 71, 27, 0.2);
+}
+
+.option--incorrect {
+  border-color: var(--fcc-red);
+  background: rgba(166, 0, 0, 0.15);
+}
+
+.option--disabled {
+  cursor: default;
+}
+
+.radioIndicator {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--fcc-gray-400);
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--transition-fast);
+}
+
+.option--selected .radioIndicator {
+  border-color: var(--fcc-gold);
+}
+
+.option--correct .radioIndicator {
+  border-color: var(--fcc-green);
+}
+
+.option--incorrect .radioIndicator {
+  border-color: var(--fcc-red);
+}
+
+.radioInner {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--fcc-gold);
+}
+
+.option--correct .radioInner {
+  background: var(--fcc-green);
+}
+
+.option--incorrect .radioInner {
+  background: var(--fcc-red);
+}
+
+.optionText {
+  flex: 1;
+}
+
+.optionBadge {
+  flex-shrink: 0;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.badgeCorrect {
+  background: var(--fcc-green);
+  color: var(--fcc-white);
+}
+
+.badgeIncorrect {
+  background: var(--fcc-red);
+  color: var(--fcc-white);
+}
+
+.explanation {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--fcc-gray-400);
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.checkBtn {
+  padding: var(--space-3) var(--space-6);
+  background: var(--fcc-gold);
+  color: var(--fcc-navy);
+  font-weight: 700;
+  font-size: var(--text-base);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.checkBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.checkBtn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.continueBtn {
+  padding: var(--space-3) var(--space-6);
+  background: var(--fcc-green);
+  color: var(--fcc-white);
+  font-weight: 700;
+  font-size: var(--text-base);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.continueBtn:hover {
+  opacity: 0.9;
+}
+
+.result {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  animation: resultPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes resultPop {
+  from { opacity: 0; transform: scale(0.9) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.result--correct {
+  background: rgba(0, 71, 27, 0.2);
+  border: 1px solid var(--fcc-green);
+}
+
+.result--incorrect {
+  background: rgba(166, 0, 0, 0.15);
+  border: 1px solid var(--fcc-red);
+}
+
+.resultIcon {
+  font-size: var(--text-2xl);
+  flex-shrink: 0;
+}
+
+.resultText {
+  flex: 1;
+}
+
+.resultTitle {
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: var(--fcc-text-light);
+  margin: 0 0 var(--space-1);
+}
+
+.resultSub {
+  font-size: var(--text-sm);
+  color: var(--fcc-gray-400);
+  margin: 0;
+}
+
+.xpTag {
+  font-weight: 700;
+  color: var(--fcc-gold);
+  font-size: var(--text-sm);
+}

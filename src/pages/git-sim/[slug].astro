@@ -1,0 +1,23 @@
+---
+import PageLayout from '@/components/layout/PageLayout.astro'
+import { GitSimPage } from '@/components/GitSimPage'
+import { getAllMissions, getMissionBySlug } from '@/lib/content-loader'
+
+export async function getStaticPaths() {
+  const missions = await getAllMissions()
+  return missions
+    .filter(m => m.gitWorkflow)
+    .map(m => ({
+      params: { slug: m.slug },
+      props: { missionSlug: m.slug },
+    }))
+}
+
+const { missionSlug } = Astro.props
+const mission = await getMissionBySlug(missionSlug)
+
+if (!mission) return Astro.redirect('/map')
+---
+<PageLayout title={`Git Review — ${mission.title}`}>
+  <GitSimPage client:load mission={mission} />
+</PageLayout>

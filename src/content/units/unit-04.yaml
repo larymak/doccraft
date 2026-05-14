@@ -1,0 +1,37 @@
+id: unit-04
+order: 4
+title: Template Design
+description: >
+  Design reusable document templates that make every contributor produce
+  consistent, complete, and maintainable documentation.
+goal: >
+  Build a runbook template, improve a weak SOP template, and explain the
+  purpose of each required field.
+prerequisiteUnitId: unit-02
+tier: intermediate
+badge:
+  id: badge-template-architect
+  label: Template Architect
+  description: Designed templates that improved document consistency across a team
+  color: "#06b6d4"
+  iconSlug: template-architect
+  earnedCondition: Complete the Unit 4 boss mission with score >= 80
+totalXP: 400
+missions:
+  - u04-m01
+  - u04-m02
+  - u04-m03
+  - u04-m04
+bossMissionId: u04-m04
+contentBlocks:
+  - type: text
+    content: >
+      Templates are contracts. They tell contributors what a document needs to
+      contain and remind readers what to expect. A good template reduces the
+      cognitive load of writing and reviewing documentation.
+  - type: callout
+    variant: info
+    content: >
+      Required template fields: title, summary, audience, owner, backup owner,
+      status, last reviewed, next review date, related docs, prerequisites,
+      scope, steps or sections, validation criteria, changelog, tags, search keywords.

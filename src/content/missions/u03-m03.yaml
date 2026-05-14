@@ -1,0 +1,200 @@
+id: u03-m03
+unitId: unit-03
+order: 3
+slug: u03-m03
+title: Cut the Scope Creep
+scenario: >
+  The support team's "Handle a Billing Dispute" SOP has grown to 1,100 words over two
+  years as different team members added sections whenever they thought of something related.
+  It now contains policy explanations, engineering escalation paths, a link to the legal
+  team's chargeback policy PDF, and a section on how the payment processor works internally.
+  New specialists are overwhelmed. Your job is to identify everything that does NOT belong
+  in a task-oriented SOP and flag it for removal or relocation.
+objectives:
+  - Distinguish between task content (what belongs in an SOP) and non-task content (what belongs elsewhere)
+  - Identify the correct destination for each piece of out-of-scope content
+  - Explain why scope creep makes SOPs harder to follow under pressure
+materials:
+  - id: doc-billing-dispute-sop
+    filename: sop-billing-dispute.md
+    title: SOP — Billing Dispute Handling — Support
+    trustScore: 30
+    findabilityScore: 55
+    issues:
+      - Contains conceptual explanation of payment processor mechanics — belongs in an explanation doc
+      - Contains the full text of the legal chargeback policy — belongs in a policy doc
+      - Contains engineering escalation paths with Slack channel names and on-call rotation details — belongs in a runbook or reference doc
+      - Steps are buried in the middle of the document after 400 words of context
+      - No scope statement telling readers what this SOP does and does not cover
+    frontmatter:
+      title: SOP — Billing Dispute Handling — Support
+      status: Active
+      owner: Sarah Chen
+      audience: Support Specialists
+      last_reviewed: "2026-01-10"
+    body: |
+      # SOP — Billing Dispute Handling — Support
+
+      ## Background
+
+      When a customer disputes a charge, their bank initiates a chargeback process with
+      Visa, Mastercard, or Stripe depending on the payment method. The payment processor
+      temporarily reverses the funds while the dispute is under review. This is an
+      automated process on the processor's side. Northstar Apps receives a chargeback
+      notice via webhook, which triggers an alert in Billing Dashboard. Our payment
+      processor charges a $15 fee per dispute regardless of outcome. Disputes older than
+      120 days cannot be responded to. The technical process involves our billing service
+      calling the dispute API endpoint with the evidence payload. The response is signed
+      with our API key and logged in the audit trail. Our processor SLA for dispute
+      outcomes is 45–75 business days.
+
+      ## Legal Policy
+
+      Per the Northstar Apps Chargeback and Dispute Policy (Legal, updated March 2026):
+      Northstar Apps will respond to all chargebacks within 7 calendar days. Disputes
+      involving amounts over $1,000 require VP Finance approval before response submission.
+      Northstar Apps does not accept liability for chargebacks resulting from customer
+      error. All dispute responses become part of the permanent record and may be used
+      in regulatory proceedings. Disputes must be tracked in the Billing Disputes
+      Tracker spreadsheet maintained by Finance. See the full policy document at:
+      legal/chargeback-policy-v4.pdf
+
+      ## How to Respond to a Billing Dispute
+
+      1. Open the customer account in Billing Dashboard
+      2. Locate the disputed transaction — status must show "Awaiting Response"
+      3. Verify the dispute is within the 7-day response window
+      4. Click "Dispute" > "Respond to Chargeback"
+      5. Upload evidence: order confirmation, delivery proof, communication log
+      6. Write a 2–3 sentence rebuttal in the text field
+      7. Select the dispute reason code
+      8. If the amount exceeds $1,000, stop and get VP Finance approval before submitting
+      9. Click Submit
+
+      ## Engineering Escalation
+
+      If Billing Dashboard is unavailable or the dispute submission fails:
+      - Primary: Post in #billing-eng with the transaction ID and error code
+      - Secondary: Page the on-call engineer via PagerDuty (billing-eng schedule)
+      - Escalation SLA: 4 hours during business hours, 2 hours for P1 issues
+      - If unresolved after 4 hours: escalate to Platform Engineering Lead
+      - For database-level issues: post in #platform-oncall with severity P1 or P2
+      - On-call rotation: billing-eng rotates weekly, platform rotates bi-weekly
+
+      ## Related Reading
+
+      - How Stripe handles chargebacks (external): stripe.com/docs/disputes
+      - Northstar payment architecture overview (Engineering wiki)
+      - Q1 2026 Dispute Volume Report (Finance)
+successCriteria:
+  - All out-of-scope items correctly identified and sorted to their correct destination
+  - Multiple-choice question answered correctly
+  - Sorting task score of 75 or higher
+estimatedMinutes: 16
+prerequisiteMissionId: u03-m02
+assessments:
+  - id: u03-m03-a1
+    type: sorting
+    title: Remove the Scope Creep
+    description: Sort each section or excerpt into whether it belongs in the SOP or should be moved elsewhere.
+    xpReward: 90
+    masteryThreshold: 75
+    debtReduction: 8
+    hints:
+      - level: 1
+        text: An SOP contains exactly one thing — the steps for performing a specific task. Anything that is not a step, a prerequisite, or a direct warning for that task does not belong.
+      - level: 2
+        text: Ask yourself — does the support specialist need this information to complete the task right now, or is it background knowledge they might want to read later?
+    data:
+      instruction: >
+        Sort each excerpt into where it belongs. Keep what the support specialist
+        needs to complete the task. Move everything else to its correct home.
+      categories:
+        - id: keep-sop
+          label: Keep in SOP
+          description: Directly needed to perform the task correctly
+        - id: move-policy
+          label: Move to Policy Document
+          description: Rules, legal obligations, and organizational standards
+        - id: move-explanation
+          label: Move to Explanation Doc
+          description: Conceptual background on how something works
+        - id: move-runbook-ref
+          label: Move to Runbook or Reference Doc
+          description: Escalation paths, on-call details, engineering recovery steps
+      items:
+        - id: i1
+          text: "Steps 1–9: Open account, locate transaction, verify window, upload evidence, write rebuttal, select reason code, check amount, submit"
+          categoryId: keep-sop
+          explanation: The numbered task steps are the core of the SOP. Everything else exists to support these or belongs elsewhere.
+        - id: i2
+          text: "\"Our payment processor charges a $15 fee per dispute regardless of outcome. The technical process involves our billing service calling the dispute API endpoint with the evidence payload.\""
+          categoryId: move-explanation
+          explanation: How the payment processor works technically is background knowledge, not task-execution knowledge. It belongs in an explanation or architecture doc.
+        - id: i3
+          text: "\"Northstar Apps does not accept liability for chargebacks resulting from customer error. All dispute responses become part of the permanent record and may be used in regulatory proceedings.\""
+          categoryId: move-policy
+          explanation: Liability statements and legal obligations belong in a formal policy document, not an SOP. The SOP should link to the policy, not reproduce it.
+        - id: i4
+          text: "\"If the amount exceeds $1,000, stop and get VP Finance approval before submitting\""
+          categoryId: keep-sop
+          explanation: >
+            This is a conditional step that the support specialist must follow during task execution.
+            It is task-critical and belongs as a warning or conditional step in the SOP itself.
+        - id: i5
+          text: "\"Post in #billing-eng with the transaction ID and error code. Page the on-call engineer via PagerDuty (billing-eng schedule). On-call rotation: billing-eng rotates weekly.\""
+          categoryId: move-runbook-ref
+          explanation: Escalation paths, Slack channels, on-call schedules, and PagerDuty details belong in a runbook or reference doc. The SOP can say "see the Billing Escalation Runbook" in a single line.
+        - id: i6
+          text: "\"Verify the dispute is within the 7-day response window\""
+          categoryId: keep-sop
+          explanation: >
+            This is step 3 — a prerequisite check that must happen during task execution. It is
+            task-critical and belongs in the SOP steps.
+        - id: i7
+          text: "\"Disputes must be tracked in the Billing Disputes Tracker spreadsheet maintained by Finance.\""
+          categoryId: move-policy
+          explanation: Record-keeping obligations are policy requirements. They may be referenced as a post-task step but the detail belongs in the policy document.
+  - id: u03-m03-a2
+    type: multiple-choice
+    title: Why Scope Creep Hurts Under Pressure
+    description: What is the primary risk of leaving out-of-scope content in an SOP?
+    xpReward: 45
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: Think about what a support specialist does when they are on a customer call with a time limit.
+    data:
+      question: >
+        A support specialist is handling an angry customer whose refund was denied.
+        They open the Billing Dispute SOP but have to read 400 words of background
+        and legal policy before reaching the actual steps. What is the primary risk?
+      options:
+        - id: a
+          text: The specialist might misunderstand the legal policy.
+          isCorrect: false
+          explanation: >
+            Misunderstanding is possible, but legal comprehension is not the task at hand.
+            The specialist is trying to perform a time-sensitive task, not study policy.
+        - id: b
+          text: >
+            The specialist may skip or skim the steps under time pressure, missing the
+            $1,000 approval requirement that is buried in the middle of the page.
+          isCorrect: true
+          explanation: >
+            Correct. When people are under pressure, they scan. Burying a critical conditional
+            step (VP Finance approval) inside 400 words of preamble means it will be missed.
+            Scope creep is not just a readability problem — it is a compliance risk.
+        - id: c
+          text: The specialist will not be able to find the document in search.
+          isCorrect: false
+          explanation: >
+            The document is findable (findabilityScore 55). The problem is not discovery —
+            it is usability under time pressure.
+        - id: d
+          text: The specialist will get confused about who owns the document.
+          isCorrect: false
+          explanation: >
+            Ownership is visible in the frontmatter. The problem is operational: a bloated SOP
+            causes critical steps to be missed during execution.

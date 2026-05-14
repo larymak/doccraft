@@ -1,0 +1,144 @@
+id: u02-m01
+unitId: unit-02
+order: 1
+slug: u02-m01
+title: Four Kinds of Docs
+scenario: >
+  Jordan calls you over to her screen. "I've been looking at our wiki and I
+  noticed something. We have a ton of pages — but they feel really different
+  from each other. Some teach you things. Some tell you what to do. Some are
+  just facts you look up. Some explain the why behind everything." She turns
+  to face you. "Is there actually a system for this? Like, are these different
+  types of documents?" You smile. "Yes — and once you see it, you can't unsee
+  it. There are four core patterns that cover almost everything a team writes."
+objectives:
+  - Learn the four core documentation types and what each one is for
+  - Tell the difference between a tutorial and a how-to guide
+  - Sort real document excerpts into the right category
+materials: []
+successCriteria:
+  - Multiple-choice question answered correctly
+  - Sorting task score of 75 or higher
+estimatedMinutes: 12
+prerequisiteMissionId: null
+assessments:
+  - id: u02-m01-a1
+    type: multiple-choice
+    title: Tutorial or How-To?
+    description: >
+      Jordan reads two document openings and asks which is which.
+      They sound similar — but they have a key difference.
+    xpReward: 45
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: A tutorial teaches. A how-to guide does. Is the goal to learn something new, or to get a specific task done?
+      - level: 2
+        text: >
+          Tutorials say "by the end of this, you will understand X."
+          How-to guides say "by the end of this, you will have done Y."
+    data:
+      question: >
+        Jordan shows you two document openings. Which one is a tutorial?
+
+        "A: In this guide, you will connect your app to Stripe.
+        By the end, you will have a working test payment flowing end-to-end."
+
+        "B: In this tutorial, you will learn how payment processing works.
+        We will explore how money moves from a customer's card to your bank account."
+      options:
+        - id: a
+          text: Document A is the tutorial
+          isCorrect: false
+          explanation: >
+            Document A is a how-to guide — its goal is "you will have a working
+            test payment." A how-to guide gets a specific thing done.
+        - id: b
+          text: Document B is the tutorial
+          isCorrect: true
+          explanation: >
+            Correct! Document B teaches how something works ("how payment processing
+            works"). A tutorial builds understanding, not just task completion.
+        - id: c
+          text: Both are tutorials
+          isCorrect: false
+          explanation: >
+            Document A drives toward a task outcome. Document B drives toward
+            understanding. They look similar but serve different purposes.
+        - id: d
+          text: Neither — both are how-to guides
+          isCorrect: false
+          explanation: >
+            Document B is clearly teaching a concept rather than completing a
+            task. That makes it a tutorial.
+  - id: u02-m01-a2
+    type: sorting
+    title: Sort the Four Types
+    description: >
+      Jordan pulls up four excerpts from the Northstar Apps wiki — one of
+      each core type. Sort them into the right category.
+    xpReward: 90
+    masteryThreshold: 75
+    debtReduction: 7
+    hints:
+      - level: 1
+        text: "Tutorial = learning a concept. How-to = completing a task. Reference = looking up facts. Explanation = understanding the why."
+      - level: 2
+        text: >
+          If an excerpt teaches a concept step by step — tutorial.
+          If it just lists facts or values with no narrative — reference.
+          If it answers "why does this work this way?" — explanation.
+    data:
+      instruction: >
+        Drag each excerpt into its correct document type.
+        Read carefully — the wording of each excerpt is a clue.
+      categories:
+        - id: tutorial
+          label: Tutorial
+          description: Teaches a concept or skill through a guided example
+        - id: howto
+          label: How-To Guide
+          description: Step-by-step instructions to accomplish a specific goal
+        - id: reference
+          label: Reference
+          description: Facts, values, or specs you look up — no narrative
+        - id: explanation
+          label: Explanation
+          description: Answers "why" — explains how something works conceptually
+      items:
+        - id: i1
+          text: >
+            "In this tutorial, you will learn how caching works at Northstar Apps.
+            We will walk through what happens when a user requests a page and
+            why the team decided to cache certain responses."
+          categoryId: tutorial
+          explanation: >
+            Teaching how caching works — a concept, not a task. The goal is
+            understanding, not task completion. This is a tutorial.
+        - id: i2
+          text: >
+            "To reset a user's password: go to Admin > Users, find the account,
+            click Reset Password, and confirm. The user receives an email
+            within 2 minutes."
+          categoryId: howto
+          explanation: >
+            A specific task with clear steps and a concrete outcome. Someone
+            came here to get something done. This is a how-to guide.
+        - id: i3
+          text: >
+            "Supported image formats: PNG (max 10MB), JPEG (max 10MB),
+            WebP (max 5MB), SVG (max 1MB). GIF is not supported."
+          categoryId: reference
+          explanation: >
+            Pure facts for lookup. No narrative, no steps, no explanation of why.
+            This is reference material.
+        - id: i4
+          text: >
+            "We store user preferences in Redis rather than the database because
+            preference lookups happen on every page load. Database queries would
+            add 40–80ms of latency at scale. Redis keeps it under 2ms."
+          categoryId: explanation
+          explanation: >
+            Explains the reasoning behind a technical decision — "why Redis?"
+            not "how to use Redis." This is an explanation.

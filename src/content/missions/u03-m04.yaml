@@ -1,0 +1,221 @@
+id: u03-m04
+unitId: unit-03
+order: 4
+slug: u03-m04
+title: "Boss: Rewrite for the Right Reader"
+scenario: >
+  The engineering team wrote a refund SOP that is technically accurate but completely
+  unusable by support specialists. It references API endpoints, idempotency keys, and
+  database transaction logs. Support specialists use the Billing Dashboard UI, not direct
+  API calls. Your job is to rewrite this SOP for support specialists — same process,
+  different audience, different language, different level of detail.
+objectives:
+  - Identify the vocabulary, assumptions, and framing that make a document audience-inappropriate
+  - Rewrite a technical SOP using support-specialist language and UI-based steps
+  - Apply scope rules — include only what the support specialist needs to complete the task
+materials:
+  - id: doc-eng-refund-sop
+    filename: sop-refund-processing-engineering.md
+    title: SOP — Refund Processing — Engineering Reference
+    trustScore: 72
+    findabilityScore: 35
+    issues:
+      - Written for engineers — uses API terminology, database concepts, and system architecture language
+      - Support specialists cannot follow these steps in their tooling
+      - No audience field despite being clearly engineering-specific
+      - Useful as an engineering reference but misfiled in the general support wiki
+    frontmatter:
+      title: SOP — Refund Processing — Engineering Reference
+      status: Active
+      owner: Platform Engineering
+      last_reviewed: "2026-03-12"
+    body: |
+      # SOP — Refund Processing — Engineering Reference
+
+      ## Overview
+
+      Refunds are processed via the Stripe API using the POST /v1/refunds endpoint.
+      Each refund request must include a unique idempotency key to prevent duplicate
+      processing in the event of network failure or retry. The billing service validates
+      the refund against the original payment intent ID before issuing.
+
+      ## Prerequisites
+
+      - Stripe API key with write permissions (stored in AWS Secrets Manager: prod/stripe/secret-key)
+      - Payment intent ID from the Postgres billing_transactions table
+      - Idempotency key (generate via UUID v4)
+
+      ## Steps
+
+      1. Retrieve the payment intent ID from billing_transactions WHERE order_id = [order_id]
+      2. Generate an idempotency key: uuidgen | tr '[:upper:]' '[:lower:]'
+      3. Call POST /v1/refunds with: payment_intent, amount (in cents), reason, metadata.ticket_id
+      4. Confirm HTTP 200 response with refund object containing status: "succeeded"
+      5. Update billing_transactions SET refund_status = 'completed', refund_id = [stripe_refund_id]
+      6. Trigger the email notification lambda: aws lambda invoke --function-name billing-notifications
+
+      ## Validation
+
+      Verify in Datadog: billing.refund.created event should appear within 30 seconds.
+      Check billing_audit_log for the refund entry with the correct ticket_id in metadata.
+
+      ## Rollback
+
+      If the refund was issued in error, call POST /v1/refunds/[refund_id]/cancel within
+      5 minutes. After 5 minutes, contact the customer and issue a correcting charge.
+successCriteria:
+  - Sorting task score of 75 or higher
+  - Rewritten SOP uses UI-based steps with no API or database terminology
+  - Rewritten SOP includes prerequisites, steps, and expected outcome appropriate for support specialists
+  - Writing task score of 75 or higher
+estimatedMinutes: 25
+prerequisiteMissionId: u03-m03
+assessments:
+  - id: u03-m04-a1
+    type: sorting
+    title: What Makes This Engineering-Only?
+    description: Sort each element into whether it belongs in a support specialist SOP or should stay in the engineering version.
+    xpReward: 80
+    masteryThreshold: 75
+    debtReduction: 7
+    hints:
+      - level: 1
+        text: Support specialists use the Billing Dashboard UI. They do not have database access, API keys, or command-line tools.
+      - level: 2
+        text: The support version of each step describes what to click in the UI, not what happens in the underlying system.
+    data:
+      instruction: >
+        Sort each element from the engineering SOP into its correct destination.
+      categories:
+        - id: support-version
+          label: Needs a Support Specialist Version
+          description: This concept exists for support but must be rewritten in UI terms
+        - id: engineering-only
+          label: Engineering-Only — Remove from Support SOP
+          description: Support specialists don't need or can't access this at all
+        - id: keep-both
+          label: Keep in Both Versions
+          description: This information applies to both audiences with the same wording
+      items:
+        - id: i1
+          text: "\"Retrieve the payment intent ID from billing_transactions WHERE order_id = [order_id]\""
+          categoryId: engineering-only
+          explanation: Support specialists do not have database access. The Billing Dashboard shows the order ID directly in the UI.
+        - id: i2
+          text: "\"Generate an idempotency key: uuidgen | tr '[:upper:]' '[:lower:]'\""
+          categoryId: engineering-only
+          explanation: The Billing Dashboard handles idempotency automatically. Support specialists never generate keys.
+        - id: i3
+          text: "The concept of locating the specific transaction by order ID"
+          categoryId: support-version
+          explanation: Support specialists do locate transactions by order ID — but they do it by typing the ID into the Billing Dashboard search field, not querying a database.
+        - id: i4
+          text: "The concept of confirming the refund succeeded"
+          categoryId: support-version
+          explanation: Both audiences need to confirm success — but engineers check Datadog and billing_audit_log, while support specialists see the transaction status change in Billing Dashboard.
+        - id: i5
+          text: "\"Refunds over $500 require manager approval before submission\""
+          categoryId: keep-both
+          explanation: This is a business rule that applies regardless of who is processing the refund. Both versions need this warning with the same wording.
+        - id: i6
+          text: "\"Trigger the email notification lambda: aws lambda invoke --function-name billing-notifications\""
+          categoryId: engineering-only
+          explanation: Support specialists do not invoke Lambda functions. The Billing Dashboard sends the confirmation email automatically when they click Submit.
+        - id: i7
+          text: "The concept of cancelling a refund issued in error"
+          categoryId: support-version
+          explanation: Support specialists can also reverse an erroneous refund — but they do it through the Billing Dashboard, not the Stripe API. The 5-minute window still applies.
+  - id: u03-m04-a2
+    type: writing
+    title: Rewrite the Refund SOP for Support Specialists
+    description: >
+      Rewrite the refund processing SOP so a support specialist can follow it
+      using only the Billing Dashboard. No API calls, no database queries, no
+      command-line steps. Keep the same process logic but in the right language
+      for the right audience.
+    xpReward: 150
+    masteryThreshold: 75
+    debtReduction: 12
+    trustDelta: 20
+    findabilityDelta: 15
+    hints:
+      - level: 1
+        text: "Start by rewriting the Prerequisites section. What does a support specialist actually need before they start? (Hint: it is not an API key.)"
+      - level: 2
+        text: Every step in your SOP should describe a UI action — clicking a button, selecting a dropdown, entering a value in a field.
+      - level: 3
+        text: "Replace the Validation section with an Expected Outcome section. What does the support specialist SEE in Billing Dashboard when the refund succeeds?"
+    data:
+      scenarioContext: >
+        The engineering refund SOP is accurate but unusable by support specialists.
+        Rewrite it for a support specialist audience using Billing Dashboard UI steps.
+        Assume the specialist has no API access, no database access, and no command-line tools.
+      docTemplate: |
+        # SOP — Refund Processing — Support Specialists
+
+        **Audience:** Support Specialists
+        **Owner:** [Owner name or team]
+        **Last reviewed:** 2026-05-04
+        **Status:** Active
+
+        ## Prerequisites
+
+        Before starting, confirm:
+
+        - [ ] [Prerequisite 1]
+        - [ ] [Prerequisite 2]
+
+        > **Stop:** If [condition], do not proceed. [What to do instead.]
+
+        ## Steps
+
+        1. [Step 1 — UI action in Billing Dashboard]
+        2. [Step 2]
+        3. [Step 3]
+        4. [Step 4]
+        5. [Step 5]
+
+        > **Important:** [Any critical warning that applies to support specialists, e.g. approval threshold]
+
+        ## Expected Outcome
+
+        When the refund has been processed successfully:
+
+        - [What the support specialist sees in Billing Dashboard]
+        - [What the customer receives]
+
+        ## If Something Goes Wrong
+
+        **If the refund fails:**
+        [What to do — UI-based, no engineering escalation detail]
+
+        **If you submitted a refund in error:**
+        [How to cancel it — within what time window — using what UI]
+      wordCountMin: 200
+      acceptedPatterns:
+        - Billing Dashboard
+        - prerequisite
+        - outcome
+        - approval
+        - support specialist
+      rubric:
+        - id: r1
+          label: Audience-appropriate language throughout
+          description: No API endpoints, database queries, or command-line steps appear anywhere in the document
+          weight: 25
+        - id: r2
+          label: UI-based steps
+          description: Every step describes a specific UI action in the Billing Dashboard (click, navigate, enter, select, submit)
+          weight: 25
+        - id: r3
+          label: Prerequisites match support specialist context
+          description: Prerequisites describe access, role, and readiness items a support specialist would actually check
+          weight: 20
+        - id: r4
+          label: Expected outcome is observable in the UI
+          description: The outcome section describes what the specialist sees in Billing Dashboard, not what happens in the underlying system
+          weight: 20
+        - id: r5
+          label: Appropriate scope — nothing extraneous
+          description: The SOP contains only what is needed to perform the task; no policy text, no engineering architecture, no unrelated context
+          weight: 10

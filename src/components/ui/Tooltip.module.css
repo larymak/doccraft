@@ -1,0 +1,110 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tip {
+  position: absolute;
+  background-color: var(--fcc-blue-mid);
+  color: var(--fcc-text-light);
+  font-size: var(--text-xs);
+  font-family: var(--font-body);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  /* Prevent layout shift by using transform */
+}
+
+/* Arrow via pseudo-element */
+.tip::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+}
+
+/* Positions */
+.tip--top {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+}
+.tip--top::before {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--fcc-blue-mid);
+  border-bottom: none;
+}
+
+.tip--bottom {
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+}
+.tip--bottom::before {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: var(--fcc-blue-mid);
+  border-top: none;
+}
+
+.tip--left {
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%) translateX(4px);
+}
+.tip--left::before {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: var(--fcc-blue-mid);
+  border-right: none;
+}
+
+.tip--right {
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+}
+.tip--right::before {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: var(--fcc-blue-mid);
+  border-left: none;
+}
+
+/* Show on hover */
+.wrapper:hover .tip--top,
+.wrapper:focus-within .tip--top {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.wrapper:hover .tip--bottom,
+.wrapper:focus-within .tip--bottom {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.wrapper:hover .tip--left,
+.wrapper:focus-within .tip--left {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.wrapper:hover .tip--right,
+.wrapper:focus-within .tip--right {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}

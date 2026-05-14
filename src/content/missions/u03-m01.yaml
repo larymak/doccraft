@@ -1,0 +1,206 @@
+id: u03-m01
+unitId: unit-03
+order: 1
+slug: u03-m01
+title: Who Is This Actually For?
+scenario: >
+  The Northstar Apps wiki has grown to 90 documents with no audience labels.
+  Support specialists open engineering runbooks and get lost. New hires read
+  management reports and have no idea what they mean. Your manager asks you
+  to tag every document with its intended audience so the team can finally
+  filter and find what they need.
+objectives:
+  - Identify the intended audience for a document based on its content and framing
+  - Distinguish between the four main internal audiences at Northstar Apps
+  - Explain why audience mismatch causes knowledge debt even when docs exist
+materials:
+  - id: doc-audience-sample-1
+    filename: api-error-budget-report.md
+    title: API Error Budget Report — Q1 2026
+    trustScore: 60
+    findabilityScore: 25
+    issues:
+      - No audience field in frontmatter
+      - Assumes familiarity with SLO/SLI terminology without defining it
+      - Written in executive summary style but stored in the Engineering folder
+    frontmatter:
+      title: API Error Budget Report — Q1 2026
+      status: Active
+      owner: Platform Engineering
+      last_reviewed: "2026-04-01"
+    body: |
+      # API Error Budget Report — Q1 2026
+
+      **Period:** January–March 2026
+      **Prepared by:** Platform Engineering
+
+      ## Summary
+
+      The API error budget consumed 61% of its quarterly allocation by week 10.
+      Three contributing incidents account for 78% of total budget burn.
+      Current trajectory: budget exhausted by May if no corrective action is taken.
+
+      ## Budget Burn by Service
+
+      | Service | Budget Used | Status |
+      |---------|------------|--------|
+      | Checkout API | 34% | At risk |
+      | Auth Service | 18% | Healthy |
+      | Billing API | 9% | Healthy |
+
+      ## Recommended Actions
+
+      1. Freeze non-critical deploys to Checkout API until error rate stabilizes
+      2. Conduct blameless review of the March 14 incident
+      3. Revisit alerting thresholds for Checkout latency
+  - id: doc-audience-sample-2
+    filename: refund-processing-steps.md
+    title: Refund Processing Steps
+    trustScore: 50
+    findabilityScore: 40
+    issues:
+      - No audience field
+      - Uses internal engineering terminology (payment processor API, idempotency key) without explanation
+      - Designed for support specialists but stored in the Engineering wiki
+    frontmatter:
+      title: Refund Processing Steps
+      status: Active
+      owner: Sarah Chen
+      last_reviewed: "2026-02-15"
+    body: |
+      # Refund Processing Steps
+
+      ## Prerequisites
+
+      - Access to Billing Dashboard (request via #it-access)
+      - Support specialist role in the customer account system
+
+      ## Steps
+
+      1. Open the customer account in Billing Dashboard
+      2. Navigate to Transactions > Find the transaction by order ID
+      3. Click "Issue Refund" — this calls the payment processor API with an idempotency key
+      4. Enter the refund amount (cannot exceed original transaction amount)
+      5. Select refund reason from the dropdown
+      6. Add a note with the support ticket number
+      7. Click Submit — the customer receives a confirmation email automatically
+
+      ## What to Do If It Fails
+
+      If the refund fails with error code 402, the payment processor rejected it.
+      Escalate to #billing-eng with the transaction ID and error message.
+successCriteria:
+  - All sorting items placed in the correct audience category
+  - Multiple-choice question answered correctly
+  - Sorting task score of 75 or higher
+estimatedMinutes: 14
+prerequisiteMissionId: null
+assessments:
+  - id: u03-m01-a1
+    type: sorting
+    title: Tag the Audience
+    description: Sort each document excerpt into its intended audience category.
+    xpReward: 90
+    masteryThreshold: 75
+    debtReduction: 7
+    hints:
+      - level: 1
+        text: Ask yourself who would actually open this document and use it on a normal workday.
+      - level: 2
+        text: "Look for clues in the vocabulary: does it use customer-facing language, technical system terms, process steps, or strategic metrics?"
+    data:
+      instruction: >
+        Sort each document excerpt into the audience it was actually written for.
+      categories:
+        - id: support
+          label: Support Specialists
+          description: Customer-facing team members handling tickets, refunds, and escalations
+        - id: engineering
+          label: Engineering / Platform Team
+          description: Developers and SREs who build, deploy, and operate the system
+        - id: new-hires
+          label: New Hires (All Roles)
+          description: People in their first 30–90 days who need orientation and setup guidance
+        - id: management
+          label: Management / Leadership
+          description: Managers, directors, and executives who need status, risk, and decision context
+      items:
+        - id: i1
+          text: "\"The API error budget consumed 61% of its quarterly allocation by week 10. Current trajectory: budget exhausted by May if no corrective action is taken.\""
+          categoryId: management
+          explanation: Error budget reports are strategic risk summaries for leadership to make decisions about deployment freezes and priorities.
+        - id: i2
+          text: "\"To issue a refund: open the customer account in Billing Dashboard, locate the transaction, click Issue Refund, enter the amount, and submit.\""
+          categoryId: support
+          explanation: Step-by-step refund instructions are written for support specialists who perform this task during customer interactions.
+        - id: i3
+          text: "\"If the deploy fails with exit code 137, the container exceeded its memory limit. Increase the ECS task memory definition and re-run the deploy workflow.\""
+          categoryId: engineering
+          explanation: Container memory limits and ECS task definitions are engineering-specific concepts. This is a runbook for platform engineers.
+        - id: i4
+          text: "\"Welcome to Northstar Apps. In your first week, you will set up your dev environment, meet your team lead, and complete the security training in Rippling.\""
+          categoryId: new-hires
+          explanation: Orientation language, tool setup, and first-week milestones are written for people who are new to the company and need general context.
+        - id: i5
+          text: "\"Q1 gross margin improved 4 points quarter-over-quarter. Customer acquisition cost is trending down. The board deck for Q2 planning is attached.\""
+          categoryId: management
+          explanation: Financial metrics and board materials are management-level content, not operational documentation.
+        - id: i6
+          text: "\"When a customer asks why their refund is taking more than 5 business days, check the payment processor status page first, then follow the escalation SOP.\""
+          categoryId: support
+          explanation: Instructions about how to respond to customers during support interactions are written specifically for support specialists.
+        - id: i7
+          text: "\"To rotate the database credentials: update the secret in AWS Secrets Manager, trigger the rolling restart workflow in GitHub Actions, and verify in Datadog.\""
+          categoryId: engineering
+          explanation: AWS Secrets Manager and GitHub Actions workflows are engineering-specific systems. Credential rotation is a platform team task.
+        - id: i8
+          text: "\"In your first month you will pair with a senior engineer on two features, attend the architecture review, and submit your first solo PR for review.\""
+          categoryId: new-hires
+          explanation: Milestone-based onboarding content written for new engineers getting oriented in their first 30 days.
+  - id: u03-m01-a2
+    type: multiple-choice
+    title: Audience Mismatch Impact
+    description: What goes wrong when the wrong person reads a document written for someone else?
+    xpReward: 45
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: Think about what a support specialist would do if they opened the API error budget report looking for help during a customer call.
+    data:
+      question: >
+        A support specialist opens the "API Error Budget Report — Q1 2026" during a
+        customer call to understand why refunds are failing. They cannot parse the
+        SLO/error budget terminology. What is the most accurate description of what
+        has happened here?
+      options:
+        - id: a
+          text: The support specialist needs more technical training.
+          isCorrect: false
+          explanation: >
+            The problem is not the specialist's knowledge level. The report was written for
+            engineering leadership. Blaming the reader for not understanding a document written
+            for a different audience is the wrong framing.
+        - id: b
+          text: The document is in the wrong folder and should be moved to the management section.
+          isCorrect: false
+          explanation: >
+            Moving it is part of the fix, but the core problem is that the document has no
+            audience label, so no one knew it was leadership-facing. Findability is a symptom
+            of missing audience metadata.
+        - id: c
+          text: >
+            The document exists and is accurate, but is knowledge debt for the support team because
+            there is no support-facing equivalent that explains the same situation in their terms.
+          isCorrect: true
+          explanation: >
+            Correct. The error budget report is useful for leadership. But the support team has
+            a gap: there is no document that tells them what to say to customers when API reliability
+            is degraded. The doc exists but serves the wrong reader. The debt is the missing
+            support-audience version.
+        - id: d
+          text: This is not a documentation problem. The support team should ask engineering directly.
+          isCorrect: false
+          explanation: >
+            Relying on verbal escalation is exactly how tribal knowledge debt forms. Every time
+            support asks engineering what to tell customers, the answer should be in a document.

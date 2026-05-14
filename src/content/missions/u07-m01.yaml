@@ -1,0 +1,185 @@
+id: u07-m01
+unitId: unit-07
+order: 1
+slug: u07-m01
+title: "Write a Properly Formatted Markdown Doc"
+scenario: >
+  Northstar Apps has just hired three new backend engineers. Their onboarding
+  guide currently lives in a Confluence page with broken formatting, no code
+  blocks, and a flat wall of text. The engineering manager wants it migrated
+  into the Git-backed docs repo as clean Markdown before the next cohort starts
+  in two weeks. You have been handed the raw text and asked to produce a properly
+  formatted Markdown file that will render correctly on the docs site.
+objectives:
+  - Apply correct heading hierarchy (h1 > h2 > h3) to structure a document
+  - Format inline code, code blocks, ordered and unordered lists correctly
+  - Write working Markdown links using the correct syntax
+  - Produce a document that passes the docs site linter
+materials:
+  - id: doc-onboarding-raw
+    filename: backend-onboarding-raw.txt
+    title: Backend Engineer Onboarding (Raw)
+    trustScore: 20
+    findabilityScore: 15
+    issues:
+      - Plain text with no Markdown formatting
+      - Code samples are inline without fencing — will render as prose
+      - No heading hierarchy — reads as a wall of text
+      - Lists are formatted with dashes but not as Markdown lists (no spacing)
+    frontmatter: {}
+    body: |
+      Backend Engineer Onboarding at Northstar Apps
+
+      Welcome to the backend team. This guide will help you get your development
+      environment set up and make your first contribution.
+
+      Prerequisites
+
+      Before you start, make sure you have the following installed: Git 2.40 or higher,
+      Node.js 20 LTS, Docker Desktop 4.x, and your SSH key added to GitHub.
+
+      Setting Up Your Local Environment
+
+      Clone the main monorepo with: git clone git@github.com:northstarapps/platform.git
+
+      Then install dependencies by running: cd platform && npm install
+
+      Start the local stack: docker compose up -d
+
+      Verify everything is running by visiting http://localhost:3000 in your browser.
+      You should see the Northstar Apps local dashboard.
+
+      Your First Pull Request
+
+      All changes go through pull requests. Never push directly to main.
+
+      The branch naming convention is: type/TICKET-description
+      Examples: feat/NP-1234-add-refund-endpoint, fix/NP-1235-null-pointer-payments
+
+      To create a PR, push your branch and open it on GitHub. Fill in the PR template.
+      Request a review from at least one team member.
+
+      Useful Links
+
+      Engineering Handbook: https://docs.northstarapps.internal/handbook
+      Slack channel for help: hash-backend-eng
+      Incident runbook: https://docs.northstarapps.internal/runbooks/incidents
+successCriteria:
+  - Document uses h1 for the title, h2 for top-level sections, h3 for subsections
+  - All commands are in fenced code blocks with a language identifier
+  - Lists use correct Markdown list syntax
+  - All three URLs are formatted as Markdown links with meaningful link text
+estimatedMinutes: 18
+prerequisiteMissionId: null
+assessments:
+  - id: u07-m01-a1
+    type: multiple-choice
+    title: Markdown Syntax Check
+    description: Identify the correctly formatted Markdown snippet from four options.
+    xpReward: 45
+    masteryThreshold: 75
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: A fenced code block uses triple backticks. An inline code span uses single backticks.
+    data:
+      question: >
+        Which of the following correctly formats a shell command as a fenced code block
+        with a language identifier in Markdown?
+      options:
+        - id: a
+          text: |
+            Run: `npm install`
+          isCorrect: false
+          explanation: >
+            Backtick-wrapped inline code is for short snippets within prose.
+            A command that the user must run on its own line should be a fenced code block
+            so it renders with a copy button and syntax highlighting.
+        - id: b
+          text: |
+            ```bash
+            npm install
+            ```
+          isCorrect: true
+          explanation: >
+            Correct. Triple backticks open and close a fenced code block.
+            Adding the language identifier "bash" after the opening fence enables
+            syntax highlighting on the docs site.
+        - id: c
+          text: |
+                npm install
+          isCorrect: false
+          explanation: >
+            Four-space indented code blocks are valid in some Markdown parsers but
+            are not recommended — they do not support language identifiers for
+            syntax highlighting and are easy to break accidentally.
+        - id: d
+          text: |
+            <code>npm install</code>
+          isCorrect: false
+          explanation: >
+            Raw HTML works in some Markdown renderers but is discouraged in the
+            Northstar Apps docs repo. It breaks the docs site linter and prevents
+            the copy-to-clipboard feature from working.
+  - id: u07-m01-a2
+    type: writing
+    title: Format the Onboarding Doc in Markdown
+    description: >
+      Reformat the raw backend onboarding text as a properly structured Markdown
+      document with correct headings, code blocks, lists, and links.
+    xpReward: 120
+    masteryThreshold: 70
+    debtReduction: 9
+    trustDelta: 15
+    hints:
+      - level: 1
+        text: Start by identifying the sections — each section title becomes an h2 heading.
+      - level: 2
+        text: >
+          Every command the reader must run (git clone, npm install, docker compose up -d)
+          should be in its own fenced code block labeled "bash" or "shell".
+      - level: 3
+        text: >
+          The three URLs at the end should become proper Markdown links:
+          [Engineering Handbook](https://docs.northstarapps.internal/handbook)
+    data:
+      scenarioContext: >
+        Rewrite the raw backend onboarding text as a properly formatted Markdown
+        document. Preserve all the information — only improve the formatting.
+      docTemplate: |
+        # [Document Title]
+
+        [Introduction paragraph]
+
+        ## [Section]
+
+        [Content — use lists, code blocks, and links as appropriate]
+
+        ## [Section]
+
+        [Content]
+      wordCountMin: 150
+      acceptedPatterns:
+        - "```"
+        - "## "
+        - "- "
+        - "](http"
+        - "bash"
+        - git clone
+      rubric:
+        - id: r1
+          label: Correct heading hierarchy
+          description: Uses h1 for document title, h2 for main sections — no heading levels are skipped
+          weight: 20
+        - id: r2
+          label: Fenced code blocks for all commands
+          description: Every shell command is in a fenced code block with a language identifier
+          weight: 30
+        - id: r3
+          label: Proper list formatting
+          description: Unordered and ordered lists use correct Markdown syntax with proper spacing
+          weight: 25
+        - id: r4
+          label: Markdown links for all URLs
+          description: All URLs are formatted as [link text](url) with descriptive link text
+          weight: 25

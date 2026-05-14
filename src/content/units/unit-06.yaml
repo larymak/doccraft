@@ -1,0 +1,50 @@
+id: unit-06
+order: 6
+title: Searchability and Metadata
+description: >
+  Learn how search depends on well-structured titles, summaries, tags, and
+  front matter. Fix documents that exist but cannot be found.
+goal: >
+  Add complete YAML front matter to three documents, diagnose two failed
+  searches, and create canonical links between related docs.
+prerequisiteUnitId: unit-05
+tier: advanced
+badge:
+  id: badge-metadata-master
+  label: Metadata Master
+  description: Made documents findable through structured metadata and canonical links
+  color: "#f59e0b"
+  iconSlug: metadata-master
+  earnedCondition: Complete the Unit 6 boss mission with score >= 80
+totalXP: 420
+missions:
+  - u06-m01
+  - u06-m02
+  - u06-m03
+  - u06-m04
+bossMissionId: u06-m04
+contentBlocks:
+  - type: text
+    content: >
+      Most documentation search failures are not search engine failures. They
+      are content structure failures. A document titled "Money Flow v2" will
+      never surface when someone searches for "customer refund."
+  - type: example
+    label: Well-structured front matter
+    content: |
+      title: "SOP - Refund Processing"
+      doc_type: "SOP"
+      status: "Active"
+      owner: "Support Operations"
+      backup_owner: "Billing Engineering"
+      audience:
+        - "Support specialists"
+        - "Support leads"
+      last_reviewed: "2026-04-01"
+      next_review: "2026-07-01"
+      tags:
+        - "refunds"
+        - "billing"
+        - "customer support"
+      canonical: true
+      sensitivity: "Internal"

@@ -1,0 +1,304 @@
+id: u09-m03
+unitId: unit-09
+order: 3
+slug: u09-m03
+title: "Mark a Superseded ADR"
+scenario: >
+  A new engineer on the Northstar Apps platform team finds two conflicting ADRs
+  in the architecture decision log. ADR-008 from 2023 says the team will use
+  MongoDB for the customer profile service. ADR-031 from 2025 says the team
+  migrated the customer profile service to PostgreSQL. Both ADRs are marked
+  "Accepted" and neither links to the other. A new hire followed ADR-008 and
+  built a data access layer for MongoDB — now it needs to be rewritten. You need
+  to correctly mark ADR-008 as superseded, link both ADRs to each other, and
+  explain what the standard process for superseding an ADR looks like.
+objectives:
+  - Understand what it means for an ADR to be superseded
+  - Update an old ADR's status and link it to the ADR that supersedes it
+  - Update the new ADR to reference the ADR it supersedes
+  - Explain why superseded ADRs should be kept rather than deleted
+materials:
+  - id: doc-adr-008
+    filename: adr-008-mongodb-customer-profiles.md
+    title: "ADR-008: Use MongoDB for Customer Profile Service"
+    trustScore: 30
+    findabilityScore: 55
+    issues:
+      - Status is "Accepted" but the decision has been reversed by ADR-031
+      - No link to ADR-031 — readers have no way to know this ADR is outdated
+      - A new hire followed this ADR and built the wrong data access layer
+    frontmatter:
+      title: "ADR-008: Use MongoDB for Customer Profile Service"
+      doc_type: "adr"
+      status: "active"
+      owner: "platform-engineering"
+      last_reviewed: "2023-06-15"
+      next_review: "2024-06-15"
+      tags:
+        - adr
+        - mongodb
+        - database
+        - customer-profiles
+    body: |
+      # ADR-008: Use MongoDB for Customer Profile Service
+
+      **Date:** 2023-06-15
+      **Status:** Accepted
+      **Deciders:** Platform Engineering leads
+
+      ## Context
+
+      The customer profile service needs a flexible schema to store user preferences,
+      custom attributes, and third-party identity provider data. The exact shape of
+      profile data varies significantly between enterprise and consumer customers.
+      A relational schema would require frequent migrations as new attribute types are added.
+
+      ## Decision
+
+      We will use MongoDB as the primary data store for the customer profile service.
+      The flexible document model eliminates migration overhead when new attribute types
+      are added by enterprise customers.
+
+      ## Consequences
+
+      **Positive:**
+      - No schema migrations required when adding new attribute types
+      - Native support for nested documents (e.g., identity provider tokens)
+      - Fast read performance for single-profile lookups
+
+      **Negative / Trade-offs:**
+      - No foreign key constraints — referential integrity must be enforced in application code
+      - Team must learn MongoDB query language and indexing model
+      - Joining customer profiles with payment data (PostgreSQL) requires application-level joins
+  - id: doc-adr-031
+    filename: adr-031-postgresql-customer-profiles.md
+    title: "ADR-031: Migrate Customer Profile Service to PostgreSQL"
+    trustScore: 75
+    findabilityScore: 50
+    issues:
+      - Does not reference ADR-008 as the decision it supersedes
+      - Status is "Accepted" but it should explicitly state it supersedes ADR-008
+    frontmatter:
+      title: "ADR-031: Migrate Customer Profile Service to PostgreSQL"
+      doc_type: "adr"
+      status: "active"
+      owner: "platform-engineering"
+      last_reviewed: "2025-03-20"
+      next_review: "2026-03-20"
+      tags:
+        - adr
+        - postgresql
+        - database
+        - customer-profiles
+    body: |
+      # ADR-031: Migrate Customer Profile Service to PostgreSQL
+
+      **Date:** 2025-03-20
+      **Status:** Accepted
+      **Deciders:** Platform Engineering, Data team leads
+
+      ## Context
+
+      The customer profile service has grown significantly since 2023. We now need
+      complex queries joining customer profiles with payment history, subscription
+      status, and fraud scores — all of which live in PostgreSQL. Application-level
+      joins between MongoDB and PostgreSQL are slow, error-prone, and difficult to
+      debug. The "flexible schema" benefit of MongoDB has not materialized — profile
+      schemas have been stable for 18 months. Meanwhile, the team has deep PostgreSQL
+      expertise and existing tooling (migrations, connection pooling, monitoring) is
+      all PostgreSQL-native.
+
+      ## Decision
+
+      We will migrate the customer profile service from MongoDB to PostgreSQL.
+      All profile data will be stored in the main PostgreSQL cluster alongside
+      payment and subscription data.
+
+      ## Consequences
+
+      **Positive:**
+      - Eliminates application-level joins between MongoDB and PostgreSQL
+      - Unified database tooling — one monitoring stack, one connection pool, one migration tool
+      - ACID transactions across customer profiles and payments
+
+      **Negative / Trade-offs:**
+      - Migration effort estimated at 3 engineer-weeks
+      - Schema must be defined upfront — flexible attribute storage uses JSONB columns
+      - Slightly higher storage cost than MongoDB for equivalent data volume
+successCriteria:
+  - ADR-008 status updated to "Superseded by ADR-031"
+  - ADR-008 includes a superseded-by link pointing to adr-031
+  - ADR-031 includes a supersedes link pointing to adr-008
+  - Learner correctly explains why superseded ADRs are kept rather than deleted
+estimatedMinutes: 16
+prerequisiteMissionId: u09-m02
+assessments:
+  - id: u09-m03-a1
+    type: multiple-choice
+    title: Why Keep Superseded ADRs?
+    description: Understand the institutional memory argument for preserving superseded ADRs.
+    xpReward: 40
+    masteryThreshold: 100
+    debtReduction: 3
+    hints:
+      - level: 1
+        text: >
+          Think about what a new engineer would lose if ADR-008 were deleted.
+          They would see ADR-031 but not understand what problem it was solving or
+          what was tried before.
+    data:
+      question: >
+        A team member argues that ADR-008 should be deleted now that ADR-031 supersedes it.
+        "Why keep a record of a wrong decision?" What is the best counter-argument?
+      options:
+        - id: a
+          text: >
+            Deleting ADRs is against company policy — all documents must be retained
+            for audit purposes.
+          isCorrect: false
+          explanation: >
+            Audit retention is a valid operational reason but it is not the best
+            architectural argument. The deeper reason is about institutional memory
+            and avoiding repeated mistakes.
+        - id: b
+          text: >
+            ADR-008 explains why MongoDB was chosen in 2023 — context that still matters.
+            If someone proposes MongoDB again in 2028, the team can reference both ADRs
+            to understand the full history: what problem MongoDB solved, why it was
+            later reversed, and what the reversal cost.
+          isCorrect: true
+          explanation: >
+            Correct. Superseded ADRs are institutional memory, not wrong decisions.
+            ADR-008 captures the 2023 context (flexible schema, uncertain data shape)
+            that made MongoDB a reasonable choice. ADR-031 captures why that decision
+            was reversed. Together they tell a complete story that prevents future teams
+            from relitigating the same debate without historical context.
+        - id: c
+          text: >
+            ADR-008 might become relevant again if the team migrates back to MongoDB someday.
+          isCorrect: false
+          explanation: >
+            This is a weak argument — "we might need it someday" is not a principled
+            reason to keep documentation. The real reason is that ADR-008 captures
+            historical context that ADR-031 explicitly builds on.
+        - id: d
+          text: >
+            Deleting ADRs creates gaps in the sequential numbering, which breaks the
+            cross-reference system.
+          isCorrect: false
+          explanation: >
+            Numbering consistency is a minor operational concern. Some teams use
+            non-sequential numbers or UUIDs for ADRs. This is not the core argument
+            for retaining superseded ADRs.
+  - id: u09-m03-a2
+    type: metadata-edit
+    title: Update ADR-008 to Superseded Status
+    description: >
+      Update the front matter and status field of ADR-008 to correctly mark it as
+      superseded by ADR-031.
+    xpReward: 60
+    masteryThreshold: 80
+    debtReduction: 5
+    trustDelta: 10
+    hints:
+      - level: 1
+        text: >
+          ADR status should be: "Superseded by ADR-031". The front matter should
+          also include a superseded_by field pointing to the new ADR.
+      - level: 2
+        text: >
+          The last_reviewed date should be updated to today — you are touching this
+          document now. The next_review can be left blank or set to a far future date
+          since superseded ADRs do not need regular review.
+    data:
+      scenarioContext: >
+        Update the front matter of ADR-008 to mark it as superseded by ADR-031.
+        Add the superseded_by field and update the status.
+      initialFrontmatter:
+        title: "ADR-008: Use MongoDB for Customer Profile Service"
+        doc_type: "adr"
+        status: "active"
+        owner: "platform-engineering"
+        last_reviewed: "2023-06-15"
+        next_review: "2024-06-15"
+        tags:
+          - adr
+          - mongodb
+          - database
+          - customer-profiles
+      requiredFields:
+        - status
+        - superseded_by
+        - last_reviewed
+      optionalFields:
+        - next_review
+        - related_docs
+      validationRules:
+        - field: status
+          rule: oneOf
+          value: "superseded"
+          feedback: >
+            Change status to "superseded". An ADR with status "active" or "accepted"
+            implies the decision is still in effect. This one has been reversed.
+        - field: superseded_by
+          rule: contains
+          value: "ADR-031"
+          feedback: >
+            Add a superseded_by field with the value "ADR-031" or the path to adr-031.
+            This creates a navigable link so readers of ADR-008 can find the current decision.
+        - field: last_reviewed
+          rule: equals
+          value: "2026-05-04"
+          feedback: Update last_reviewed to today's date since you are modifying this document now.
+  - id: u09-m03-a3
+    type: multiple-choice
+    title: Update ADR-031 to Reference ADR-008
+    description: Choose the correct way to update ADR-031 so it explicitly references the ADR it supersedes.
+    xpReward: 45
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: >
+          ADR-031 should make it clear it supersedes ADR-008, both in the status line
+          and in the context or a supersedes field.
+    data:
+      question: >
+        How should ADR-031's status line and front matter be updated to correctly
+        reference ADR-008 as the decision it supersedes?
+      options:
+        - id: a
+          text: >
+            Status: "Accepted" — no change needed; ADR-031 stands on its own.
+          isCorrect: false
+          explanation: >
+            ADR-031 supersedes ADR-008. If it does not say so, a reader cannot tell
+            from ADR-031 that a conflicting earlier decision exists. The link must
+            go both ways — ADR-008 points forward to ADR-031, and ADR-031 points
+            back to ADR-008.
+        - id: b
+          text: >
+            Status: "Accepted — supersedes ADR-008". Add a supersedes field in front matter
+            with the path to adr-008.
+          isCorrect: true
+          explanation: >
+            Correct. The bidirectional link is essential. Readers following the
+            decision log forward (ADR-008 → ADR-031) need the supersedes link.
+            Readers who find ADR-031 first can follow the supersedes link backward
+            to understand the full history.
+        - id: c
+          text: >
+            Delete ADR-008 and add a note in ADR-031 that "a previous document existed."
+          isCorrect: false
+          explanation: >
+            Never delete ADRs. ADR-008 contains historical context (the 2023 flexible
+            schema requirement) that informs why ADR-031 was necessary. Deleting it
+            destroys institutional memory.
+        - id: d
+          text: >
+            Change ADR-031's status to "Deprecated" since it replaces an older decision.
+          isCorrect: false
+          explanation: >
+            "Deprecated" means a decision is being phased out. ADR-031 is the current
+            active decision — it should remain "Accepted". The older ADR-008 is the
+            one that gets marked "Superseded".

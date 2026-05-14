@@ -1,0 +1,38 @@
+id: unit-03
+order: 3
+title: Audience, Task, and Scope
+description: >
+  Write documentation that the right person can actually use. Learn to define
+  audience, state prerequisites, scope content clearly, and remove noise.
+goal: >
+  Rewrite a vague SOP for a specific audience, add prerequisites and expected
+  outcomes, and remove content that does not serve the reader.
+prerequisiteUnitId: unit-02
+tier: intermediate
+badge:
+  id: badge-audience-advocate
+  label: Audience Advocate
+  description: Rewrote documentation to serve a specific reader clearly
+  color: "#8b5cf6"
+  iconSlug: audience-advocate
+  earnedCondition: Complete the Unit 3 boss mission with score >= 80
+totalXP: 380
+missions:
+  - u03-m01
+  - u03-m02
+  - u03-m03
+  - u03-m04
+bossMissionId: u03-m04
+contentBlocks:
+  - type: text
+    content: >
+      Every document has exactly one primary reader. Before writing a single
+      word, ask: who needs this? What do they already know? What do they need
+      to accomplish? What could go wrong for them?
+  - type: callout
+    variant: tip
+    content: >
+      A common mistake is writing for the author instead of the reader.
+      Engineers write deployment guides assuming readers know what a container
+      is. Support specialists write escalation guides assuming readers know
+      internal ticket systems. Always test your docs against a real reader.

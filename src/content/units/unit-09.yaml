@@ -1,0 +1,42 @@
+id: unit-09
+order: 9
+title: Decision Records and Institutional Memory
+description: >
+  Capture architectural and operational decisions so future team members
+  understand not just what was decided, but why.
+goal: >
+  Write an ADR from scattered meeting notes, mark a superseded decision,
+  and link an ADR to its downstream SOP and architecture guide.
+prerequisiteUnitId: unit-08
+tier: pro
+badge:
+  id: badge-adr-historian
+  label: ADR Historian
+  description: Preserved decision context that prevented a repeated architectural debate
+  color: "#d97706"
+  iconSlug: adr-historian
+  earnedCondition: Complete the Unit 9 boss mission with score >= 80
+totalXP: 400
+missions:
+  - u09-m01
+  - u09-m02
+  - u09-m03
+  - u09-m04
+bossMissionId: u09-m04
+contentBlocks:
+  - type: text
+    content: >
+      Decision amnesia is when a team repeats the same debates because the
+      original reasoning was never recorded. An Architecture Decision Record
+      (ADR) captures the context, options considered, decision made, and
+      expected consequences — so future teams understand why, not just what.
+  - type: example
+    label: ADR required fields
+    content: |
+      Title, Status, Date, Decision owner
+      Context (why this decision was needed)
+      Options considered (what was evaluated)
+      Decision (what was chosen)
+      Consequences (what changes as a result)
+      Follow-up work, Related docs
+      Supersedes / Superseded by

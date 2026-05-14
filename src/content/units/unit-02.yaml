@@ -1,0 +1,39 @@
+id: unit-02
+order: 2
+title: Document Types and Use Cases
+description: >
+  Learn to choose the right document type for every situation. The wrong type
+  creates confusion even when the content is accurate.
+goal: >
+  Correctly classify 15 documents and split a bloated wiki page into four
+  properly typed documents.
+prerequisiteUnitId: null
+tier: beginner
+badge:
+  id: badge-doc-classifier
+  label: Doc Classifier
+  description: Correctly identified and applied 8 or more document types
+  color: "#3b82f6"
+  iconSlug: doc-classifier
+  earnedCondition: Complete the Unit 2 boss mission with score >= 80
+totalXP: 420
+missions:
+  - u02-m01
+  - u02-m02
+  - u02-m03
+  - u02-m04
+bossMissionId: u02-m04
+contentBlocks:
+  - type: text
+    content: >
+      Different documentation needs call for different document types. A tutorial
+      walks someone through a new skill. An SOP tells them exactly how to execute
+      a process. A reference answers "what is this?" An explanation answers
+      "why does this work this way?"
+  - type: callout
+    variant: info
+    content: >
+      The Diátaxis framework separates documentation into four quadrants: tutorials
+      (learning), how-to guides (goal-oriented tasks), references (information),
+      and explanations (understanding). Northstar Apps uses this plus operational
+      types like SOPs, ADRs, postmortems, and changelogs.

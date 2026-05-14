@@ -1,0 +1,205 @@
+id: u02-m04
+unitId: unit-02
+order: 4
+slug: u02-m04
+title: "Boss: Fix the Mistyped Docs"
+scenario: >
+  Jordan pulls up two documents that have been causing real problems.
+  "These two pages have been confusing people for months," she says.
+  "The first one tries to be a tutorial AND a reference at the same time —
+  engineers keep getting lost halfway through. The second one is supposed to
+  help on-call engineers during incidents, but it's just a flat checklist
+  with no decision logic. Nobody uses it." She looks at you. "You've spent
+  this whole unit learning document types. Time to put it to work."
+objectives:
+  - Identify the correct type for two mistyped documents
+  - Rewrite a checklist as a proper runbook with if/then logic
+  - Explain what makes the rewrite better
+materials:
+  - id: doc-mistyped-1
+    filename: api-auth-guide.md
+    title: API Authentication Guide
+    trustScore: 35
+    findabilityScore: 40
+    issues:
+      - Mixed type — starts as a tutorial but ends with configuration reference tables
+      - Confusing to readers who need one or the other, not both
+    frontmatter:
+      title: API Authentication Guide
+      status: Active
+    body: |
+      # API Authentication Guide
+
+      In this tutorial, you will learn how OAuth 2.0 works at Northstar Apps.
+
+      ## Understanding OAuth
+
+      OAuth 2.0 is an authorization framework that allows applications to...
+      [300 words of explanation]
+
+      ## Supported Grant Types
+
+      | Grant Type | Use Case | Token Expiry |
+      |-----------|----------|-------------|
+      | Authorization Code | Web apps | 1 hour |
+      | Client Credentials | Server-to-server | 24 hours |
+      | Refresh Token | Long-lived sessions | 30 days |
+  - id: doc-mistyped-2
+    filename: incident-checklist.md
+    title: Incident Response Checklist
+    trustScore: 28
+    findabilityScore: 35
+    issues:
+      - Titled as a checklist but written as an SOP — no decision logic, not usable during an incident
+      - Missing the "if X then do Y" structure that incidents require
+    frontmatter:
+      title: Incident Response Checklist
+      status: Active
+    body: |
+      # Incident Response Checklist
+
+      When an incident occurs, the on-call engineer must:
+
+      1. Acknowledge the alert in PagerDuty within 5 minutes
+      2. Create an incident Slack channel
+      3. Diagnose the root cause
+      4. Fix the problem
+      5. Write a postmortem within 48 hours
+
+      This checklist ensures consistent incident response across the platform team.
+successCriteria:
+  - Correct type identified for both sample documents
+  - Writing task rewrites a document excerpt correctly for its new type
+  - Writing score of 70 or higher
+estimatedMinutes: 22
+prerequisiteMissionId: u02-m03
+assessments:
+  - id: u02-m04-a1
+    type: sorting
+    title: Fix the Mistyped Documents
+    description: What should each document become?
+    xpReward: 80
+    masteryThreshold: 75
+    debtReduction: 7
+    hints:
+      - level: 1
+        text: Look at how the document is used, not just what it contains.
+    data:
+      instruction: >
+        Each document is the wrong type. Sort it into what it should become.
+      categories:
+        - id: tutorial-plus-reference
+          label: Split into Tutorial + Reference
+          description: Separate the learning content from the lookup content
+        - id: runbook
+          label: Rewrite as Runbook
+          description: Add diagnostic decision trees and conditional steps for operational use
+        - id: keep-sop
+          label: Keep as SOP
+          description: The SOP structure is correct for this content
+        - id: adr
+          label: Rewrite as ADR
+          description: Extract the decision and document the reasoning
+      items:
+        - id: i1
+          text: "API Authentication Guide — mixes tutorial content with reference tables"
+          categoryId: tutorial-plus-reference
+          explanation: >
+            A tutorial should teach how OAuth works through example. The reference table
+            should live in a separate reference doc. Readers have different needs.
+        - id: i2
+          text: "Incident Response Checklist — written as a generic SOP with no diagnostic decision logic"
+          categoryId: runbook
+          explanation: >
+            An incident response guide used under pressure needs if/then logic, escalation
+            paths, and conditional steps. A flat SOP checklist fails during a real incident.
+  - id: u02-m04-a2
+    type: writing
+    title: Rewrite the Incident Checklist as a Runbook
+    description: >
+      Rewrite the Incident Response Checklist excerpt as a proper runbook.
+      Add diagnostic decision logic and conditional steps.
+    xpReward: 140
+    masteryThreshold: 70
+    debtReduction: 10
+    trustDelta: 20
+    hints:
+      - level: 1
+        text: A runbook uses if/then language. "If the alert is from Datadog, check X first."
+      - level: 2
+        text: Add severity levels. A P1 (production down) should have different steps than a P3 (minor degradation).
+      - level: 3
+        text: Include an escalation section. Who do you contact if you cannot diagnose in 30 minutes?
+    data:
+      scenarioContext: >
+        The Incident Response Checklist needs to become a runbook. Rewrite it with
+        diagnostic decision logic so an on-call engineer can actually use it during
+        a 2am incident.
+      docTemplate: |
+        # Runbook - Incident Response - Platform
+
+        **Type:** Runbook
+        **Audience:** On-call engineers (Platform team)
+        **Owner:** Platform Engineering
+        **Last reviewed:** 2026-05-04
+
+        ## Severity Levels
+
+        | Level | Definition | Response Time |
+        |-------|-----------|--------------|
+        | P1 | Production down or data loss | Immediate — wake up anyone needed |
+        | P2 | Major feature degraded | 15 minutes |
+        | P3 | Minor degradation, workaround available | 1 hour |
+
+        ## Initial Response (all incidents)
+
+        1. Acknowledge the alert in PagerDuty
+        2. [Add step]
+        3. [Add step]
+
+        ## Diagnosis
+
+        **If alert is from [monitoring tool]:**
+        - [Check X]
+        - [If X shows Y, then do Z]
+
+        **If you cannot identify root cause within 30 minutes:**
+        - [Escalation action]
+
+        ## Resolution Steps
+
+        [Add resolution steps]
+
+        ## Post-Incident
+
+        - [ ] Write postmortem within 48 hours
+        - [ ] Update this runbook if steps were missing or wrong
+      wordCountMin: 100
+      acceptedPatterns:
+        - P1
+        - escalat
+        - diagnos
+        - runbook
+        - on-call
+        - if
+        - check
+      rubric:
+        - id: r1
+          label: Severity levels defined
+          description: At least two severity levels with clear definitions
+          weight: 25
+          checkFn: keyword-check
+        - id: r2
+          label: Diagnostic decision logic
+          description: Uses if/then or conditional language (the words "if" or "check")
+          weight: 35
+          checkFn: keyword-check
+        - id: r3
+          label: Escalation path included
+          description: Mentions escalation or who to contact when stuck
+          weight: 25
+          checkFn: keyword-check
+        - id: r4
+          label: Correct runbook format
+          description: Document uses runbook structure, not a flat checklist
+          weight: 25

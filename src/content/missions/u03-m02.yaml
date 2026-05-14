@@ -1,0 +1,196 @@
+id: u03-m02
+unitId: unit-03
+order: 2
+slug: u03-m02
+title: Set the Stage Before the Steps
+scenario: >
+  A new support specialist followed the "Process a Chargeback" how-to guide step by step
+  and accidentally submitted a dispute for a transaction that was already resolved. The
+  guide had no prerequisites section and no expected outcome. Your job is to add both to
+  three how-to guides so readers know what they need before they start and what success
+  looks like when they finish.
+objectives:
+  - Identify what prerequisites are missing from a task-oriented document
+  - Write prerequisites that are specific, checkable, and actionable
+  - Write expected outcomes that are observable and tied to the task goal
+materials:
+  - id: doc-chargeback-guide
+    filename: how-to-process-chargeback.md
+    title: How to Process a Chargeback Dispute
+    trustScore: 38
+    findabilityScore: 50
+    issues:
+      - No prerequisites section — reader has no way to know if they are in the right context
+      - No expected outcome — reader does not know what done looks like
+      - Steps assume the reader already has the correct transaction status
+      - No warning about irreversible actions
+    frontmatter:
+      title: How to Process a Chargeback Dispute
+      status: Active
+      owner: Sarah Chen
+      audience: Support Specialists
+      last_reviewed: "2025-11-20"
+    body: |
+      # How to Process a Chargeback Dispute
+
+      ## Steps
+
+      1. Open the customer account in Billing Dashboard
+      2. Navigate to Transactions and locate the disputed transaction
+      3. Click "Dispute" > "Respond to Chargeback"
+      4. Upload the evidence documents (order confirmation, delivery proof, communication log)
+      5. Write a 2–3 sentence rebuttal summary in the text field
+      6. Select the dispute reason code from the dropdown
+      7. Click Submit — the response is sent to the payment processor automatically
+
+      **Note:** Responses must be submitted within 7 calendar days of the chargeback notice.
+successCriteria:
+  - Prerequisites identified correctly in sorting task
+  - Written prerequisites are specific and checkable
+  - Written expected outcome describes an observable end state
+  - Writing task score of 70 or higher
+estimatedMinutes: 18
+prerequisiteMissionId: u03-m01
+assessments:
+  - id: u03-m02-a1
+    type: sorting
+    title: Which Prerequisites Are Missing?
+    description: Sort each item into whether it is a missing prerequisite, a missing expected outcome, or already present in the guide.
+    xpReward: 70
+    masteryThreshold: 75
+    debtReduction: 6
+    hints:
+      - level: 1
+        text: A prerequisite is something the reader must have, know, or confirm BEFORE starting. An expected outcome describes what the reader should see or have AFTER completing all steps.
+      - level: 2
+        text: Look for gaps the new specialist fell into — what did they need to know before step 1 that the guide did not tell them?
+    data:
+      instruction: >
+        Sort each item into the correct category for the Chargeback Dispute guide.
+      categories:
+        - id: missing-prerequisite
+          label: Missing Prerequisite
+          description: Should appear in a Prerequisites section before the steps
+        - id: missing-outcome
+          label: Missing Expected Outcome
+          description: Should appear in an Expected Outcome section at the end
+        - id: already-present
+          label: Already Present
+          description: This information exists somewhere in the current guide
+      items:
+        - id: i1
+          text: The chargeback notice from the payment processor must be in your queue (status must be "Awaiting Response")
+          categoryId: missing-prerequisite
+          explanation: >
+            This is the most critical missing prerequisite. The new specialist submitted a dispute on a
+            resolved transaction because the guide never said to check the status first.
+        - id: i2
+          text: You must have the Billing Dashboard open and be logged in with a Support Specialist role
+          categoryId: missing-prerequisite
+          explanation: Access requirements are always prerequisites. The guide assumes this without stating it.
+        - id: i3
+          text: Evidence documents must be ready to upload (order confirmation, delivery proof, communication log)
+          categoryId: missing-prerequisite
+          explanation: >
+            Gathering evidence takes time. The reader should have this ready before starting the 7-day
+            clock is mentioned. This is a prepare-first prerequisite.
+        - id: i4
+          text: The dispute response has been submitted and the transaction status changes to "Dispute Response Sent"
+          categoryId: missing-outcome
+          explanation: >
+            An observable end state. The reader needs to know what to check to confirm the action
+            succeeded before closing the task.
+        - id: i5
+          text: You will receive a Billing Dashboard notification within 24 hours confirming the payment processor received the response
+          categoryId: missing-outcome
+          explanation: >
+            Confirmation of the downstream action. Without this, the reader cannot tell whether "Submit"
+            worked or silently failed.
+        - id: i6
+          text: Responses must be submitted within 7 calendar days of the chargeback notice
+          categoryId: already-present
+          explanation: The time limit is already stated in the note at the bottom of the guide.
+  - id: u03-m02-a2
+    type: writing
+    title: Write the Prerequisites and Expected Outcome
+    description: >
+      Add a Prerequisites section and an Expected Outcome section to the
+      Chargeback Dispute guide. Make both specific enough that a brand-new
+      support specialist knows exactly what to check before starting and what
+      to verify when they finish.
+    xpReward: 120
+    masteryThreshold: 70
+    debtReduction: 9
+    trustDelta: 18
+    hints:
+      - level: 1
+        text: Prerequisites use checkable language — "you have X", "the status shows Y", "you can access Z".
+      - level: 2
+        text: Expected outcomes describe what the reader should SEE in the system after completing the steps — not what they DID.
+      - level: 3
+        text: Include at least one warning prerequisite. What situation should stop the reader from continuing?
+    data:
+      scenarioContext: >
+        A new support specialist followed this guide and accidentally submitted a chargeback dispute
+        on an already-resolved transaction. Add the sections that would have prevented that mistake.
+      docTemplate: |
+        # How to Process a Chargeback Dispute
+
+        **Audience:** Support Specialists
+        **Owner:** Sarah Chen
+        **Last reviewed:** 2026-05-04
+
+        ## Prerequisites
+
+        Before starting, confirm all of the following:
+
+        - [ ] [Prerequisite 1 — access or role requirement]
+        - [ ] [Prerequisite 2 — transaction status requirement]
+        - [ ] [Prerequisite 3 — evidence readiness]
+
+        > **Stop:** If [condition that should block the reader], do not proceed.
+        > [What to do instead.]
+
+        ## Steps
+
+        1. Open the customer account in Billing Dashboard
+        2. Navigate to Transactions and locate the disputed transaction
+        3. Click "Dispute" > "Respond to Chargeback"
+        4. Upload the evidence documents (order confirmation, delivery proof, communication log)
+        5. Write a 2–3 sentence rebuttal summary in the text field
+        6. Select the dispute reason code from the dropdown
+        7. Click Submit — the response is sent to the payment processor automatically
+
+        **Note:** Responses must be submitted within 7 calendar days of the chargeback notice.
+
+        ## Expected Outcome
+
+        When you have completed all steps successfully:
+
+        - [Observable system state 1]
+        - [Observable system state 2]
+        - [What to do if the expected outcome does not appear]
+      wordCountMin: 120
+      acceptedPatterns:
+        - prerequisite
+        - status
+        - Awaiting Response
+        - outcome
+        - confirm
+      rubric:
+        - id: r1
+          label: Prerequisites are specific and checkable
+          description: Each prerequisite can be verified by looking at a system state or checking access — not just general advice
+          weight: 30
+        - id: r2
+          label: Stop condition included
+          description: At least one warning or stop condition tells the reader when NOT to proceed
+          weight: 25
+        - id: r3
+          label: Expected outcome is observable
+          description: The outcome section describes what the reader should see in the system, not what they did
+          weight: 30
+        - id: r4
+          label: Fallback or recovery guidance
+          description: Includes at least one sentence on what to do if the expected outcome does not appear
+          weight: 15

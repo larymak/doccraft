@@ -1,0 +1,205 @@
+id: u01-m03
+unitId: unit-01
+order: 3
+slug: u01-m03
+title: Reading the Docs
+scenario: >
+  Jordan drops by with a printout and sets it on your desk. "Would you mind
+  taking a look at these three docs?" she asks. "I keep telling leadership
+  that our documentation needs work but I can't quite explain why some docs
+  feel trustworthy and others make me nervous. You're the expert — can you
+  help me put words to it?" You flip through the pages. Three documents,
+  three very different feelings. Time to figure out what separates a doc
+  you can trust from one you really can't.
+objectives:
+  - Understand what makes a document trustworthy — or not
+  - Identify the specific things missing from each document
+  - Rank three real documents by how much you would trust them
+materials:
+  - id: doc-deploy-guide
+    filename: deployment-guide.md
+    title: Deployment Guide
+    trustScore: 25
+    findabilityScore: 30
+    issues:
+      - No owner listed
+      - Last updated field says "TBD"
+      - References a Heroku deployment that was migrated to AWS 14 months ago
+      - No review date
+      - No audience specification
+    frontmatter:
+      title: Deployment Guide
+      status: Active
+    body: |
+      # Deployment Guide
+
+      This guide covers deploying Northstar Apps to production.
+
+      ## Steps
+
+      1. Push to the main branch
+      2. Heroku will auto-deploy (check the Heroku dashboard)
+      3. Verify the deployment at https://northstar-staging.herokuapp.com
+      4. If staging looks good, promote to production in Heroku
+
+      Last updated: TBD
+      Owner: TBD
+  - id: doc-refund-sop
+    filename: refund-sop-v3.md
+    title: Refund Processing SOP v3
+    trustScore: 45
+    findabilityScore: 20
+    issues:
+      - Filename includes "v3" with no version history
+      - No audience section
+      - Steps are numbered but missing validation criteria
+      - No escalation path
+      - Backup owner field is empty
+    frontmatter:
+      title: Refund Processing SOP v3
+      owner: Sarah Chen
+      status: Active
+      last_reviewed: "2025-06-01"
+    body: |
+      # Refund Processing SOP v3
+
+      Owner: Sarah Chen
+      Last reviewed: June 2025
+
+      ## Steps
+
+      1. Open the customer account in Billing Dashboard
+      2. Locate the transaction
+      3. Click "Issue Refund"
+      4. Enter the refund amount
+      5. Add a note referencing the support ticket number
+      6. Submit
+
+      Note: Refunds over $500 need manager approval (ask in #billing-ops).
+  - id: doc-onboarding-eng
+    filename: onboarding-engineers.md
+    title: Onboarding for Engineers
+    trustScore: 15
+    findabilityScore: 10
+    issues:
+      - No owner
+      - No date
+      - Links to a Confluence page that requires access nobody on the new team has
+      - Missing first-day checklist
+      - Assumes knowledge of internal systems not explained anywhere
+      - No next review date
+    frontmatter: {}
+    body: |
+      # Onboarding for Engineers
+
+      Welcome! Here's what you need to get started.
+
+      ## Setup
+
+      - Get access to GitHub (ask anyone)
+      - Check Confluence for the architecture overview (link: [Confluence](https://northstar.atlassian.net/wiki/spaces/ENG))
+      - Set up your dev environment (see the setup script in the repo)
+
+      ## First Tasks
+
+      - Pick up a "good first issue" from the backlog
+      - Pair with a senior engineer on your first PR
+successCriteria:
+  - Trust score assigned to all three documents within ±15 points of rubric
+  - At least 2 issues identified per document
+  - Knowledge debt level calculated correctly
+estimatedMinutes: 18
+prerequisiteMissionId: u01-m02
+assessments:
+  - id: u01-m03-a1
+    type: multiple-choice
+    title: What Makes a Doc Trustworthy?
+    description: >
+      Jordan wants to understand the single biggest driver of trust.
+      Which combination of missing fields creates the most risk?
+    xpReward: 40
+    masteryThreshold: 100
+    debtReduction: 3
+    hints:
+      - level: 1
+        text: >
+          Imagine you are following a document at 2am during an incident.
+          What would make you doubt it most?
+    data:
+      question: >
+        Jordan asks: "If I had to pick the worst combination of missing
+        information in a document, what would it be?" What is your answer?
+      options:
+        - id: a
+          text: No table of contents and no version number
+          isCorrect: false
+          explanation: >
+            Format issues make a doc harder to use, but they don't make you
+            question whether the information itself is correct.
+        - id: b
+          text: No owner, no review date, and status says "Active" but the content is 2 years old
+          isCorrect: true
+          explanation: >
+            This is the most dangerous combination. An orphaned document with an
+            overdue review and a misleading "Active" label will be followed
+            confidently — right into a mistake.
+        - id: c
+          text: No tags and no summary
+          isCorrect: false
+          explanation: >
+            These affect how easily people can find the doc, but once they find it
+            they can still trust its content.
+        - id: d
+          text: No related docs section and no prerequisites
+          isCorrect: false
+          explanation: >
+            Missing context makes a doc less complete, but it's less trust-damaging
+            than no owner or a misleading freshness signal.
+  - id: u01-m03-a2
+    type: sorting
+    title: Rank These Documents
+    description: >
+      Based on what you read, sort the three Northstar Apps documents
+      from lowest trust to highest. Go with your gut — then check your reasoning.
+    xpReward: 80
+    masteryThreshold: 70
+    debtReduction: 7
+    hints:
+      - level: 1
+        text: >
+          Count the governance gaps first — owner, review date, accuracy.
+          Those weigh the most in a trust score.
+    data:
+      instruction: >
+        Drag each document into the trust category that fits best.
+        Use what you read in the materials panel on the left.
+      categories:
+        - id: lowest
+          label: Low Trust (0–30)
+          description: Multiple critical fields missing or inaccurate
+        - id: medium
+          label: Medium Trust (31–60)
+          description: Has some governance but missing key fields
+        - id: highest
+          label: Higher Trust (61–100)
+          description: Well-governed, current, and reasonably complete
+      items:
+        - id: i1
+          text: "Onboarding for Engineers — no owner, no date, broken links, assumes context that isn't explained"
+          categoryId: lowest
+          explanation: >
+            No governance at all — and broken links make it actively harmful to
+            the exact people who need it most: new engineers on their first day.
+        - id: i2
+          text: "Refund Processing SOP v3 — has an owner and review date, but missing escalation path and backup owner"
+          categoryId: medium
+          explanation: >
+            Has a real foundation: an owner and a review date. But missing enough
+            fields to be risky during an incident when Sarah isn't available.
+        - id: i3
+          text: "Deployment Guide — titled 'Active' but references infrastructure that was retired 14 months ago"
+          categoryId: lowest
+          explanation: >
+            The Active status combined with deeply wrong information makes this
+            more dangerous than the onboarding doc. Someone will follow it
+            confidently into a broken deployment.

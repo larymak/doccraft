@@ -1,0 +1,290 @@
+id: u05-m04
+unitId: unit-05
+order: 4
+slug: u05-m04
+title: "Boss: Fix the Deployment Docs Area"
+scenario: >
+  The Northstar Apps deployment documentation area is a complete mess. There are 8 documents
+  related to deployment, but they have inconsistent names, several are filed in the wrong
+  folders, at least two documents cover the same topic with conflicting information, and
+  nobody has marked which document is the canonical reference. Your job is to rename them,
+  sort them into the correct folders, identify the canonical document for each topic, and
+  write a brief index that the platform team can use as their single entry point for all
+  deployment documentation.
+objectives:
+  - Apply naming conventions to all documents in a functional area
+  - Sort documents into the correct folder locations
+  - Identify the canonical document when duplicates exist
+  - Write a concise documentation index for a team area
+materials:
+  - id: doc-deploy-doc-1
+    filename: deployment-steps.md
+    title: deployment-steps.md
+    trustScore: 55
+    findabilityScore: 20
+    issues:
+      - No document type in filename
+      - Covers the production deployment process correctly using GitHub Actions
+      - Should be canonical — most accurate and recently reviewed
+    frontmatter:
+      title: Deployment Steps
+      status: Active
+      owner: Platform Engineering
+      last_reviewed: "2026-04-01"
+    body: |
+      # Deployment Steps
+
+      ## Trigger Conditions
+
+      Deploys run automatically when a PR is merged to main. Production
+      promotion requires manual approval in GitHub Actions.
+
+      ## Steps
+
+      1. Merge PR to main branch
+      2. GitHub Actions test suite runs automatically (10–15 min)
+      3. If tests pass, staging deploy runs automatically
+      4. Verify at https://staging.northstar-apps.com
+      5. In GitHub Actions, approve the "Production Deploy" workflow
+      6. Production deploy takes 8 minutes
+      7. Verify at https://northstar-apps.com
+
+      **Owner:** Platform Engineering
+      **Last reviewed:** April 2026
+  - id: doc-deploy-doc-2
+    filename: how-we-deploy.md
+    title: how-we-deploy.md
+    trustScore: 30
+    findabilityScore: 15
+    issues:
+      - No document type in filename
+      - Duplicate of deployment-steps.md but older and less accurate
+      - Still references Heroku staging URL which was decommissioned
+      - Should be deprecated, not kept as active
+    frontmatter:
+      title: How We Deploy
+      status: Active
+      last_reviewed: "2024-11-08"
+    body: |
+      # How We Deploy
+
+      1. Merge to main
+      2. Check Heroku staging at https://northstar-staging.herokuapp.com
+      3. Promote to production in GitHub Actions
+
+      Last reviewed: November 2024
+  - id: doc-deploy-doc-3
+    filename: env-vars.md
+    title: env-vars.md
+    trustScore: 60
+    findabilityScore: 25
+    issues:
+      - No document type declared in filename
+      - Accurate and up to date — good candidate for canonical reference
+      - Should be named as a Reference document
+    frontmatter:
+      title: Environment Variables
+      status: Active
+      owner: Platform Engineering
+      last_reviewed: "2026-03-15"
+    body: |
+      # Environment Variables
+
+      | Variable | Description | Required | Secret |
+      |----------|-------------|----------|--------|
+      | DATABASE_URL | Postgres connection string | Yes | Yes |
+      | REDIS_URL | Redis connection string | Yes | Yes |
+      | STRIPE_SECRET_KEY | Payment processing | Yes | Yes |
+      | SENDGRID_API_KEY | Email delivery | Yes | Yes |
+      | FEATURE_NEW_CHECKOUT | Checkout redesign flag | No | No |
+      | LOG_LEVEL | Logging verbosity (info/debug/error) | No | No |
+  - id: doc-deploy-doc-4
+    filename: deploy-troubleshooting.md
+    title: deploy-troubleshooting.md
+    trustScore: 48
+    findabilityScore: 30
+    issues:
+      - Should be named as a Runbook, not just "troubleshooting"
+      - Contains useful if/then diagnostic logic — good operational content
+      - No escalation path section
+    frontmatter:
+      title: Deploy Troubleshooting
+      status: Active
+      owner: Platform Engineering
+      last_reviewed: "2025-10-20"
+    body: |
+      # Deploy Troubleshooting
+
+      **Tests failing in CI but passing locally?**
+      Check that .env.test matches .env.ci. Missing variables cause most CI failures.
+
+      **Staging deploy stuck at "Building"?**
+      GitHub Actions runner may be overloaded. Wait 10 minutes. If still stuck, cancel and re-run.
+
+      **Production deploy failed mid-deploy?**
+      Do NOT re-deploy immediately. Check Datadog error logs first.
+      If database migration failure: ping #platform-oncall immediately.
+      If container crash: check ECS task logs in CloudWatch.
+successCriteria:
+  - Sorting task score of 80 or higher
+  - All documents correctly renamed, sorted, and canonical status assigned
+  - Written index is concise, accurate, and immediately usable
+  - Writing task score of 75 or higher
+estimatedMinutes: 25
+prerequisiteMissionId: u05-m03
+assessments:
+  - id: u05-m04-a1
+    type: sorting
+    title: Rename, Sort, and Mark Canonical
+    description: For each document, sort it into its correct action — rename and keep as canonical, rename and mark deprecated, or rename and sort to a different folder.
+    xpReward: 100
+    masteryThreshold: 80
+    debtReduction: 9
+    hints:
+      - level: 1
+        text: When two documents cover the same topic, the canonical one is the more accurate and recently reviewed version. The duplicate gets marked Deprecated.
+      - level: 2
+        text: The new filename should follow the naming convention exactly. Check the document type, topic, team, and whether it needs a [Deprecated] or [Draft] status tag.
+    data:
+      instruction: >
+        Sort each document into its correct outcome. Use the naming convention:
+        {DocType} - {Topic} - {Team} [Status if not Active].
+      categories:
+        - id: canonical-platform
+          label: "Canonical → Engineering > Platform"
+          description: Rename, mark as canonical for its topic, and file in Engineering > Platform
+        - id: deprecated-platform
+          label: "Deprecated → Engineering > Platform"
+          description: Rename with [Deprecated] status, file in Engineering > Platform (kept for history)
+        - id: canonical-reference
+          label: "Canonical → Engineering > Platform > Reference"
+          description: Rename as a Reference document, mark canonical, file under Engineering > Platform
+        - id: canonical-runbook
+          label: "Canonical → Engineering > Platform (Runbook)"
+          description: Rename as a Runbook, mark canonical, file under Engineering > Platform
+      items:
+        - id: i1
+          text: "deployment-steps.md — GitHub Actions production deploy process, reviewed April 2026, accurate"
+          categoryId: canonical-platform
+          explanation: >
+            This is the accurate, recently reviewed deployment SOP. Rename to "SOP - Production Deployment - Platform"
+            and mark it canonical. It belongs in Engineering > Platform as the definitive deployment procedure.
+        - id: i2
+          text: "how-we-deploy.md — Older deploy steps, still references decommissioned Heroku staging URL, reviewed November 2024"
+          categoryId: deprecated-platform
+          explanation: >
+            This is a duplicate of deployment-steps.md but is outdated and inaccurate (Heroku reference).
+            Rename to "SOP - Production Deployment - Platform [Deprecated]", set status to Deprecated,
+            and file in Engineering > Platform for historical reference. Do not delete — it may be referenced
+            in older postmortems.
+        - id: i3
+          text: "env-vars.md — Accurate table of all deployment environment variables, reviewed March 2026"
+          categoryId: canonical-reference
+          explanation: >
+            A lookup table of environment variables with no steps or narrative is a Reference document.
+            Rename to "Reference - Deployment Environment Variables - Platform" and mark as canonical.
+            No duplicate exists, so no deprecation needed.
+        - id: i4
+          text: "deploy-troubleshooting.md — If/then diagnostic logic for deployment failures, reviewed October 2025"
+          categoryId: canonical-runbook
+          explanation: >
+            Diagnostic decision logic for operational failures is a Runbook, not just a troubleshooting
+            doc. Rename to "Runbook - Deployment Failure Recovery - Platform". Mark canonical.
+            Note: the missing escalation path is a quality gap, not a naming/folder issue.
+  - id: u05-m04-a2
+    type: writing
+    title: Write the Deployment Docs Index
+    description: >
+      Write a concise documentation index for the deployment docs area that the
+      platform team can use as their single entry point. It should tell a new
+      platform engineer exactly which document to open for any deployment-related task.
+    xpReward: 150
+    masteryThreshold: 75
+    debtReduction: 12
+    trustDelta: 15
+    findabilityDelta: 20
+    hints:
+      - level: 1
+        text: A documentation index is not a table of contents — it is a "when should I open this?" guide. Each entry should tell the reader when to use the document, not just what it is called.
+      - level: 2
+        text: Include a section for deprecated documents so the team knows they exist but should not be used.
+      - level: 3
+        text: Keep each entry to 1–2 sentences. The index should be scannable in under 60 seconds.
+    data:
+      scenarioContext: >
+        You have renamed and reorganized the four deployment documents. Now write a
+        documentation index that lives at the top of the Engineering > Platform folder
+        as the first document a new platform engineer opens. It should direct them to
+        the right document for any deployment-related need.
+      docTemplate: |
+        # Deployment Documentation Index — Platform Team
+
+        **Maintained by:** Platform Engineering
+        **Last updated:** 2026-05-04
+        **Purpose:** Single entry point for all deployment-related documentation
+
+        > **New here?** Start with [document name] before reading anything else.
+
+        ---
+
+        ## When You Need To...
+
+        **Deploy to production:**
+        [Document name] — [1 sentence on what it covers and when to use it]
+
+        **Diagnose a failed deploy:**
+        [Document name] — [1 sentence]
+
+        **Check environment variable requirements:**
+        [Document name] — [1 sentence]
+
+        ---
+
+        ## Deprecated Documents
+
+        These documents are kept for historical reference but **should not be followed**.
+
+        | Document | Replaced By | Reason Deprecated |
+        |----------|-------------|-------------------|
+        | [Deprecated document name] | [Canonical document name] | [1-sentence reason] |
+
+        ---
+
+        ## Gaps and Known Issues
+
+        The following documentation gaps exist in this area and are tracked for resolution:
+
+        - [ ] [Gap 1 — e.g., missing escalation path in the runbook]
+        - [ ] [Gap 2 — optional]
+
+        ---
+
+        *To suggest changes to this index, post in #platform-docs or open a PR against this file.*
+      wordCountMin: 180
+      acceptedPatterns:
+        - index
+        - deprecated
+        - canonical
+        - deployment
+        - escalat
+      rubric:
+        - id: r1
+          label: Index covers all four documents
+          description: All four renamed documents are referenced with clear "when to use" guidance
+          weight: 30
+        - id: r2
+          label: Deprecated document is clearly marked
+          description: The deprecated SOP is listed separately with a note that it should not be followed and an explanation of why it was deprecated
+          weight: 25
+        - id: r3
+          label: Scannable structure
+          description: A new engineer can find the right document for their task in under 60 seconds using this index
+          weight: 20
+        - id: r4
+          label: Known gaps documented
+          description: At least one known quality gap (e.g., missing escalation path in runbook) is noted so the team can track it
+          weight: 15
+        - id: r5
+          label: Maintenance ownership clear
+          description: It is clear who owns this index and how to suggest updates
+          weight: 10

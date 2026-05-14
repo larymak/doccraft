@@ -1,0 +1,81 @@
+.link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.link:hover .card {
+  background: rgba(241, 190, 50, 0.06);
+  border-color: rgba(241, 190, 50, 0.3);
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--fcc-blue-mid);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.locked { opacity: 0.5; cursor: not-allowed; }
+.available, .in_progress { cursor: pointer; }
+.completed { opacity: 0.8; }
+
+.icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.iconDone {
+  background: var(--fcc-green);
+  color: var(--fcc-white);
+}
+
+.iconLock {
+  background: var(--fcc-blue-mid);
+  color: var(--fcc-gray-400);
+}
+
+.iconPlay {
+  background: var(--fcc-gold);
+  color: var(--fcc-navy);
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--fcc-text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  font-size: var(--text-xs);
+  color: var(--fcc-gray-400);
+  margin-top: 2px;
+}
+
+.inProgressBadge {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--fcc-gold);
+  background: rgba(241, 190, 50, 0.12);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}

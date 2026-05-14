@@ -1,0 +1,276 @@
+id: u06-m03
+unitId: unit-06
+order: 3
+slug: u06-m03
+title: "Add Synonyms and Canonical Sources"
+scenario: >
+  A search audit at Northstar Apps reveals that the same concept — the process of
+  connecting a third-party service to the platform — is described as "integration",
+  "connector", "plugin", and "add-on" across four different documents. None of them
+  link to each other and none declare themselves the canonical source. Engineers,
+  PMs, and support staff each find a different document and assume it is correct.
+  Your task is to designate one document as the canonical source, add synonym fields
+  to all four, and cross-link them so searches for any of the four terms lead users
+  to the right place.
+objectives:
+  - Identify when synonym fragmentation is causing search and trust problems
+  - Designate a single canonical document and mark the others as non-canonical
+  - Add synonym metadata so all four search terms resolve to the same canonical source
+  - Add cross-reference links between the related documents
+materials:
+  - id: doc-integration-guide
+    filename: integration-guide.md
+    title: Integration Guide
+    trustScore: 55
+    findabilityScore: 40
+    issues:
+      - Does not declare itself canonical
+      - No synonym field — "connector", "plugin", "add-on" searches do not surface it
+      - Most complete and accurate of the four — should be canonical
+    frontmatter:
+      title: "Integration Guide"
+      doc_type: "how-to"
+      status: "active"
+      owner: "platform-team"
+      last_reviewed: "2026-02-01"
+      next_review: "2026-08-01"
+      tags:
+        - integration
+        - third-party
+    body: |
+      # Integration Guide
+
+      This guide explains how to connect a third-party service to Northstar Apps
+      using the Integrations API.
+
+      ## Prerequisites
+
+      - An active Northstar Apps developer account
+      - API credentials for the third-party service
+      - Access to the Northstar Apps dashboard
+
+      ## Steps
+
+      1. Navigate to **Settings > Integrations** in the dashboard.
+      2. Click **Add Integration** and select your service from the catalog.
+      3. Enter your API credentials in the configuration panel.
+      4. Click **Test Connection** to verify the integration is live.
+      5. Enable the integration and configure event routing.
+
+      ## Troubleshooting
+
+      If the test connection fails, verify that your API key has the correct
+      permissions scopes enabled on the third-party service side.
+  - id: doc-connector-setup
+    filename: connector-setup.md
+    title: Connector Setup
+    trustScore: 45
+    findabilityScore: 38
+    issues:
+      - Uses "connector" throughout but covers the same concept as integration-guide.md
+      - Partially duplicates integration-guide.md with slight differences
+      - Should point to integration-guide.md as the canonical source
+    frontmatter:
+      title: "Connector Setup"
+      doc_type: "how-to"
+      status: "active"
+      owner: "platform-team"
+      last_reviewed: "2025-11-15"
+      next_review: "2026-05-15"
+      tags:
+        - connector
+        - setup
+    body: |
+      # Connector Setup
+
+      A connector links an external service to the Northstar Apps platform.
+
+      ## Getting Started
+
+      1. Go to **Settings > Connectors**.
+      2. Choose a connector from the marketplace.
+      3. Paste in your credentials and save.
+
+      _Note: This page may be out of date. Check with the platform team._
+  - id: doc-plugin-reference
+    filename: plugin-reference.md
+    title: Plugin Reference
+    trustScore: 40
+    findabilityScore: 30
+    issues:
+      - Uses "plugin" but describes the same integration concept
+      - Last reviewed 14 months ago — may contain stale API details
+      - Should point to integration-guide.md as the canonical source
+    frontmatter:
+      title: "Plugin Reference"
+      doc_type: "reference"
+      status: "active"
+      owner: "developer-experience"
+      last_reviewed: "2025-03-10"
+      next_review: "2025-09-10"
+      tags:
+        - plugin
+        - api
+    body: |
+      # Plugin Reference
+
+      Plugins extend Northstar Apps with external service data and actions.
+
+      ## Available Plugin Types
+
+      - **Data plugins** — pull metrics or records from external services
+      - **Action plugins** — trigger actions in external services from Northstar workflows
+
+      ## Installation
+
+      Refer to the developer portal for plugin credentials and setup instructions.
+  - id: doc-addon-overview
+    filename: add-on-overview.md
+    title: Add-On Overview
+    trustScore: 38
+    findabilityScore: 28
+    issues:
+      - Uses "add-on" for the same concept
+      - Very brief — mostly marketing copy, not actionable docs
+      - Should point to integration-guide.md as the canonical source
+    frontmatter:
+      title: "Add-On Overview"
+      doc_type: "explanation"
+      status: "active"
+      owner: "marketing"
+      last_reviewed: "2025-06-01"
+      next_review: "2026-06-01"
+      tags:
+        - add-on
+        - extensions
+    body: |
+      # Add-On Overview
+
+      Add-ons let you extend Northstar Apps with the tools your team already uses.
+      Browse hundreds of add-ons in the Northstar marketplace.
+
+      For setup instructions, contact your account manager or visit the help center.
+successCriteria:
+  - integration-guide.md is marked canonical with is_canonical true
+  - All four documents include a synonyms field with at least 3 cross-term synonyms
+  - The three non-canonical docs include a canonical_source field pointing to integration-guide.md
+  - The learner correctly identifies which document should be canonical and why
+estimatedMinutes: 18
+prerequisiteMissionId: u06-m02
+assessments:
+  - id: u06-m03-a1
+    type: multiple-choice
+    title: Which Document Should Be Canonical?
+    description: Decide which of the four documents should be the single canonical source.
+    xpReward: 45
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: >
+          The canonical source should be the most complete, most current, and owned by
+          the team most responsible for the feature.
+    data:
+      question: >
+        You have four documents describing the same concept under different names.
+        Which should become the canonical source, and why?
+      options:
+        - id: a
+          text: "integration-guide.md — most complete, most recently reviewed, owned by the platform team responsible for the feature"
+          isCorrect: true
+          explanation: >
+            Correct. integration-guide.md has the highest trust score, was reviewed
+            most recently, and is owned by the platform team — the authoritative source
+            for integration functionality. It also already uses the officially preferred term.
+        - id: b
+          text: "connector-setup.md — it already notes it may be out of date, so it is the most honest"
+          isCorrect: false
+          explanation: >
+            A document that self-flags as potentially stale is the opposite of a good
+            canonical source. Canonical docs must be trustworthy and current.
+        - id: c
+          text: "add-on-overview.md — it is the most broadly readable, written for a general audience"
+          isCorrect: false
+          explanation: >
+            Readability is a plus, but add-on-overview.md is marketing copy owned by
+            the marketing team, not the platform team. Canonical technical docs should
+            be owned by the team responsible for the feature.
+        - id: d
+          text: "plugin-reference.md — it is structured as a reference, which is the most authoritative doc type"
+          isCorrect: false
+          explanation: >
+            Doc type alone does not determine canonicity. plugin-reference.md was
+            last reviewed 14 months ago and its next_review date has already passed,
+            making it the least trustworthy of the four.
+  - id: u06-m03-a2
+    type: metadata-edit
+    title: Add Synonyms and Canonical Links
+    description: >
+      Update the front matter of integration-guide.md to declare it canonical and
+      add synonyms so all four search terms resolve to it.
+    xpReward: 85
+    masteryThreshold: 80
+    debtReduction: 7
+    findabilityDelta: 20
+    trustDelta: 15
+    hints:
+      - level: 1
+        text: >
+          Add is_canonical: true to integration-guide.md. Add a synonyms list with
+          all the alternative terms: connector, plugin, add-on.
+      - level: 2
+        text: >
+          For the non-canonical docs, add canonical_source pointing to
+          /docs/platform/integration-guide and is_canonical: false.
+    data:
+      scenarioContext: >
+        Update integration-guide.md's front matter to declare it as the canonical
+        source for the "integration / connector / plugin / add-on" concept. Add all
+        synonym terms so the search indexer maps them all to this document.
+      initialFrontmatter:
+        title: "Integration Guide"
+        doc_type: "how-to"
+        status: "active"
+        owner: "platform-team"
+        last_reviewed: "2026-02-01"
+        next_review: "2026-08-01"
+        tags:
+          - integration
+          - third-party
+      requiredFields:
+        - is_canonical
+        - synonyms
+        - canonical
+        - tags
+      optionalFields:
+        - related_docs
+        - description
+      validationRules:
+        - field: is_canonical
+          rule: equals
+          value: "true"
+          feedback: >
+            Set is_canonical to true on the document that is the authoritative source.
+            This tells the search indexer to prefer it when synonyms match.
+        - field: synonyms
+          rule: contains
+          value: "connector"
+          feedback: Add "connector" to the synonyms list so connector searches resolve here.
+        - field: synonyms
+          rule: contains
+          value: "plugin"
+          feedback: Add "plugin" to the synonyms list so plugin searches resolve here.
+        - field: synonyms
+          rule: contains
+          value: "add-on"
+          feedback: Add "add-on" to the synonyms list so add-on searches resolve here.
+        - field: tags
+          rule: minItems
+          value: "4"
+          feedback: >
+            Expand the tags list to include integration, connector, plugin, and add-on
+            so all four terms boost relevance scoring.
+        - field: canonical
+          rule: pattern
+          value: "^/docs/"
+          feedback: Set the canonical URL path using the /docs/ prefix format.

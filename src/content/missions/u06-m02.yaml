@@ -1,0 +1,218 @@
+id: u06-m02
+unitId: unit-06
+order: 2
+slug: u06-m02
+title: "Diagnose a Failed Search"
+scenario: >
+  A customer success manager at Northstar Apps files a support ticket: "I searched
+  'customer refund' three times and got nothing useful — I had to ask an engineer."
+  You pull up the search logs and confirm that the refund processing document exists
+  but never appears in those results. The document's title uses internal jargon,
+  its tags describe the implementation rather than the user need, and the front
+  matter status is still "draft" even though the doc has been live for eight months.
+  Diagnose what is failing and fix the metadata so the right people can find it.
+objectives:
+  - Identify the metadata reasons a document fails to surface in search
+  - Distinguish between user-language tags and implementation-language tags
+  - Fix a document's title, status, and tags to match how users search
+  - Understand how draft status suppresses search indexing
+materials:
+  - id: doc-refund-broken
+    filename: ledger-reversal-flow.md
+    title: Ledger Reversal Flow — Payments Engine
+    trustScore: 62
+    findabilityScore: 15
+    issues:
+      - Title uses internal implementation jargon ("ledger reversal") — customers and CSMs search for "refund"
+      - Status is "draft" so the search indexer excludes it entirely
+      - Tags describe the system internals, not the user-facing concept
+      - No audience field — indexer cannot route to correct reader segment
+    frontmatter:
+      title: "Ledger Reversal Flow — Payments Engine"
+      doc_type: "reference"
+      status: "draft"
+      owner: "payments-team"
+      last_reviewed: "2025-09-01"
+      next_review: "2026-09-01"
+      tags:
+        - ledger
+        - reversal
+        - double-entry
+        - payments-engine
+    body: |
+      # Ledger Reversal Flow — Payments Engine
+
+      This document describes how the Northstar Apps payments engine processes
+      ledger reversals when a transaction must be cancelled after settlement.
+
+      ## When a Reversal Occurs
+
+      A reversal is triggered when:
+      - A customer requests a refund within the 90-day refund window
+      - A chargeback dispute is upheld by the card network
+      - An internal billing error is detected and corrected
+
+      ## Reversal States
+
+      | State | Meaning |
+      |-------|---------|
+      | `reversal.pending` | Reversal request received, awaiting bank confirmation |
+      | `reversal.processing` | Bank has acknowledged; funds in transit |
+      | `reversal.settled` | Funds returned to customer's account |
+      | `reversal.failed` | Bank rejected the reversal; manual review required |
+
+      ## Processing Time
+
+      Standard reversals settle within 5–10 business days depending on the
+      customer's card network. ACH reversals may take up to 15 business days.
+
+      ## Escalation
+
+      If a reversal remains in `reversal.pending` for more than 3 business days,
+      open a ticket with the payments ops team at payments-ops@northstarapps.com.
+successCriteria:
+  - Correctly identifies all three root causes of the search failure
+  - Fixes the title to include user-facing language (refund)
+  - Updates status from "draft" to "active"
+  - Replaces implementation-only tags with a mix of user-language and technical tags
+estimatedMinutes: 16
+prerequisiteMissionId: u06-m01
+assessments:
+  - id: u06-m02-a1
+    type: sorting
+    title: What Is Causing the Search Failure?
+    description: >
+      Sort each potential cause into "real cause of failure" or "not a factor" based
+      on what you know about how the Northstar search indexer works.
+    xpReward: 50
+    masteryThreshold: 75
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: The search indexer only indexes documents with status "active" or "published".
+      - level: 2
+        text: Think about what words a customer success manager would type vs. what a payments engineer would type.
+    data:
+      instruction: >
+        Sort each factor below. Some are real causes of the search failure.
+        Others are red herrings.
+      categories:
+        - id: real-cause
+          label: Real Cause of Search Failure
+          description: This directly explains why searching "customer refund" returns nothing useful
+        - id: not-a-factor
+          label: Not a Factor
+          description: This does not explain the failed search result
+      items:
+        - id: i1
+          text: "Status is \"draft\" — the indexer excludes all draft documents from search results"
+          categoryId: real-cause
+          explanation: >
+            Draft status is the most immediate blocker. The search indexer at Northstar
+            only surfaces documents with status "active". Even a perfectly tagged draft
+            will not appear.
+        - id: i2
+          text: "Title is \"Ledger Reversal Flow\" — no user would search for that phrase"
+          categoryId: real-cause
+          explanation: >
+            Title carries the highest weight in search ranking. When the title uses
+            internal jargon that users never type, relevance scoring drops to near zero
+            even for related queries.
+        - id: i3
+          text: "Tags describe system internals (ledger, double-entry) not user-facing concepts (refund, return)"
+          categoryId: real-cause
+          explanation: >
+            Tags are the second-highest relevance signal. Tags like "ledger" and
+            "double-entry" match engineer searches, not customer success queries
+            about refunds.
+        - id: i4
+          text: "The document is too long — the indexer truncates long documents"
+          categoryId: not-a-factor
+          explanation: >
+            The Northstar search indexer does not truncate by document length.
+            Length is not a relevance factor. This is a red herring.
+        - id: i5
+          text: "The document has no description field"
+          categoryId: not-a-factor
+          explanation: >
+            Description is an optional field. Its absence reduces snippet quality in
+            results, but it is not why the document fails to appear at all.
+        - id: i6
+          text: "No audience field is set"
+          categoryId: not-a-factor
+          explanation: >
+            Missing audience reduces routing precision but does not exclude the document
+            from search entirely. The three active causes are more direct blockers.
+  - id: u06-m02-a2
+    type: metadata-edit
+    title: Fix the Document Metadata
+    description: >
+      Update the front matter of ledger-reversal-flow.md so it surfaces correctly
+      when customer success managers search for "customer refund".
+    xpReward: 80
+    masteryThreshold: 80
+    debtReduction: 7
+    findabilityDelta: 20
+    trustDelta: 10
+    hints:
+      - level: 1
+        text: The title needs to include the word "refund" — that is the term users search for.
+      - level: 2
+        text: >
+          You can keep some technical tags but add user-facing synonyms.
+          Think: what would a CSM type? What would an engineer type?
+      - level: 3
+        text: >
+          A good title for this doc might be: "Customer Refunds — How Northstar Apps Processes Returns".
+          It includes both the user term and the context.
+    data:
+      scenarioContext: >
+        Fix the front matter so the document appears when someone searches
+        "customer refund" or "refund processing". The content is accurate and
+        ready to publish — only the metadata needs work.
+      initialFrontmatter:
+        title: "Ledger Reversal Flow — Payments Engine"
+        doc_type: "reference"
+        status: "draft"
+        owner: "payments-team"
+        last_reviewed: "2025-09-01"
+        next_review: "2026-09-01"
+        tags:
+          - ledger
+          - reversal
+          - double-entry
+          - payments-engine
+      requiredFields:
+        - title
+        - status
+        - tags
+        - audience
+      optionalFields:
+        - description
+        - canonical
+      validationRules:
+        - field: title
+          rule: contains
+          value: "refund"
+          feedback: >
+            The title must include "refund" — that is the word users type. The current
+            title "Ledger Reversal Flow" is invisible to everyone outside the payments team.
+        - field: status
+          rule: oneOf
+          value: "active"
+          feedback: >
+            The document has been live for 8 months. Change status to "active" so the
+            search indexer picks it up.
+        - field: tags
+          rule: contains
+          value: "refund"
+          feedback: Tags must include "refund" as a user-language term alongside technical tags.
+        - field: tags
+          rule: minItems
+          value: "4"
+          feedback: Include at least 4 tags — a mix of user-facing terms and technical terms.
+        - field: audience
+          rule: nonempty
+          feedback: >
+            Set audience so the indexer can route the document to both customer success
+            managers and engineers. Use a value like "customer-success,engineering".

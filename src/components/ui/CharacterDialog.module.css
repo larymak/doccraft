@@ -1,0 +1,95 @@
+.dialog {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  animation: dialogIn 0.4s ease both;
+}
+
+.avatarCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  width: 64px;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.avatarInitial {
+  font-size: var(--text-2xl);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+
+.avatarName {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--fcc-text-light);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.avatarRole {
+  font-size: 10px;
+  color: var(--fcc-gray-400);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.bubble {
+  position: relative;
+  background: var(--fcc-blue-mid);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  flex: 1;
+}
+
+.bubble::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 18px;
+  border: 9px solid transparent;
+  border-right-color: rgba(255, 255, 255, 0.1);
+  border-left: none;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 19px;
+  border: 8px solid transparent;
+  border-right-color: var(--fcc-blue-mid);
+  border-left: none;
+}
+
+.bubbleText {
+  font-size: var(--text-base);
+  color: var(--fcc-text-light);
+  line-height: 1.7;
+  margin: 0;
+}
+
+@keyframes dialogIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,150 @@
+id: u04-m01
+unitId: unit-04
+order: 1
+slug: u04-m01
+title: Required, Optional, or Irrelevant?
+scenario: >
+  The Northstar Apps documentation team is building a standard SOP template that every
+  team must use. Someone has submitted a list of 20 candidate fields for the template.
+  Your job is to decide which fields are required for every SOP, which are optional
+  depending on context, and which do not belong in an SOP template at all.
+objectives:
+  - Distinguish between required, optional, and irrelevant fields in an SOP template
+  - Explain the purpose of each required field in terms of trustworthiness and usability
+  - Understand why templates with too many required fields get abandoned
+materials: []
+successCriteria:
+  - All sorting items placed in the correct category
+  - Sorting task score of 75 or higher
+  - Multiple-choice question answered correctly
+estimatedMinutes: 14
+prerequisiteMissionId: null
+assessments:
+  - id: u04-m01-a1
+    type: sorting
+    title: Sort the Template Fields
+    description: Sort each candidate field into Required, Optional, or Irrelevant for a standard SOP template.
+    xpReward: 100
+    masteryThreshold: 75
+    debtReduction: 8
+    hints:
+      - level: 1
+        text: A required field is one whose absence would make the SOP untrustworthy or impossible to maintain. Ask — what breaks if this field is missing?
+      - level: 2
+        text: Optional fields add value in specific contexts but are not always applicable. Irrelevant fields belong in a different document type entirely.
+    data:
+      instruction: >
+        Sort each candidate field into the correct category for a standard SOP template.
+      categories:
+        - id: required
+          label: Required
+          description: Must be present in every SOP for the document to be trustworthy and maintainable
+        - id: optional
+          label: Optional
+          description: Valuable in some SOPs but not universally applicable
+        - id: irrelevant
+          label: Irrelevant — Wrong Document Type
+          description: This field belongs in a different type of document, not an SOP
+      items:
+        - id: i1
+          text: Title
+          categoryId: required
+          explanation: Every SOP must have a title. Without it the document cannot be referenced, searched, or linked.
+        - id: i2
+          text: Owner
+          categoryId: required
+          explanation: An SOP without an owner is an orphan. No one knows who to ask when steps are wrong or outdated.
+        - id: i3
+          text: Status (Active / Draft / Deprecated)
+          categoryId: required
+          explanation: Readers must be able to tell whether the document reflects current practice. An SOP without a status invites blind trust in outdated content.
+        - id: i4
+          text: Last Reviewed Date
+          categoryId: required
+          explanation: Without a review date, readers cannot assess freshness. A 3-year-old "Active" SOP with no review date erodes trust silently.
+        - id: i5
+          text: Audience
+          categoryId: required
+          explanation: An SOP must declare who it is for. Audience determines language level, assumed context, and correct scope.
+        - id: i6
+          text: Prerequisites
+          categoryId: required
+          explanation: Every SOP needs prerequisites. A reader who starts without the required access or context will fail the task.
+        - id: i7
+          text: Backup Owner
+          categoryId: optional
+          explanation: A backup owner is a best practice but may not always be available, especially in small teams. It should be strongly encouraged but not required to publish.
+        - id: i8
+          text: Related Documents
+          categoryId: optional
+          explanation: Linking related docs improves navigation but not every SOP has related docs that are worth linking. This is optional but recommended.
+        - id: i9
+          text: Next Review Date
+          categoryId: optional
+          explanation: A target review date is valuable but some teams prefer calendar-based review cycles rather than per-document dates.
+        - id: i10
+          text: Tags and Search Keywords
+          categoryId: optional
+          explanation: Tags improve findability in wikis with search. Useful but not essential for the SOP to function correctly.
+        - id: i11
+          text: Decision Log (list of decisions made during document creation)
+          categoryId: irrelevant
+          explanation: Decision history belongs in an ADR, not an SOP. An SOP describes what to do, not why decisions were made.
+        - id: i12
+          text: Timeline of Incidents Where This SOP Failed
+          categoryId: irrelevant
+          explanation: Incident history belongs in postmortem documents. Including it in an SOP creates confusion about the document's purpose.
+        - id: i13
+          text: Glossary of All Company Terms Used Anywhere in the Wiki
+          categoryId: irrelevant
+          explanation: A company-wide glossary is a reference document. SOPs may include a small terms section for jargon specific to the SOP, but a full glossary does not belong.
+        - id: i14
+          text: Scope (what this SOP covers and explicitly does not cover)
+          categoryId: required
+          explanation: A scope statement prevents readers from applying the SOP to situations it was not designed for. It also keeps authors from adding scope creep over time.
+  - id: u04-m01-a2
+    type: multiple-choice
+    title: Why Templates Fail
+    description: What happens when a template has too many required fields?
+    xpReward: 45
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: Think about what a busy engineer does when they face a 25-field form before they can publish a doc.
+    data:
+      question: >
+        The Northstar Apps platform team tries to adopt a new SOP template with 22 required
+        fields. After two months, usage is worse than before the template existed —
+        people are either skipping the template entirely or filling fields with "N/A" and "TBD".
+        What is the most likely root cause?
+      options:
+        - id: a
+          text: The engineers do not value documentation.
+          isCorrect: false
+          explanation: >
+            Blaming contributor attitude avoids the real problem. Engineers who write code
+            with detailed comments and PR descriptions can and do write documentation when
+            templates are proportionate to the task.
+        - id: b
+          text: >
+            The template has too many required fields, making it feel like bureaucratic overhead.
+            Contributors bypass it because the cost of compliance exceeds the perceived value.
+          isCorrect: true
+          explanation: >
+            Correct. Template adoption fails when required fields outnumber what contributors
+            can reasonably fill in for a typical document. The result is abandonment or
+            compliance theater (filling fields with "TBD"). A good template requires only
+            what is genuinely critical and makes optional fields clearly optional.
+        - id: c
+          text: The template should have been built in Confluence, not the internal wiki.
+          isCorrect: false
+          explanation: >
+            The tool is not the problem. A 22-field mandatory template will be ignored
+            in Confluence, Notion, or any other wiki for the same reason.
+        - id: d
+          text: The fields should all be optional so contributors can decide what to fill in.
+          isCorrect: false
+          explanation: >
+            Making everything optional creates inconsistency — the original problem templates
+            are meant to solve. The fix is fewer required fields, not no required fields.

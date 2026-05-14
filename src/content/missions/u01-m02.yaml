@@ -1,0 +1,157 @@
+id: u01-m02
+unitId: unit-01
+order: 2
+slug: u01-m02
+title: The Question That Keeps Coming Back
+scenario: >
+  You have been at Northstar Apps for a week now and you are settling in nicely.
+  Jordan stops by your desk with a friendly look on her face. "I want to show you
+  something," she says, pulling up the #help-billing Slack channel on your screen.
+  "I've been scrolling through this and I noticed something kind of funny.
+  See if you can spot it." You start reading through the last 30 days of messages.
+  It doesn't take long before you see exactly what she means.
+objectives:
+  - Spot which questions are being asked over and over again
+  - Understand why repeated questions are a signal worth paying attention to
+  - Match each gap to the kind of document that would fix it for good
+materials:
+  - id: doc-slack-excerpt
+    filename: slack-excerpt.md
+    title: "#help-billing Slack Excerpt (last 30 days)"
+    trustScore: 0
+    findabilityScore: 0
+    issues:
+      - This is a chat log, not documentation — answers here disappear from view quickly.
+    frontmatter: {}
+    body: |
+      **Week 1:**
+      @alex: "How do I process a refund for a subscription that was cancelled mid-cycle?"
+      @sarah: "Check the billing runbook... actually I'm not sure it covers that. Let me DM you."
+
+      @marcus: "What's the cutoff time for same-day refund processing?"
+      @sarah: "3pm EST. It used to be 5pm but Finance changed it 6 months ago. Not sure it's in the docs."
+
+      **Week 2:**
+      @jamie: "Where do I escalate if a refund fails three times?"
+      @sarah: "Ping @billing-eng in #escalations. They respond within 4 hours during business hours."
+      @alex: "Is that documented anywhere?"
+      @sarah: "Not really. Just know it."
+
+      **Week 3:**
+      @new-hire-priya: "How do I process a refund for a subscription that was cancelled mid-cycle?"
+      @marcus: "Same answer as last month — check with Sarah."
+
+      **Week 4:**
+      @new-hire-tom: "What happens if a refund request comes in for a transaction older than 90 days?"
+      @sarah: "We can't process those. Have to send the customer to their bank. I should write that down."
+      @new-hire-tom: "What's the cutoff time for same-day processing?"
+      @sarah: "3pm EST."
+successCriteria:
+  - Correctly identify all 4 repeated questions
+  - Correctly match each gap to a document type
+  - Prioritisation score of 70 or higher
+estimatedMinutes: 15
+prerequisiteMissionId: u01-m01
+assessments:
+  - id: u01-m02-a1
+    type: sorting
+    title: Which Questions Are Knowledge Debt?
+    description: >
+      Help Jordan sort the questions from the Slack log.
+      Some are genuine knowledge debt — asked repeatedly with no permanent answer.
+      Others are just normal team conversation.
+    xpReward: 70
+    masteryThreshold: 70
+    debtReduction: 6
+    hints:
+      - level: 1
+        text: >
+          Knowledge debt shows up when the same question keeps getting asked
+          and the only answer is "ask Sarah."
+    data:
+      instruction: >
+        Sort each item from the Slack log. Is it a knowledge debt signal,
+        or just normal one-time team chat?
+      categories:
+        - id: debt
+          label: Knowledge Debt Signal
+          description: Repeated question with no permanent documented answer
+        - id: normal
+          label: Normal Team Communication
+          description: One-time question or already-documented answer
+      items:
+        - id: i1
+          text: >
+            "How do I process a refund for a cancelled mid-cycle subscription?"
+            (asked by two different people in different weeks)
+          categoryId: debt
+          explanation: >
+            Same question, different people, different weeks — and the answer was
+            "check with Sarah" both times. Clear documentation gap.
+        - id: i2
+          text: >
+            "What's the cutoff time for same-day refund processing?"
+            (asked in week 1 and again in week 4)
+          categoryId: debt
+          explanation: >
+            Asked twice by different people. The answer even changed 6 months ago
+            and was never updated anywhere. Classic knowledge debt.
+        - id: i3
+          text: >
+            "Where do I escalate if a refund fails three times?"
+          categoryId: debt
+          explanation: >
+            Sarah's answer: "Just know it." The escalation path involves another team
+            and has an SLA — this absolutely needs to be documented.
+        - id: i4
+          text: >
+            "What happens for transactions older than 90 days?"
+          categoryId: debt
+          explanation: >
+            Sarah's own words: "I should write that down." That's knowledge debt
+            being created right in front of you.
+  - id: u01-m02-a2
+    type: multiple-choice
+    title: Which Gap Would You Fix First?
+    description: >
+      Jordan says you can only tackle one documentation gap this sprint.
+      Which one gives you the most value?
+    xpReward: 50
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: >
+          Think about what happens during a stressful moment — like a payment
+          failure at 11pm — if the highest-risk gap is still undocumented.
+    data:
+      question: >
+        You can only fix one knowledge gap this sprint. Which should you
+        document first?
+      options:
+        - id: a
+          text: The refund cutoff time (3pm EST)
+          isCorrect: false
+          explanation: >
+            Important, but this is a single fact that takes five minutes to add
+            to an existing doc. Not the most urgent gap.
+        - id: b
+          text: The escalation path when a refund fails three times
+          isCorrect: true
+          explanation: >
+            This is the right call. It crosses team boundaries, has a time-sensitive
+            SLA, and lives entirely in Sarah's head. If Sarah is unavailable during
+            an incident, this gap turns into an operational crisis.
+        - id: c
+          text: The 90-day transaction limit
+          isCorrect: false
+          explanation: >
+            A clear policy boundary, but it mainly affects how you communicate
+            with customers — less operationally risky than the escalation path.
+        - id: d
+          text: The mid-cycle cancellation refund process
+          isCorrect: false
+          explanation: >
+            Frequently asked and worth documenting — but the escalation path is
+            more urgent because it has an SLA and involves coordination with
+            another team under time pressure.

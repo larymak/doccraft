@@ -1,0 +1,194 @@
+id: u08-m02
+unitId: unit-08
+order: 2
+slug: u08-m02
+title: "Choose the Right Review Cadence"
+scenario: >
+  Northstar Apps has 12 documents that need review cadences assigned. Currently
+  every document is set to "annual review" regardless of type or risk level — which
+  means a production runbook might go 12 months without being verified, while a
+  marketing overview gets reviewed as often as a compliance policy. Your job is to
+  assign the correct review frequency to each document based on its type, audience,
+  and how quickly its content goes stale in a fast-moving software company.
+objectives:
+  - Understand how document type and risk level determine review frequency
+  - Assign appropriate review cadences (monthly, quarterly, biannual, annual)
+  - Identify documents where annual review is dangerously long
+  - Recognize when a review cadence is too frequent for the content type
+materials: []
+successCriteria:
+  - Operational and incident-response docs assigned monthly or quarterly cadence
+  - Compliance and policy docs assigned annual cadence with legal review
+  - Product and roadmap docs assigned quarterly cadence
+  - Tutorial and how-to docs for active products assigned biannual cadence
+estimatedMinutes: 15
+prerequisiteMissionId: u08-m01
+assessments:
+  - id: u08-m02-a1
+    type: multiple-choice
+    title: Why Does Cadence Matter?
+    description: Test your understanding of why review frequency is tied to risk and content type.
+    xpReward: 40
+    masteryThreshold: 75
+    debtReduction: 3
+    hints:
+      - level: 1
+        text: Think about what happens when a production runbook is wrong during a 2am incident.
+    data:
+      question: >
+        The Northstar Apps platform team reviews their incident runbooks annually.
+        An on-call engineer follows the runbook during a P1 incident and the steps
+        are 14 months out of date — the service was migrated to Kubernetes 8 months ago
+        and the old steps no longer work. What review cadence should runbooks have, and why?
+      options:
+        - id: a
+          text: Annual — runbooks rarely change and annual review is sufficient for stability.
+          isCorrect: false
+          explanation: >
+            Annual review is dangerously long for runbooks. Infrastructure changes
+            (like a Kubernetes migration) can invalidate runbook steps in weeks.
+            A runbook that fails during a P1 incident causes extended downtime.
+        - id: b
+          text: >
+            Monthly — operational docs used under pressure must be verified after
+            every infrastructure change and at minimum every 30 days.
+          isCorrect: true
+          explanation: >
+            Correct. Runbooks, on-call procedures, and incident response docs should
+            be reviewed monthly. Any infrastructure change (new services, migrations,
+            tooling upgrades) should trigger an immediate ad-hoc review in addition
+            to the scheduled one.
+        - id: c
+          text: Biannual — twice a year is a good balance between freshness and review cost.
+          isCorrect: false
+          explanation: >
+            Biannual is appropriate for stable how-to guides and tutorials, not
+            for operational docs. Six months is too long when infrastructure changes
+            happen weekly.
+        - id: d
+          text: Quarterly — enough for docs that change when product releases happen.
+          isCorrect: false
+          explanation: >
+            Quarterly is right for product documentation tied to release cycles.
+            Runbooks need monthly review because infrastructure changes faster
+            than quarterly release cycles.
+  - id: u08-m02-a2
+    type: sorting
+    title: Assign Review Cadences to 12 Documents
+    description: >
+      Sort each document into the correct review cadence bucket based on its type,
+      risk level, and how quickly it goes stale.
+    xpReward: 100
+    masteryThreshold: 75
+    debtReduction: 8
+    hints:
+      - level: 1
+        text: >
+          Ask: "If this document is wrong, how quickly would someone be harmed or
+          blocked?" High-harm docs need frequent review. Low-harm docs can wait longer.
+      - level: 2
+        text: >
+          Compliance and legal documents have external stakeholders (regulators, auditors).
+          They change when laws change, not when engineering does a release — so annual
+          review with legal sign-off is usually appropriate.
+    data:
+      instruction: >
+        Assign a review cadence to each document. Base your decision on document type,
+        risk level, and how quickly the content becomes inaccurate or harmful.
+      categories:
+        - id: monthly
+          label: Monthly
+          description: Used under pressure or in production; errors cause immediate harm; infrastructure changes frequently
+        - id: quarterly
+          label: Quarterly
+          description: Tied to product release cycles; audience-facing content that changes with features
+        - id: biannual
+          label: Biannual (Every 6 months)
+          description: Stable how-to guides and tutorials for actively developed products
+        - id: annual
+          label: Annual
+          description: Stable policies, legal/compliance docs, and evergreen explanations
+      items:
+        - id: i1
+          text: "Production Incident Runbook — step-by-step remediation for database failovers"
+          categoryId: monthly
+          explanation: >
+            Database failover runbooks are used under pressure during P1 incidents.
+            Infrastructure evolves constantly. Monthly review plus ad-hoc review
+            after any database migration is the minimum cadence.
+        - id: i2
+          text: "On-Call Escalation Policy — who to call and when during incidents"
+          categoryId: monthly
+          explanation: >
+            On-call policies are operational and change when team headcount, roles,
+            or responsibilities change. Monthly review keeps them current. A stale
+            escalation policy during an incident causes delays.
+        - id: i3
+          text: "Product Roadmap — Q3 priorities and upcoming feature releases"
+          categoryId: quarterly
+          explanation: >
+            Roadmaps are inherently tied to quarterly cycles. A roadmap doc reviewed
+            annually will be stale within weeks of the next planning cycle. Quarterly
+            review aligns with how product planning works.
+        - id: i4
+          text: "API Release Notes — new endpoints and breaking changes by version"
+          categoryId: quarterly
+          explanation: >
+            API release notes should be reviewed when releases ship — which is roughly
+            quarterly at Northstar Apps. Each review confirms the notes are complete
+            and accurately describe the changes made.
+        - id: i5
+          text: "Getting Started with the Northstar Mobile SDK — step-by-step tutorial"
+          categoryId: biannual
+          explanation: >
+            Getting-started tutorials for an active SDK need biannual review to catch
+            version drift (new installation methods, changed API shapes). Annual review
+            is too long; monthly is more cost than this content warrants.
+        - id: i6
+          text: "REST API Reference — endpoint parameters, response shapes, error codes"
+          categoryId: biannual
+          explanation: >
+            API references are stable between major versions but change with each
+            minor release. Biannual review catches drift. Teams should also trigger
+            an ad-hoc review whenever a new API version is released.
+        - id: i7
+          text: "GDPR Data Retention Policy — legal retention and deletion obligations"
+          categoryId: annual
+          explanation: >
+            Compliance policies change when laws change, not when engineering ships a
+            release. Annual review with legal sign-off is the standard cadence.
+            Changes to GDPR obligations should trigger immediate ad-hoc reviews.
+        - id: i8
+          text: "Employee Code of Conduct — workplace behavior expectations"
+          categoryId: annual
+          explanation: >
+            HR policies like codes of conduct are stable and reviewed annually by
+            HR and legal. They do not change with engineering releases.
+        - id: i9
+          text: "Payment API Uptime SLA — guaranteed availability and incident response times"
+          categoryId: biannual
+          explanation: >
+            SLAs are semi-stable — they change when service tiers or business agreements
+            change, not with every release. Biannual review keeps them current without
+            over-investing in review cycles.
+        - id: i10
+          text: "Engineering Career Levels — role expectations and promotion criteria"
+          categoryId: annual
+          explanation: >
+            Career leveling docs are HR/people strategy content. They are deliberately
+            stable. Annual review gives leadership time for thoughtful updates and
+            avoids churn that confuses employees.
+        - id: i11
+          text: "Deployment Runbook — steps for deploying the platform monorepo to production"
+          categoryId: monthly
+          explanation: >
+            Deployment runbooks are operational docs used in production. Deployment
+            tooling, CI/CD pipelines, and infrastructure change frequently. Monthly
+            review plus post-deployment validation is the right cadence.
+        - id: i12
+          text: "Northstar Brand Guidelines — logo usage, color palette, typography"
+          categoryId: annual
+          explanation: >
+            Brand guidelines are among the most stable documents a company produces.
+            Annual review — or review triggered by a brand refresh — is appropriate.
+            These rarely change and over-reviewing wastes design team time.

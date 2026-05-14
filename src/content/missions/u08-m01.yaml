@@ -1,0 +1,312 @@
+id: u08-m01
+unitId: unit-08
+order: 1
+slug: u08-m01
+title: "Assign Owners to Unowned Documents"
+scenario: >
+  The Northstar Apps docs health dashboard is showing 6 documents with no owner
+  assigned. No one receives review reminders for them, they are not included in
+  any team's docs sprint, and two of them have content that may be out of date.
+  Your task is to read each document's content and assign it to the correct team
+  or role owner at Northstar Apps based on who is responsible for that subject matter.
+objectives:
+  - Read document content to infer the correct responsible team
+  - Assign each of 6 unowned documents to the appropriate team or role owner
+  - Understand the difference between the team that wrote a doc and the team that owns it
+  - Recognize when shared ownership is a sign of an unclear ownership model
+materials:
+  - id: doc-unowned-1
+    filename: payment-sla.md
+    title: Payment Processing SLA
+    trustScore: 50
+    findabilityScore: 40
+    issues:
+      - No owner assigned
+      - Defines uptime and response-time guarantees for the payments API
+    frontmatter:
+      title: "Payment Processing SLA"
+      doc_type: "reference"
+      status: "active"
+      last_reviewed: "2025-10-01"
+      next_review: "2026-04-01"
+      tags:
+        - payments
+        - sla
+        - api
+    body: |
+      # Payment Processing SLA
+
+      Northstar Apps guarantees 99.95% uptime for the payments API.
+      P1 incidents affecting payment processing will be responded to within 15 minutes
+      and resolved within 2 hours. Scheduled maintenance windows are announced 72 hours
+      in advance via the status page.
+  - id: doc-unowned-2
+    filename: design-system-tokens.md
+    title: Design System Color Tokens
+    trustScore: 55
+    findabilityScore: 48
+    issues:
+      - No owner assigned
+      - Defines the CSS custom property names for the design system color palette
+    frontmatter:
+      title: "Design System Color Tokens"
+      doc_type: "reference"
+      status: "active"
+      last_reviewed: "2026-01-15"
+      next_review: "2026-07-15"
+      tags:
+        - design-system
+        - css
+        - tokens
+    body: |
+      # Design System Color Tokens
+
+      All UI components must use these CSS custom properties instead of hardcoded
+      hex values. This ensures automatic support for light/dark mode.
+
+      | Token | Light Value | Dark Value |
+      |-------|------------|-----------|
+      | `--color-primary` | `#0052CC` | `#4C9AFF` |
+      | `--color-surface` | `#FFFFFF` | `#1E1E2E` |
+      | `--color-text` | `#172B4D` | `#E6E6E6` |
+  - id: doc-unowned-3
+    filename: gdpr-data-retention.md
+    title: GDPR Data Retention Policy
+    trustScore: 45
+    findabilityScore: 35
+    issues:
+      - No owner assigned
+      - Legal/compliance content — must be owned by the team accountable for compliance obligations
+    frontmatter:
+      title: "GDPR Data Retention Policy"
+      doc_type: "policy"
+      status: "active"
+      last_reviewed: "2025-05-20"
+      next_review: "2026-05-20"
+      tags:
+        - gdpr
+        - compliance
+        - data-retention
+    body: |
+      # GDPR Data Retention Policy
+
+      Customer PII is retained for a maximum of 36 months after account closure,
+      unless a longer retention period is required by applicable law.
+      Upon request, customer data is deleted within 30 days. All deletion requests
+      must be logged in the compliance dashboard.
+  - id: doc-unowned-4
+    filename: mobile-push-integration.md
+    title: Mobile Push Notification Integration
+    trustScore: 48
+    findabilityScore: 42
+    issues:
+      - No owner assigned
+      - Technical integration guide for setting up push notifications in the mobile SDK
+    frontmatter:
+      title: "Mobile Push Notification Integration"
+      doc_type: "how-to"
+      status: "active"
+      last_reviewed: "2025-12-10"
+      next_review: "2026-06-10"
+      tags:
+        - mobile
+        - push-notifications
+        - sdk
+    body: |
+      # Mobile Push Notification Integration
+
+      Follow these steps to enable push notifications in your Northstar Mobile SDK
+      integration. You will need APNs credentials for iOS and an FCM project for Android.
+  - id: doc-unowned-5
+    filename: on-call-schedule.md
+    title: On-Call Rotation Schedule
+    trustScore: 40
+    findabilityScore: 38
+    issues:
+      - No owner assigned
+      - Operational schedule — changes whenever headcount or rotation structure changes
+    frontmatter:
+      title: "On-Call Rotation Schedule"
+      doc_type: "reference"
+      status: "active"
+      last_reviewed: "2026-02-01"
+      next_review: "2026-05-01"
+      tags:
+        - on-call
+        - operations
+        - schedule
+    body: |
+      # On-Call Rotation Schedule
+
+      Platform engineering maintains a 24/7 on-call rotation. Each engineer is
+      on-call for one week every six weeks. The rotation follows the order in PagerDuty.
+      Swap requests must be submitted 48 hours in advance.
+  - id: doc-unowned-6
+    filename: quarterly-roadmap-q2-2026.md
+    title: Product Roadmap Q2 2026
+    trustScore: 35
+    findabilityScore: 30
+    issues:
+      - No owner assigned
+      - Product planning document — must be owned by product management, not engineering
+    frontmatter:
+      title: "Product Roadmap Q2 2026"
+      doc_type: "explanation"
+      status: "active"
+      last_reviewed: "2026-04-01"
+      next_review: "2026-07-01"
+      tags:
+        - roadmap
+        - product
+        - q2-2026
+    body: |
+      # Product Roadmap Q2 2026
+
+      Q2 priorities: (1) Multi-currency support in the payments API, (2) Mobile SDK
+      v3.0 with biometric authentication, (3) Self-serve dashboard analytics.
+      These priorities are set by the Product team in collaboration with Engineering leads.
+successCriteria:
+  - All 6 documents assigned to the correct team owner
+  - No document assigned to "engineering" when a more specific team exists
+  - Legal/compliance documents assigned to legal or compliance, not engineering
+  - Product roadmap assigned to product management, not engineering
+estimatedMinutes: 16
+prerequisiteMissionId: null
+assessments:
+  - id: u08-m01-a1
+    type: sorting
+    title: Assign Each Document to Its Owner
+    description: Match each unowned document to the correct team or role owner at Northstar Apps.
+    xpReward: 90
+    masteryThreshold: 80
+    debtReduction: 7
+    hints:
+      - level: 1
+        text: >
+          The owner is the team that is accountable when the document is wrong or out of date —
+          not necessarily the team that wrote it or the team that reads it most.
+      - level: 2
+        text: >
+          Legal and compliance documents must be owned by the legal or compliance team,
+          even if engineering teams are the ones who implement the requirements.
+    data:
+      instruction: >
+        Assign each unowned document to the correct team owner. The owner is the team
+        accountable for keeping the document accurate and up to date.
+      categories:
+        - id: payments-team
+          label: Payments Team
+          description: Owns payment processing, payment APIs, refunds, and financial transaction infrastructure
+        - id: design-system-team
+          label: Design System Team
+          description: Owns UI component specifications, design tokens, and visual standards
+        - id: legal-compliance
+          label: Legal / Compliance
+          description: Owns regulatory policies, data governance, privacy, and compliance documentation
+        - id: mobile-team
+          label: Mobile Team
+          description: Owns the mobile SDK, mobile app documentation, and mobile-specific integrations
+        - id: platform-engineering
+          label: Platform Engineering
+          description: Owns infrastructure operations, on-call procedures, deployment, and reliability
+        - id: product-management
+          label: Product Management
+          description: Owns roadmaps, feature prioritization, and product strategy documentation
+      items:
+        - id: i1
+          text: "Payment Processing SLA — defines uptime guarantees for the payments API"
+          categoryId: payments-team
+          explanation: >
+            The payments team is accountable for payment API uptime and must own the SLA
+            document. If the SLA changes (e.g., a new uptime tier), the payments team
+            updates it, not platform engineering.
+        - id: i2
+          text: "Design System Color Tokens — defines CSS custom properties for the design system"
+          categoryId: design-system-team
+          explanation: >
+            Design tokens are owned by the design system team. Frontend engineers consume
+            these tokens but the design system team decides what they are and ensures
+            they stay accurate.
+        - id: i3
+          text: "GDPR Data Retention Policy — defines PII retention periods and deletion obligations"
+          categoryId: legal-compliance
+          explanation: >
+            GDPR compliance documentation must be owned by legal or compliance. Engineering
+            implements the requirements, but legal is accountable for the policy being correct
+            and up to date with applicable law.
+        - id: i4
+          text: "Mobile Push Notification Integration — how-to guide for the mobile SDK push feature"
+          categoryId: mobile-team
+          explanation: >
+            The mobile team owns the mobile SDK and is responsible for keeping integration
+            guides accurate when the SDK changes. Developer experience may co-own the prose
+            quality, but mobile owns the technical accuracy.
+        - id: i5
+          text: "On-Call Rotation Schedule — describes the 24/7 on-call rotation structure"
+          categoryId: platform-engineering
+          explanation: >
+            On-call rotations are an operational concern owned by platform engineering.
+            They maintain PagerDuty, define the rotation structure, and are responsible
+            for keeping this document current.
+        - id: i6
+          text: "Product Roadmap Q2 2026 — quarterly product priorities set by the product team"
+          categoryId: product-management
+          explanation: >
+            Product roadmaps are owned by product management. Engineering contributes input,
+            but product management sets priorities and is accountable for the accuracy
+            and currency of roadmap documents.
+  - id: u08-m01-a2
+    type: multiple-choice
+    title: Owner vs. Contributor — What Is the Difference?
+    description: Confirm you understand the distinction between document ownership and contribution.
+    xpReward: 45
+    masteryThreshold: 75
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: >
+          The owner receives review reminders and is accountable when the document
+          is wrong. Contributors write content but are not on the hook for accuracy.
+    data:
+      question: >
+        The payments team wrote 80% of the GDPR Data Retention Policy because they
+        process payment card data and needed specific retention rules. Should the
+        payments team own this document?
+      options:
+        - id: a
+          text: >
+            Yes — the team that wrote most of the content should own it and receive
+            review reminders.
+          isCorrect: false
+          explanation: >
+            Authorship does not equal ownership. The payments team contributed
+            technical content, but the legal team is accountable for the policy
+            being correct under applicable law. Ownership follows accountability,
+            not authorship.
+        - id: b
+          text: >
+            No — legal/compliance owns all compliance policies regardless of who
+            contributed the content, because they are accountable if the policy
+            is wrong or non-compliant.
+          isCorrect: true
+          explanation: >
+            Correct. The payments team are contributors — they provided the
+            domain-specific content. Legal/compliance is the owner — they are
+            accountable to auditors and regulators if the policy is incorrect.
+            The payments team should be listed as a reviewer, not the owner.
+        - id: c
+          text: >
+            Both teams should co-own it — compliance policy affects both teams equally.
+          isCorrect: false
+          explanation: >
+            Co-ownership splits accountability and leads to both teams assuming
+            the other is responsible. One primary owner is always better. The
+            secondary team becomes a required reviewer.
+        - id: d
+          text: >
+            The document should have no owner since it spans multiple teams.
+          isCorrect: false
+          explanation: >
+            Cross-team documents still need a primary owner. "No owner" is the
+            problem you are trying to fix in this mission. When no one is accountable,
+            documents go stale and create compliance risk.

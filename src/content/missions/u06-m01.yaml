@@ -1,0 +1,203 @@
+id: u06-m01
+unitId: unit-06
+order: 1
+slug: u06-m01
+title: "Add Front Matter to a Bare Document"
+scenario: >
+  A backend engineer has submitted a Markdown file called `payment-webhooks.md`
+  to the Northstar Apps docs repo. The document has solid technical content but
+  zero front matter — no title, no owner, no review date, nothing. The search
+  indexer skips it entirely because it cannot classify the doc, and the docs
+  dashboard shows it as an orphan. Your job is to add complete, accurate YAML
+  front matter so the document is discoverable, owned, and scheduled for review.
+objectives:
+  - Understand the required front matter fields for Northstar Apps documentation
+  - Add all required metadata fields to a document that has none
+  - Choose appropriate values for doc_type, status, audience, and tags
+  - Set a realistic last_reviewed and next_review date pair
+materials:
+  - id: doc-bare-webhook
+    filename: payment-webhooks.md
+    title: Payment Webhooks
+    trustScore: 30
+    findabilityScore: 10
+    issues:
+      - No YAML front matter block at all
+      - Search indexer cannot classify or surface the document
+      - No owner assigned — no one knows who is responsible
+      - No review date — could be months or years out of date
+    frontmatter: {}
+    body: |
+      # Payment Webhooks
+
+      Northstar Apps sends webhook events to your server when payment-related
+      activity occurs. This reference covers all supported event types, payload
+      shapes, and signature verification.
+
+      ## Supported Event Types
+
+      | Event | Trigger |
+      |-------|---------|
+      | `payment.completed` | A payment clears successfully |
+      | `payment.failed` | A payment is declined or errors |
+      | `refund.initiated` | A refund is requested via the dashboard or API |
+      | `refund.completed` | A refund settles in the customer's account |
+      | `dispute.opened` | A chargeback dispute is filed |
+
+      ## Payload Structure
+
+      All webhook payloads share a common envelope:
+
+      ```json
+      {
+        "id": "evt_01HXYZ",
+        "type": "payment.completed",
+        "created_at": "2026-04-12T14:30:00Z",
+        "data": { ... }
+      }
+      ```
+
+      ## Signature Verification
+
+      Northstar signs every webhook with HMAC-SHA256. Verify the signature before
+      processing:
+
+      ```python
+      import hmac, hashlib
+
+      def verify_signature(payload_bytes, header_sig, secret):
+          expected = hmac.new(secret.encode(), payload_bytes, hashlib.sha256).hexdigest()
+          return hmac.compare_digest(expected, header_sig)
+      ```
+
+      ## Retry Policy
+
+      Failed deliveries are retried up to 5 times with exponential backoff
+      (1 min, 5 min, 30 min, 2 hr, 8 hr). After 5 failures the event is marked
+      dead and logged to the webhook failure dashboard.
+successCriteria:
+  - All required fields present in the front matter block
+  - doc_type is set to "reference" (correct for this content)
+  - tags include at least "payments", "webhooks", and "api"
+  - last_reviewed and next_review are a valid date pair no more than 12 months apart
+estimatedMinutes: 14
+prerequisiteMissionId: null
+assessments:
+  - id: u06-m01-a1
+    type: multiple-choice
+    title: Which Fields Are Required?
+    description: Before you edit the doc, confirm which front matter fields are mandatory at Northstar Apps.
+    xpReward: 40
+    masteryThreshold: 75
+    debtReduction: 3
+    hints:
+      - level: 1
+        text: Think about what the search indexer, the docs dashboard, and the review scheduler each need to work.
+    data:
+      question: >
+        A teammate says "title and status are enough front matter — that's all the search tool reads."
+        What is wrong with that claim?
+      options:
+        - id: a
+          text: Nothing is wrong — title and status are the only required fields.
+          isCorrect: false
+          explanation: >
+            Title and status alone leave the document without an owner, without
+            audience context, and without a review schedule. The docs dashboard
+            will flag it as an orphan.
+        - id: b
+          text: >
+            The claim ignores owner, audience, last_reviewed, and next_review — all of which
+            the Northstar review scheduler requires to track doc health.
+          isCorrect: true
+          explanation: >
+            Correct. The search indexer reads title and tags, but the docs health
+            system also needs owner (so someone gets pinged at review time),
+            audience (so the indexer routes it correctly), and the review date pair
+            so overdue docs can be flagged.
+        - id: c
+          text: The claim is wrong because status is not a required field.
+          isCorrect: false
+          explanation: >
+            Status is required. It signals whether a doc is Draft, Active, or
+            Deprecated — critical for preventing readers from acting on outdated content.
+        - id: d
+          text: The claim is wrong because the search tool does not read title at all.
+          isCorrect: false
+          explanation: >
+            The search tool absolutely reads title — it is the highest-weighted
+            field in the relevance ranking.
+  - id: u06-m01-a2
+    type: metadata-edit
+    title: Add Front Matter to Payment Webhooks
+    description: >
+      Add a complete YAML front matter block to payment-webhooks.md.
+      Fill in every required field with accurate, realistic values.
+    xpReward: 90
+    masteryThreshold: 80
+    debtReduction: 8
+    findabilityDelta: 18
+    hints:
+      - level: 1
+        text: >
+          The document is a technical reference for integrating with the payments API.
+          Who at Northstar is most likely responsible for payment infrastructure?
+      - level: 2
+        text: >
+          Tags should include the technology (webhooks), the domain (payments), and the
+          audience type (api, integrations). Three to five tags is the right range.
+      - level: 3
+        text: >
+          The canonical field should be a docs-site path, not a GitHub URL.
+          Use the pattern /docs/{category}/{slug}.
+    data:
+      scenarioContext: >
+        payment-webhooks.md exists in the repo with no front matter. The search
+        indexer has skipped it. Add a complete front matter block using values
+        appropriate for the document's content.
+      initialFrontmatter: {}
+      requiredFields:
+        - title
+        - doc_type
+        - status
+        - owner
+        - audience
+        - last_reviewed
+        - next_review
+        - tags
+        - canonical
+      optionalFields:
+        - description
+        - related_docs
+      validationRules:
+        - field: title
+          rule: nonempty
+          feedback: Title cannot be blank — it is the primary search signal.
+        - field: doc_type
+          rule: oneOf
+          value: "reference"
+          feedback: >
+            This document is a technical reference. It lists event types, payload
+            shapes, and a retry policy — not a tutorial or how-to guide.
+        - field: status
+          rule: oneOf
+          value: "active,draft"
+          feedback: Choose "active" if the content is accurate, or "draft" if it needs review before publishing.
+        - field: owner
+          rule: nonempty
+          feedback: Owner must be a team name or individual — someone who will receive review reminders.
+        - field: last_reviewed
+          rule: dateFormat
+          feedback: Use ISO 8601 date format (YYYY-MM-DD).
+        - field: next_review
+          rule: dateAfter
+          value: last_reviewed
+          feedback: next_review must be after last_reviewed.
+        - field: tags
+          rule: minItems
+          value: "3"
+          feedback: Include at least 3 tags. Aim for domain, technology, and audience type.
+        - field: canonical
+          rule: pattern
+          value: "^/docs/"
+          feedback: The canonical path should start with /docs/ and match the docs site URL structure.

@@ -1,0 +1,272 @@
+id: u04-m04
+unitId: unit-04
+order: 4
+slug: u04-m04
+title: "Boss: Design the Platform Runbook Template"
+scenario: >
+  After the April 18 checkout incident, the platform team's engineering lead has asked
+  you to design a standard runbook template that all platform engineers must use for
+  every operational runbook going forward. The team currently has 11 runbooks with
+  completely inconsistent structure — some have escalation paths, some don't; some
+  have severity levels, some skip them entirely. Your template will become the contract
+  that makes every future runbook usable at 3am.
+objectives:
+  - Identify all required sections for a platform operations runbook template
+  - Explain the purpose and expected content of each section
+  - Design a complete, field-complete runbook template that engineers can fill in
+materials:
+  - id: doc-existing-runbook-sample
+    filename: runbook-api-rate-limiter.md
+    title: Runbook — API Rate Limiter Alert (Existing, Inconsistent)
+    trustScore: 42
+    findabilityScore: 55
+    issues:
+      - No severity levels
+      - Checks listed without decision logic
+      - No escalation path
+      - No rollback section
+      - No last-tested date
+    frontmatter:
+      title: Runbook — API Rate Limiter Alert
+      status: Active
+      owner: Platform Engineering
+      last_reviewed: "2025-12-01"
+    body: |
+      # Runbook — API Rate Limiter Alert
+
+      Triggered when: Datadog alert fires on rate limiter queue depth > 5000
+
+      ## Checks
+
+      1. Check the rate limiter dashboard in Grafana
+      2. Check for traffic spikes in the load balancer logs
+      3. Check if a feature flag release happened in the last hour
+      4. Check Redis memory usage
+
+      ## Fixes
+
+      - If traffic spike: scale the API service horizontally via GitHub Actions
+      - If Redis memory high: clear the rate limit counter cache (script: ops/clear-rate-cache.sh)
+      - If feature flag related: disable the flag via LaunchDarkly
+
+      ## Notes
+
+      This runbook was written after the November 2025 incident. May be incomplete.
+successCriteria:
+  - Sorting task score of 80 or higher
+  - Written template includes all required sections with purpose explanations
+  - Template is immediately usable — a new engineer can fill it in for a real runbook
+  - Writing task score of 75 or higher
+estimatedMinutes: 25
+prerequisiteMissionId: u04-m03
+assessments:
+  - id: u04-m04-a1
+    type: sorting
+    title: Which Sections Does Every Runbook Need?
+    description: Sort each candidate section into Required, Optional, or Wrong Document Type for a platform operations runbook template.
+    xpReward: 90
+    masteryThreshold: 80
+    debtReduction: 8
+    hints:
+      - level: 1
+        text: Required sections are ones whose absence would make the runbook fail during a real incident. Optional sections add value in specific contexts.
+      - level: 2
+        text: Remember — a runbook is used under pressure by someone who may not be the author. Every required section exists to answer a question that cannot wait.
+    data:
+      instruction: >
+        Sort each candidate section into the correct category for a platform runbook template.
+      categories:
+        - id: required
+          label: Required in Every Runbook
+          description: Must be present for the runbook to be reliably usable during an incident
+        - id: optional
+          label: Optional — Include When Applicable
+          description: Adds value in specific runbooks but is not universally necessary
+        - id: wrong-type
+          label: Wrong Document Type
+          description: This content belongs in a different document, not a runbook
+      items:
+        - id: i1
+          text: Alert trigger — what monitoring condition activates this runbook
+          categoryId: required
+          explanation: Without knowing what triggers the runbook, an engineer cannot know when to use it. Every runbook must specify its trigger condition.
+        - id: i2
+          text: Severity levels with P1/P2/P3 definitions and expected response times
+          categoryId: required
+          explanation: Severity levels tell the engineer how urgently to act and when to wake up other people. Missing this causes both under-response and over-response.
+        - id: i3
+          text: Diagnostic steps with if/then decision logic
+          categoryId: required
+          explanation: Flat check lists without decision logic are what failed in the April 18 incident. Every runbook must tell the engineer what to do when each check reveals a problem.
+        - id: i4
+          text: Escalation path — who to contact, in what order, with what information
+          categoryId: required
+          explanation: An escalation path is what ends incidents that a single engineer cannot resolve alone. Its absence caused a 47-minute delay in the April checkout incident.
+        - id: i5
+          text: Rollback procedure — how to undo a fix attempt if it makes things worse
+          categoryId: required
+          explanation: Every runbook must include rollback instructions. A failed fix attempt without a rollback path can turn a P2 into a P1.
+        - id: i6
+          text: Owner, backup owner, and last-tested date
+          categoryId: required
+          explanation: Runbooks that are never tested go stale silently. Owner and last-tested date are governance fields that keep the runbook trustworthy.
+        - id: i7
+          text: Known safe states — what the system looks like when it is healthy
+          categoryId: required
+          explanation: An engineer needs a baseline to compare against. Without knowing what normal metrics look like, they cannot tell if a fix is working.
+        - id: i8
+          text: Post-incident tasks (postmortem reminder, channel notification)
+          categoryId: optional
+          explanation: Post-incident tasks are good practice but some teams track these through an incident management system rather than the runbook itself. Optional but recommended.
+        - id: i9
+          text: Historical list of every time this alert has fired
+          categoryId: optional
+          explanation: Historical incident data can help with pattern recognition but belongs in a searchable incident tracker, not the runbook itself. A brief "related incidents" link is optional.
+        - id: i10
+          text: Architecture explanation of how the affected system works
+          categoryId: wrong-type
+          explanation: Architecture context belongs in an explanation or architecture decision record. An engineer using a runbook at 3am needs operational steps, not system design education.
+        - id: i11
+          text: Decision record explaining why the alert threshold was chosen
+          categoryId: wrong-type
+          explanation: Threshold decisions belong in an ADR. Including them in a runbook adds length without operational value.
+  - id: u04-m04-a2
+    type: writing
+    title: Design the Platform Runbook Template
+    description: >
+      Write a complete, field-complete runbook template for the platform team.
+      Every section should include a brief purpose note in comments so engineers
+      understand what to put in each field. The template must be immediately
+      usable — an engineer should be able to copy it and fill it in for a real runbook.
+    xpReward: 150
+    masteryThreshold: 75
+    debtReduction: 12
+    trustDelta: 18
+    hints:
+      - level: 1
+        text: A template is not a filled-in document. Use [placeholder text] and <!-- comment --> notes to show engineers what belongs in each section.
+      - level: 2
+        text: Include example values alongside placeholders where the format matters — e.g., dates, severity levels, contact formats.
+      - level: 3
+        text: Every required section you identified in the sorting task should appear in this template. Check your work against that list.
+    data:
+      scenarioContext: >
+        You are designing the standard platform runbook template for Northstar Apps.
+        All 11 existing runbooks will be migrated to this format. New runbooks must
+        use this template. It must include all required sections with clear guidance
+        on what each section expects.
+      docTemplate: |
+        # Runbook — [Alert or System Name] — Platform
+
+        <!-- Copy this template for every new platform runbook. Fill in all Required sections
+             before publishing. Optional sections can be omitted if not applicable. -->
+
+        **Type:** Runbook
+        **Owner:** [Name or team — person responsible for keeping this accurate]
+        **Backup Owner:** [Name or team]
+        **Last Reviewed:** [YYYY-MM-DD]
+        **Last Tested:** [YYYY-MM-DD — date this runbook was last walked through in a real or simulated incident]
+        **Status:** [Draft | Active | Deprecated]
+
+        ## Alert Trigger
+
+        <!-- What monitoring condition causes an engineer to open this runbook?
+             Include: the alert name, the tool (Datadog, PagerDuty, etc.), and the threshold. -->
+
+        **Alert:** [Alert name in monitoring tool]
+        **Condition:** [e.g., "Datadog fires when error rate > 5% for 5 minutes"]
+
+        ## Severity Levels
+
+        <!-- Define how urgent this alert is before the engineer starts investigating. -->
+
+        | Level | Definition | Response |
+        |-------|-----------|----------|
+        | [P1] | [e.g., Production down or data loss] | [e.g., Wake anyone needed immediately] |
+        | [P2] | [e.g., Significant degradation, workaround available] | [e.g., Respond within 15 minutes] |
+        | [P3] | [e.g., Minor degradation, customers unaffected] | [e.g., Respond within 1 hour] |
+
+        ## Known Good State
+
+        <!-- What do healthy metrics look like? Give the engineer a baseline to compare against. -->
+
+        | Metric | Normal Range | Where to Check |
+        |--------|-------------|----------------|
+        | [Metric name] | [e.g., < 1% error rate] | [e.g., Datadog > Services > Checkout] |
+
+        ## Diagnosis
+
+        <!-- Use if/then logic. Do not just list checks — tell the engineer what each check means. -->
+
+        **Step 1: [First thing to check]**
+        - If [condition A]: [go to Step X / take action Y]
+        - If [condition B]: [go to Step Z / take action W]
+
+        **Step 2: [Second check — only reached if Step 1 didn't resolve]**
+        - If [condition]: [action]
+
+        ## Resolution Steps
+
+        <!-- For each root cause identified in Diagnosis, provide the resolution steps. -->
+
+        ### [Root Cause A]
+
+        1. [Step 1]
+        2. [Step 2]
+
+        ### [Root Cause B]
+
+        1. [Step 1]
+        2. [Step 2]
+
+        ## Rollback
+
+        <!-- How to undo each resolution if it makes things worse.
+             Every resolution that changes system state must have a rollback. -->
+
+        - To undo [Resolution A]: [rollback steps]
+        - To undo [Resolution B]: [rollback steps]
+
+        ## Escalation Path
+
+        <!-- Who to contact if you cannot identify or resolve the issue within 30 minutes. -->
+
+        | Condition | Contact | Method | Response SLA |
+        |-----------|---------|--------|-------------|
+        | [e.g., Unresolved after 30 min] | [Name / Role] | [Slack / PagerDuty] | [e.g., 15 min] |
+        | [e.g., P1 — production down] | [Engineering Lead] | [PagerDuty — urgent] | [Immediate] |
+
+        ## Post-Incident
+
+        - [ ] Post incident summary in #incidents
+        - [ ] Write postmortem within 48 hours (use the Postmortem template)
+        - [ ] Update this runbook if any steps were missing, wrong, or incomplete
+      wordCountMin: 250
+      acceptedPatterns:
+        - severity
+        - escalat
+        - rollback
+        - diagnosis
+        - trigger
+        - owner
+      rubric:
+        - id: r1
+          label: All required sections present
+          description: Template includes trigger, severity levels, known good state, diagnosis with decision logic, resolution steps, rollback, and escalation path
+          weight: 30
+        - id: r2
+          label: Placeholder guidance is clear and actionable
+          description: Each section has comments or placeholder text that tells a new engineer exactly what to write — not just the field name
+          weight: 25
+        - id: r3
+          label: Decision logic structure in Diagnosis section
+          description: Diagnosis section uses if/then language, not a flat checklist
+          weight: 20
+        - id: r4
+          label: Escalation path is structured
+          description: Escalation section specifies who, when, how, and expected response time — not just a name
+          weight: 15
+        - id: r5
+          label: Template is immediately usable
+          description: An engineer could copy this template and fill it in for a real runbook without additional guidance
+          weight: 10

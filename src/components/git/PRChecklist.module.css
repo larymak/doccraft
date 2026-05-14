@@ -1,0 +1,129 @@
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--fcc-blue-dark);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.item:hover {
+  background: var(--fcc-blue-mid);
+}
+
+.item.checked {
+  border-color: var(--fcc-gold);
+  background: rgba(241, 190, 50, 0.06);
+}
+
+.checkboxWrapper {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  background: var(--fcc-navy);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  position: relative;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.checkbox:checked {
+  background: var(--fcc-gold);
+  border-color: var(--fcc-gold);
+}
+
+.checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid var(--fcc-navy);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+.checkbox:focus {
+  outline: 2px solid var(--fcc-gold);
+  outline-offset: 2px;
+}
+
+.itemText {
+  font-size: var(--text-sm);
+  color: var(--fcc-text-light);
+  line-height: 1.5;
+  user-select: none;
+}
+
+.item.checked .itemText {
+  color: var(--fcc-gold-light);
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--fcc-gray-400);
+}
+
+.progressBar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--fcc-gold);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-base);
+}
+
+.readyBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: rgba(0, 71, 27, 0.18);
+  border: 1px solid var(--fcc-green);
+  border-radius: var(--radius-md);
+  animation: fadeIn 0.3s ease;
+}
+
+.readyIcon {
+  font-size: var(--text-xl);
+  color: #4ade80;
+}
+
+.readyText {
+  font-weight: 700;
+  color: #4ade80;
+  font-size: var(--text-base);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

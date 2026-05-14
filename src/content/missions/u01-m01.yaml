@@ -1,0 +1,148 @@
+id: u01-m01
+unitId: unit-01
+order: 1
+slug: u01-m01
+title: Welcome to Northstar Apps
+scenario: >
+  Good morning! Today is your first day as a documentation specialist at Northstar Apps.
+  Your manager Jordan greets you with a warm smile and a coffee. "I'm so glad you're here,"
+  she says. "We've been building really fast, and honestly, our docs haven't kept up.
+  Nothing catastrophic — just the usual stuff that happens when a small team moves quickly."
+  She pulls up the internal wiki. "I thought maybe we could take a fresh look together.
+  What do you think?" You lean in. This is exactly the kind of puzzle you love.
+objectives:
+  - Learn what "knowledge debt" means in plain language
+  - Recognise the most common ways documentation goes wrong
+  - Sort a few real-world examples to build your eye for the different types
+materials: []
+successCriteria:
+  - Multiple-choice question answered correctly
+  - Sorting task score of 70 or higher
+estimatedMinutes: 10
+prerequisiteMissionId: null
+assessments:
+  - id: u01-m01-a1
+    type: multiple-choice
+    title: A Question from Jordan
+    description: Jordan asks you something she has been wondering about for a while.
+    xpReward: 40
+    masteryThreshold: 100
+    debtReduction: 3
+    hints:
+      - level: 1
+        text: Think about what makes a problem get harder to fix the longer you wait.
+      - level: 2
+        text: >
+          If you skip writing one doc, you might need to explain three things to
+          write the next one. What does that tell you?
+    data:
+      question: >
+        Jordan says: "I never understood why our docs feel more outdated every month
+        even though we haven't changed that much. What's actually going on?"
+        Which answer best explains it?
+      options:
+        - id: a
+          text: Docs just get harder to read as they age.
+          isCorrect: false
+          explanation: >
+            Readability fades, but that's a symptom — not why the problem keeps growing.
+        - id: b
+          text: >
+            Each thing you don't document makes the next thing harder to document,
+            because the missing context piles up.
+          isCorrect: true
+          explanation: >
+            Exactly right! This is why we call it "debt" — it compounds. One undocumented
+            process depends on another undocumented process, which depends on another.
+            The longer you wait, the bigger the job gets.
+        - id: c
+          text: The team keeps forgetting to update docs after shipping new features.
+          isCorrect: false
+          explanation: >
+            Forgetting to update is a cause of the problem — not the reason it keeps
+            getting worse on its own.
+        - id: d
+          text: New hires ask more questions over time, which makes the gaps more visible.
+          isCorrect: false
+          explanation: >
+            More questions are a signal that the gap exists, but they're not what
+            makes the gap grow.
+  - id: u01-m01-a2
+    type: sorting
+    title: Spot the Difference
+    description: >
+      Jordan points to five things she has noticed in the wiki.
+      Can you sort each one into the right category? Don't worry — these are
+      the five patterns you will see everywhere in documentation work.
+    xpReward: 80
+    masteryThreshold: 70
+    debtReduction: 7
+    hints:
+      - level: 1
+        text: >
+          Ask yourself: does the doc exist? Is it accurate? Can people find it?
+          Is it owned? Are there conflicting versions?
+      - level: 2
+        text: >
+          Stale = was right once, now wrong. Missing = never existed. Tribal = only
+          in someone's head. Findability = buried and invisible. Conflicting = two
+          docs say different things.
+    data:
+      instruction: >
+        Drag each situation Jordan described into the correct category.
+        These are the five types of knowledge debt you will recognise in every team.
+      categories:
+        - id: stale
+          label: Stale Documentation
+          description: Was accurate once but no longer reflects reality
+        - id: missing
+          label: Missing Documentation
+          description: Should exist but does not exist anywhere
+        - id: tribal
+          label: Tribal Knowledge
+          description: Exists only in someone's head, not written down
+        - id: findability
+          label: Findability Debt
+          description: Exists somewhere but cannot be found reliably
+        - id: conflicting
+          label: Conflicting Documentation
+          description: Multiple contradictory versions of the same information
+      items:
+        - id: i1
+          text: >
+            The deployment guide still mentions the old Jenkins pipeline —
+            the team switched to GitHub Actions 18 months ago.
+          categoryId: stale
+          explanation: >
+            The guide existed and was accurate. The system changed but the doc wasn't
+            updated. Classic stale documentation.
+        - id: i2
+          text: >
+            Nobody has ever written down how to rotate the payment processor API keys.
+          categoryId: missing
+          explanation: >
+            This process is critical and happens regularly — but it has never been
+            documented. Pure missing documentation.
+        - id: i3
+          text: >
+            Only the lead database engineer knows the backup restoration procedure.
+          categoryId: tribal
+          explanation: >
+            The knowledge exists — it just lives entirely in one person's head.
+            If they're unavailable, nobody knows what to do.
+        - id: i4
+          text: >
+            There are three files named "onboarding.md" in different folders and
+            no one knows which one is the current version.
+          categoryId: conflicting
+          explanation: >
+            Multiple versions, probably saying different things. New hires don't
+            know which to trust — and they might follow the wrong one.
+        - id: i5
+          text: >
+            The incident runbook exists and is accurate — but it's buried five
+            folders deep with no links from the main wiki.
+          categoryId: findability
+          explanation: >
+            The doc is there and might even be good! The problem is nobody can
+            find it when they need it most — during an incident.

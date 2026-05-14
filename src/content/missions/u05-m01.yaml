@@ -1,0 +1,167 @@
+id: u05-m01
+unitId: unit-05
+order: 1
+slug: u05-m01
+title: Rename These Six Documents
+scenario: >
+  The Northstar Apps engineering team has six documents with names that make them nearly
+  impossible to find. Two of them are named "notes.md". One is named "final_FINAL_v2.md".
+  Your job is to rename all six using the Northstar Apps naming convention:
+  {DocType} - {Topic} - {Audience or Team} [{Status if not Active}].
+objectives:
+  - Apply the Northstar Apps document naming convention consistently
+  - Identify the document type, topic, audience, and status from document content
+  - Explain why each original name fails and how the new name fixes it
+materials:
+  - id: doc-notes-1
+    filename: notes.md
+    title: notes.md
+    trustScore: 5
+    findabilityScore: 2
+    issues:
+      - Completely undescriptive name — "notes.md" matches nothing in search
+      - No document type, no topic, no audience
+      - Appears to be an SOP for on-call handoff
+    frontmatter: {}
+    body: |
+      # notes
+
+      when you hand off on-call:
+      - post in #platform-oncall with: current incidents, any systems in degraded state, deploys scheduled for next 24h
+      - update the on-call calendar in PagerDuty
+      - brief the incoming engineer verbally if any P1 or P2 is active
+      - hand off the incident slack channel ownership
+  - id: doc-final-v2
+    filename: final_FINAL_v2.md
+    title: final_FINAL_v2.md
+    trustScore: 3
+    findabilityScore: 1
+    issues:
+      - Version numbers in filename — impossible to know if this is the canonical version
+      - No document type declared
+      - Content is a postmortem from April 2026
+    frontmatter: {}
+    body: |
+      # final_FINAL_v2
+
+      **Date:** April 18, 2026
+      **Incident:** Checkout 503 errors — Redis eviction policy misconfiguration
+      **Duration:** 34 minutes
+      **Affected:** ~50 customer checkout sessions
+
+      Root cause: Redis eviction policy reset during cluster resize.
+      Fix: Restored eviction policy to noeviction.
+      Action items: Update resize runbook, add staging validation step.
+successCriteria:
+  - All six documents renamed correctly using the naming convention
+  - Sorting task score of 80 or higher
+  - Multiple-choice question answered correctly
+estimatedMinutes: 14
+prerequisiteMissionId: null
+assessments:
+  - id: u05-m01-a1
+    type: sorting
+    title: Match Each Bad Name to Its Correct Rename
+    description: Match each poorly named document to its correct name under the Northstar Apps naming convention.
+    xpReward: 100
+    masteryThreshold: 80
+    debtReduction: 8
+    hints:
+      - level: 1
+        text: "The naming convention is: {DocType} - {Topic} - {Audience or Team} [Status if not Active]. Always start with the document type."
+      - level: 2
+        text: Look at the content of each document to identify what type it is before choosing a name.
+    data:
+      instruction: >
+        Match each poorly named document to its correct new name. Use the naming convention:
+        {DocType} - {Topic} - {Audience or Team} [Status if Deprecated or Draft].
+      categories:
+        - id: name-a
+          label: "SOP - On-Call Handoff - Platform"
+          description: Standard operating procedure for handing off on-call duties on the platform team
+        - id: name-b
+          label: "Postmortem - 2026-04-18 - Checkout 503 Redis Eviction"
+          description: Postmortem for the April 18, 2026 checkout incident
+        - id: name-c
+          label: "Runbook - API Error Spike - Platform"
+          description: Runbook for diagnosing and resolving API error spikes
+        - id: name-d
+          label: "Reference - Deployment Environment Variables - Engineering"
+          description: Reference document listing all deployment environment variables
+        - id: name-e
+          label: "ADR-007 - Adopt PagerDuty for On-Call Rotation"
+          description: Architecture decision record for the PagerDuty adoption decision
+        - id: name-f
+          label: "Onboarding - Backend Engineer - First 30 Days [Draft]"
+          description: Draft onboarding guide for new backend engineers
+      items:
+        - id: i1
+          text: "notes.md — content: on-call handoff steps for platform engineers"
+          categoryId: name-a
+          explanation: The content is a fixed procedure for a specific operational task (handing off on-call). That is an SOP. The audience is the platform team.
+        - id: i2
+          text: "final_FINAL_v2.md — content: April 18, 2026 incident with root cause and action items"
+          categoryId: name-b
+          explanation: The content is a postmortem. Postmortems should include the date and incident description in the name so they can be found by incident date.
+        - id: i3
+          text: "api-stuff.md — content: decision tree for diagnosing elevated error rates in the API service"
+          categoryId: name-c
+          explanation: Decision trees for diagnosing operational problems under pressure are runbooks. The name should declare the doc type and the specific alert it addresses.
+        - id: i4
+          text: "deploy-config.md — content: table of all environment variables required for deployment"
+          categoryId: name-d
+          explanation: A lookup table of parameters with no narrative or steps is a reference document.
+        - id: i5
+          text: "pagerduty-why.md — content: evaluation of PagerDuty vs. OpsGenie and decision to adopt PagerDuty"
+          categoryId: name-e
+          explanation: An evaluation of alternatives followed by a documented decision is an Architecture Decision Record. ADRs should be sequentially numbered.
+        - id: i6
+          text: "backend-onboarding-wip.md — content: 30-day milestone guide for new backend engineers, marked incomplete"
+          categoryId: name-f
+          explanation: A milestone-based guide for new hires is an onboarding guide. Because it is incomplete, the status [Draft] belongs in the name so readers know not to rely on it yet.
+  - id: u05-m01-a2
+    type: multiple-choice
+    title: Why Version Numbers in Filenames Fail
+    description: What is the correct way to handle document versioning?
+    xpReward: 45
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: Think about what happens when someone saves "final_v3.md" and there is already a "final_v2.md" in the same folder.
+    data:
+      question: >
+        A team member saves a new version of the refund SOP as "refund-sop-final_v3.md"
+        while "refund-sop-final_v2.md" still exists in the same folder. What is the
+        best way to handle versioning in the Northstar Apps documentation system?
+      options:
+        - id: a
+          text: Keep both files and add a note at the top of v3 saying it supersedes v2.
+          isCorrect: false
+          explanation: >
+            Keeping both files creates exactly the conflicting documentation problem. Readers
+            will encounter both and not know which is current, especially via search results.
+        - id: b
+          text: >
+            Use a single canonical filename with no version number. Track version history
+            in the document's changelog section or the wiki's version history. Deprecate
+            old files with a status field, do not rename them to v2/v3.
+          isCorrect: true
+          explanation: >
+            Correct. The canonical filename should never include a version number. Version
+            history belongs in metadata (the wiki's built-in versioning, or a changelog section
+            in the document). When a document is outdated, its status field changes to Deprecated —
+            it does not get a new filename.
+        - id: c
+          text: Delete the old file immediately when the new version is saved.
+          isCorrect: false
+          explanation: >
+            Deleting without archiving removes the history of what changed and why. Old versions
+            should be archived or their status set to Deprecated, not deleted.
+        - id: d
+          text: Use dates in the filename instead — "refund-sop-2026-05-04.md"
+          isCorrect: false
+          explanation: >
+            Dates in filenames have the same problem as version numbers — they create multiple
+            files that readers cannot easily distinguish without opening each one. Use a single
+            canonical filename and metadata for currency.

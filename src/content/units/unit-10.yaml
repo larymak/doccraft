@@ -1,0 +1,38 @@
+id: unit-10
+order: 10
+title: "Final Boss: The Expert Leaves Tomorrow"
+description: >
+  Northstar Apps is in crisis. A senior engineer is leaving tomorrow, a new
+  hire starts next week, the knowledge base is in chaos, and leadership wants
+  an AI assistant ready. You have one day to fix everything.
+goal: >
+  Complete a full knowledge-transfer and documentation recovery operation:
+  interview the departing expert, write an SOP, create an ADR, fix
+  searchability, archive stale docs, design an onboarding path, update a
+  runbook, and prepare an AI-readiness checklist.
+prerequisiteUnitId: unit-08
+tier: pro
+badge:
+  id: badge-knowledge-lead
+  label: Knowledge Continuity Lead
+  description: Successfully ran a full knowledge-transfer operation under pressure
+  color: "#f1be32"
+  iconSlug: knowledge-lead
+  earnedCondition: Complete the Final Boss mission with score >= 75
+totalXP: 600
+missions:
+  - u10-m01
+bossMissionId: u10-m01
+contentBlocks:
+  - type: callout
+    variant: warning
+    content: >
+      This is the hardest mission in DocCraft. It combines skills from all
+      nine previous units. Take your time. Use the hints. Re-read your earlier
+      work if you need to.
+  - type: text
+    content: >
+      The final boss scenario is set at Northstar Apps. Everything you have
+      learned — knowledge debt, document types, audience writing, templates,
+      naming, metadata, Git workflows, governance, and decision records —
+      comes together in one high-stakes operation.

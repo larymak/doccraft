@@ -1,0 +1,169 @@
+id: u04-m03
+unitId: unit-04
+order: 3
+slug: u04-m03
+title: Fill in the Postmortem
+scenario: >
+  The platform team had a production incident on April 18, 2026. The checkout service
+  was down for 34 minutes due to a Redis eviction policy misconfiguration applied during
+  a cache resize. An incident summary was shared in Slack but no formal postmortem was
+  written. Your job is to take the raw incident notes and fill in a postmortem template
+  correctly, demonstrating that you understand what each field is for.
+objectives:
+  - Correctly match incident information to the right postmortem fields
+  - Distinguish between root cause, contributing factors, and trigger
+  - Identify which postmortem fields are missing from a weak summary
+materials:
+  - id: doc-incident-slack-notes
+    filename: incident-2026-04-18-slack-notes.md
+    title: Incident Slack Thread Notes — April 18, 2026
+    trustScore: 5
+    findabilityScore: 10
+    issues:
+      - Informal chat notes, not a document
+      - Root cause is described but not clearly separated from timeline
+      - Action items mentioned but not assigned owners or due dates
+      - No structured format — cannot be referenced or linked reliably
+    frontmatter: {}
+    body: |
+      # Incident Slack Thread Notes — April 18, 2026
+
+      **From #incidents Slack thread:**
+
+      @marcus (14:47): "Checkout is returning 503s. Datadog alert fired at 14:32."
+
+      @priya-platform (14:51): "Checking. Cache hit rate just dropped to 4%. Something's wrong with Redis."
+
+      @priya-platform (15:01): "Found it. We resized the Redis cluster at 14:30 and the eviction policy got
+      reset to allkeys-lru. That's evicting session data mid-checkout. Rolling back the eviction policy now."
+
+      @priya-platform (15:06): "Eviction policy restored to noeviction. Error rate dropping."
+
+      @marcus (15:08): "Datadog back to green. Checkout is working."
+
+      @priya-platform (15:10): "34 minutes of elevated errors. Some customers may have had failed checkouts.
+      I'll write the postmortem. The resize runbook doesn't mention eviction policy — that's the gap.
+      We should also add a check to our pre-resize checklist. This could have been caught in staging
+      if we had a cache eviction policy validation step."
+
+      @kai (15:12): "Was this affecting all customers or just some?"
+
+      @priya-platform (15:13): "Customers in active checkout sessions during the 34-minute window.
+      Estimate maybe 40-60 affected checkout sessions based on the error log count."
+successCriteria:
+  - Sorting task correctly maps incident information to postmortem fields
+  - Multiple-choice question answered correctly
+  - Sorting task score of 80 or higher
+estimatedMinutes: 18
+prerequisiteMissionId: u04-m02
+assessments:
+  - id: u04-m03-a1
+    type: sorting
+    title: Map Notes to Postmortem Fields
+    description: Sort each piece of information from the Slack notes into the correct postmortem field it belongs in.
+    xpReward: 95
+    masteryThreshold: 80
+    debtReduction: 8
+    hints:
+      - level: 1
+        text: "A postmortem has distinct fields: Summary, Timeline, Root Cause, Contributing Factors, Impact, Action Items. Each piece of information belongs in exactly one field."
+      - level: 2
+        text: "Root cause is the technical reason the system failed. Contributing factor is a condition that made it possible. Trigger is what set it off at that specific moment."
+    data:
+      instruction: >
+        Sort each piece of information from the Slack notes into the correct postmortem field.
+      categories:
+        - id: summary
+          label: Summary
+          description: 2–3 sentence overview of what happened, when, and how it was resolved
+        - id: timeline
+          label: Timeline
+          description: Chronological log of detection, diagnosis, and resolution events with timestamps
+        - id: root-cause
+          label: Root Cause
+          description: The underlying technical reason the system behaved incorrectly
+        - id: contributing-factor
+          label: Contributing Factor
+          description: A condition that made the failure possible or harder to catch
+        - id: impact
+          label: Impact
+          description: Who was affected, for how long, and to what degree
+        - id: action-items
+          label: Action Items
+          description: Specific follow-up work with owners and due dates
+      items:
+        - id: i1
+          text: "Redis eviction policy was reset to allkeys-lru during a cluster resize, evicting active session data mid-checkout"
+          categoryId: root-cause
+          explanation: This is the specific technical failure that caused the symptoms. The wrong eviction policy is the root cause.
+        - id: i2
+          text: "The Redis resize runbook did not include a step to preserve or verify the eviction policy setting"
+          categoryId: contributing-factor
+          explanation: >
+            The gap in the runbook is what made the failure possible. If the runbook had included
+            an eviction policy verification step, the operator would have caught it during the resize.
+            This is a contributing factor, not the root cause.
+        - id: i3
+          text: "14:32 — Datadog alert fires on checkout 503s. 14:47 — @marcus reports in #incidents. 14:51 — @priya-platform identifies cache hit rate at 4%. 15:01 — Root cause identified. 15:06 — Eviction policy restored. 15:08 — Checkout restored."
+          categoryId: timeline
+          explanation: Timestamped events from detection through resolution belong in the timeline section.
+        - id: i4
+          text: "Approximately 40–60 customer checkout sessions failed during the 34-minute outage window"
+          categoryId: impact
+          explanation: The number of affected customers and the duration are the impact of the incident.
+        - id: i5
+          text: "Update the Redis resize runbook to include an eviction policy verification step"
+          categoryId: action-items
+          explanation: A specific follow-up task that prevents recurrence. Needs an owner and due date to be complete.
+        - id: i6
+          text: "Add a cache eviction policy validation step to the pre-resize checklist in staging"
+          categoryId: action-items
+          explanation: A second preventive action item. Both action items should be tracked with owners and due dates.
+        - id: i7
+          text: "On April 18, 2026, the checkout service was unavailable for 34 minutes due to a Redis eviction policy misconfiguration applied during a cache resize. The incident affected approximately 40–60 customer checkout sessions."
+          categoryId: summary
+          explanation: A clear, factual 2-sentence overview of what happened and how many customers were affected. This is the summary.
+  - id: u04-m03-a2
+    type: multiple-choice
+    title: Root Cause vs. Trigger vs. Contributing Factor
+    description: Which statement correctly identifies the difference between these three postmortem concepts?
+    xpReward: 50
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: "Think about it this way: the trigger is what happened first, the root cause is why the system broke, and the contributing factor is what made it possible."
+    data:
+      question: >
+        In the April 18 incident, how do the trigger, root cause, and contributing factor relate?
+      options:
+        - id: a
+          text: >
+            Trigger: Redis cluster resize. Root cause: eviction policy reset to allkeys-lru.
+            Contributing factor: resize runbook missing eviction policy check.
+          isCorrect: true
+          explanation: >
+            Correct. The resize (trigger) set off the chain of events. The wrong eviction policy
+            (root cause) is why checkout broke. The missing runbook step (contributing factor) is
+            what made the error possible without any safeguard catching it.
+        - id: b
+          text: >
+            Trigger: Datadog alert. Root cause: Redis degradation. Contributing factor: no monitoring on eviction policy.
+          isCorrect: false
+          explanation: >
+            The Datadog alert is a detection event, not a trigger. The trigger is what caused the system
+            to change state — the resize. Redis degradation is a symptom, not the root cause.
+        - id: c
+          text: >
+            Trigger: eviction policy misconfiguration. Root cause: cache resize. Contributing factor: 40 customer sessions affected.
+          isCorrect: false
+          explanation: >
+            The cache resize is the trigger, not the root cause. Customer impact is an impact metric,
+            not a contributing factor. This ordering reverses cause and effect.
+        - id: d
+          text: >
+            Trigger: customer checkout failures. Root cause: missing runbook step. Contributing factor: Redis eviction policy.
+          isCorrect: false
+          explanation: >
+            Customer checkout failures are the visible impact, not the trigger. The missing runbook step
+            is a contributing factor that enabled the failure, not the technical root cause itself.

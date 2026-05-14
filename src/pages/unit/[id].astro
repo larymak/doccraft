@@ -1,0 +1,31 @@
+---
+import PageLayout from '@/components/layout/PageLayout.astro'
+import { UnitIntroPage } from '@/components/UnitIntroPage'
+import { getAllUnits, getMissionsForUnit, getAllMissions } from '@/lib/content-loader'
+
+export async function getStaticPaths() {
+  const units = await getAllUnits()
+  return units.map(u => ({
+    params: { id: u.id },
+    props: { unitId: u.id },
+  }))
+}
+
+const { unitId } = Astro.props
+const allUnits = await getAllUnits()
+const unit = allUnits.find(u => u.id === unitId)
+
+if (!unit) return Astro.redirect('/map')
+
+const missions = await getMissionsForUnit(unitId)
+const allMissions = await getAllMissions()
+---
+<PageLayout title={`${unit.title} — DocCraft`}>
+  <UnitIntroPage
+    client:load
+    unit={unit}
+    missions={missions}
+    allUnits={allUnits}
+    allMissions={allMissions}
+  />
+</PageLayout>

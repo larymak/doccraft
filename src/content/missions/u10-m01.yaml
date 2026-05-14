@@ -1,0 +1,662 @@
+id: u10-m01
+unitId: unit-10
+order: 1
+slug: u10-m01
+title: "The Expert Leaves Tomorrow"
+scenario: >
+  It is Friday at Northstar Apps. Marcus, the senior platform engineer who has
+  been at the company since day one, is leaving for a new role on Monday.
+  A new backend engineer, Priya, starts next week. Billing reconciliation has
+  no current SOP. Deployment docs contradict each other. Several important ADRs
+  are missing. Search results surface outdated docs. Last week's incident
+  revealed gaps in the runbook. Leadership wants an AI assistant ready to
+  answer process questions, but the knowledge base is not ready for it.
+  You have one day. Go.
+objectives:
+  - Identify the top 5 critical knowledge risks before Marcus leaves
+  - Write or fix a billing reconciliation SOP with full metadata
+  - Write an ADR from fragmented decision context
+  - Fix search for the most-used deployment docs
+  - Create a 30-day onboarding path for Priya
+  - Update the incident runbook based on last week's incident
+  - Prepare an AI-readiness checklist for the knowledge base
+materials:
+  - id: doc-marcus-notes
+    filename: marcus-handoff-notes.md
+    title: Marcus Exit Notes (Draft)
+    trustScore: 12
+    findabilityScore: 8
+    issues:
+      - Not a real document type — personal notes, not a structured handoff
+      - Mix of process hints, system quirks, and random context
+      - No audience, no owner, no dates
+      - Will be worthless in 3 months without structured capture
+    frontmatter: {}
+    body: |
+      # Marcus Exit Notes
+
+      Things I know that probably aren't written down:
+
+      billing reconciliation:
+      - runs every month-end, usually around the 28th
+      - script is at /billing/scripts/reconcile.py
+      - needs BILLING_DB_URL and STRIPE_SECRET_KEY env vars from 1password vault "production"
+      - has to be run in this order: stripe pull, then local db compare, then generate report
+      - the $0.50 rounding rule — don't flag discrepancies under 50 cents, finance approved this
+      - sometimes fails silently if Stripe rate limits us — check the logs at /var/log/billing/reconcile.log
+      - i fixed a double-count bug in march 2026, the fix is in commit a4f82b
+
+      deployments:
+      - we have THREE deployment docs and they contradict each other
+      - the real process is: merge to main → GH Actions runs tests → auto-deploys staging → manual approval for production
+      - the old heroku one is wrong, the confluence one is wrong, only the github wiki one is right
+      - production approvals need TWO engineers, not one (changed after the march incident)
+
+      architecture:
+      - we chose postgres over mongo for billing events in 2024 — decision doc never got written
+      - the reason was ACID compliance for financial data + our existing postgres expertise
+      - considered: mongo (rejected: no ACID), mysql (rejected: team expertise), dynamodb (rejected: cost + complexity)
+
+      runbook gaps:
+      - last week's checkout latency incident — we didn't know to check redis memory first
+      - the fix was: redis-cli info memory → if used_memory > 80% → run redis-cli flushdb (after confirming with lead)
+      - this should be in the runbook but isn't
+
+      ai assistant prep:
+      - don't let it use the heroku deployment doc or the old billing notes
+      - the refund SOP v3 is probably fine but needs the escalation path added
+      - any doc with status Draft should be excluded from the AI index
+  - id: doc-deploy-old-heroku
+    filename: deployment-heroku-OLD.md
+    title: Deployment Guide (Heroku)
+    trustScore: 5
+    findabilityScore: 45
+    issues:
+      - Refers to Heroku which was decommissioned — actively harmful if followed
+      - Status says Active but should be Deprecated
+      - Ranks highly in search because it is the oldest and most-linked doc
+      - No owner
+    frontmatter:
+      title: Deployment Guide
+      status: Active
+      last_reviewed: "2022-11-01"
+    body: |
+      # Deployment Guide
+
+      ## Deploy to Production
+
+      1. Push your branch to GitHub
+      2. Go to the Heroku dashboard at https://dashboard.heroku.com
+      3. Select the northstar-apps pipeline
+      4. Click "Promote to production"
+
+      Last updated: November 2022
+  - id: doc-deploy-github
+    filename: deployment-github-actions.md
+    title: Deployment Guide (GitHub Actions) - Current
+    trustScore: 62
+    findabilityScore: 25
+    issues:
+      - Correct process but poorly discoverable — not linked from the main wiki
+      - Missing the two-approver requirement for production
+      - No audience, no owner, no next review date
+    frontmatter:
+      title: Deployment Guide (GitHub Actions)
+      status: Active
+      owner: Platform Engineering
+      last_reviewed: "2026-03-01"
+    body: |
+      # Deployment Guide — GitHub Actions
+
+      ## Process
+
+      1. Merge your PR to the main branch
+      2. GitHub Actions will automatically run the test suite
+      3. If tests pass, staging deployment starts automatically
+      4. Verify staging at https://staging.northstar-apps.com
+      5. Go to the GitHub Actions workflow run
+      6. Click "Approve Production Deploy" (requires engineer approval)
+      7. Production deployment takes ~8 minutes
+
+      Owner: Platform Engineering
+      Last reviewed: March 2026
+  - id: doc-incident-runbook
+    filename: runbook-checkout-latency.md
+    title: Runbook - Checkout Latency
+    trustScore: 48
+    findabilityScore: 52
+    issues:
+      - Missing the redis memory check step discovered in the April incident
+      - No post-incident update process documented
+      - Escalation path is incomplete — only lists one engineer
+    frontmatter:
+      title: Runbook - Checkout Latency
+      doc_type: Runbook
+      status: Active
+      owner: Platform Engineering
+      last_reviewed: "2026-03-15"
+    body: |
+      # Runbook - Checkout Latency
+
+      **Audience:** On-call platform engineers
+      **Owner:** Platform Engineering
+
+      ## Symptoms
+
+      - P95 checkout latency > 2 seconds
+      - Checkout error rate > 0.5%
+      - Customer complaints about slow checkout
+
+      ## Initial Diagnosis
+
+      1. Check Datadog latency dashboard
+      2. Check application logs for errors
+      3. Check database connection pool utilization
+      4. Check external payment processor status (Stripe status page)
+
+      ## Resolution Steps
+
+      **If DB connection pool is exhausted:**
+      - Restart the application pods: `kubectl rollout restart deployment/checkout`
+
+      **If Stripe is degraded:**
+      - Enable the "graceful degradation" feature flag
+      - Notify the support team
+
+      ## Escalation
+
+      If unresolved in 30 minutes, page @marcus
+successCriteria:
+  - Phase 1 risk assessment identifies all 5 critical knowledge gaps
+  - Billing SOP writing score of 70 or higher
+  - ADR writing score of 70 or higher
+  - Runbook update writing score of 70 or higher
+  - AI-readiness checklist is complete
+  - Total simulation score of 75 or higher
+estimatedMinutes: 45
+prerequisiteMissionId: null
+assessments:
+  - id: u10-m01-a1
+    type: simulation
+    title: "Final Boss: The Expert Leaves Tomorrow"
+    description: >
+      A multi-phase documentation crisis. Work through each phase to reduce
+      knowledge debt, preserve Marcus's expertise, and set Priya up for success.
+    xpReward: 500
+    masteryThreshold: 75
+    debtReduction: 20
+    hints:
+      - level: 1
+        text: Start by reading Marcus's exit notes carefully. Make a list of everything that needs a document.
+      - level: 2
+        text: Prioritize by risk. What would cause an incident if Marcus were unreachable today?
+      - level: 3
+        text: Each phase builds on the last. Your SOP informs the AI-readiness checklist. Your ADR updates the onboarding path.
+    data:
+      scenario: >
+        Marcus leaves Monday. Priya starts Tuesday. The knowledge base is in crisis.
+        You have one day to fix what matters most.
+      briefing: >
+        You have reviewed Marcus's exit notes and the existing documentation.
+        Work through each phase in order. At the end, the AI feedback system will
+        evaluate your complete set of deliverables.
+      masteryRequirement: 75
+      aiPromptTemplate: |
+        You are evaluating documentation created by a learner in a gamified learning app.
+        The learner is acting as a documentation systems specialist at Northstar Apps.
+        They have completed a multi-phase knowledge transfer exercise.
+
+        Here is what the learner produced:
+
+        PHASE 1 - RISK ASSESSMENT:
+        {phase1_answer}
+
+        PHASE 2 - BILLING SOP:
+        {phase2_answer}
+
+        PHASE 3 - ADR:
+        {phase3_answer}
+
+        PHASE 4 - RUNBOOK UPDATE:
+        {phase4_answer}
+
+        PHASE 5 - AI READINESS CHECKLIST:
+        {phase5_answer}
+
+        Evaluate the complete set of deliverables against these criteria:
+        1. Did the risk assessment correctly identify the highest-priority knowledge gaps?
+        2. Is the billing SOP clear, complete, and usable by someone without Marcus?
+        3. Does the ADR capture context, options, decision, and consequences?
+        4. Does the runbook update include the redis memory check and a correct escalation path?
+        5. Is the AI-readiness checklist practical and grounded in the actual doc problems?
+
+        Return your evaluation as JSON with this structure:
+        {
+          "overallScore": 0-100,
+          "phaseScores": { "phase1": 0-100, "phase2": 0-100, "phase3": 0-100, "phase4": 0-100, "phase5": 0-100 },
+          "strengths": ["...", "..."],
+          "issues": [
+            { "severity": "high|medium|low", "phase": "phase1-5", "message": "...", "suggestion": "..." }
+          ],
+          "revisionPrompt": "..."
+        }
+      phases:
+        - id: phase-1
+          title: "Phase 1: Risk Assessment"
+          description: >
+            Read Marcus's exit notes and the existing documents. Identify the 5 most
+            critical knowledge gaps. For each gap, specify the risk, the document type
+            needed, and the recommended owner.
+          assessmentType: writing
+          xpReward: 80
+          data:
+            scenarioContext: >
+              You have reviewed Marcus's exit notes and the documentation materials.
+              Identify the 5 most critical knowledge gaps that must be addressed before
+              Marcus leaves.
+            docTemplate: |
+              # Knowledge Risk Assessment - Northstar Apps
+              **Date:** 2026-05-04
+              **Prepared by:** Documentation Specialist
+
+              ## Critical Knowledge Gaps
+
+              | # | Knowledge Gap | Risk if Undocumented | Document Type Needed | Recommended Owner | Priority |
+              |---|--------------|---------------------|---------------------|------------------|----------|
+              | 1 | | | | | |
+              | 2 | | | | | |
+              | 3 | | | | | |
+              | 4 | | | | | |
+              | 5 | | | | | |
+
+              ## Highest Risk Item
+
+              [Explain in 2-3 sentences why this is the most urgent gap.]
+
+              ## Items That Can Wait
+
+              [List 1-2 things from Marcus's notes that are lower priority and why.]
+            wordCountMin: 150
+            acceptedPatterns:
+              - reconcili
+              - SOP
+              - runbook
+              - ADR
+              - risk
+            rubric:
+              - id: r1
+                label: 5 gaps identified
+                description: All five gaps are named specifically, not vaguely
+                weight: 30
+              - id: r2
+                label: Risk clearly stated
+                description: Each gap has a specific risk description
+                weight: 25
+              - id: r3
+                label: Document types correct
+                description: Each gap is matched to the right document type
+                weight: 25
+              - id: r4
+                label: Priority reasoning
+                description: The highest-risk item is identified with clear reasoning
+                weight: 20
+        - id: phase-2
+          title: "Phase 2: Write the Billing Reconciliation SOP"
+          description: >
+            Using Marcus's notes, write a complete billing reconciliation SOP.
+            Include all required metadata fields, step-by-step process, and an
+            escalation section for when the script fails.
+          assessmentType: writing
+          xpReward: 100
+          data:
+            scenarioContext: >
+              Write the billing reconciliation SOP from Marcus's notes. It must be
+              usable by a support operations engineer who has never run the process before.
+            docTemplate: |
+              ---
+              title: "SOP - Billing Reconciliation"
+              doc_type: "SOP"
+              status: "Active"
+              owner: "Finance Operations"
+              backup_owner: "Platform Engineering"
+              audience:
+                - "Finance Operations engineers"
+                - "Billing Engineering on-call"
+              last_reviewed: "2026-05-04"
+              next_review: "2026-08-04"
+              tags:
+                - "billing"
+                - "reconciliation"
+                - "finance"
+                - "month-end"
+              canonical: true
+              sensitivity: "Internal"
+              ---
+
+              # SOP - Billing Reconciliation
+
+              ## Summary
+
+              [One paragraph describing what this process does and when it runs]
+
+              ## Prerequisites
+
+              - [ ] Access to 1Password vault: [vault name]
+              - [ ] Access to the billing server
+              - [ ] [Other prerequisites]
+
+              ## When to Run This Process
+
+              [Describe the trigger — when does this run?]
+
+              ## Steps
+
+              1. [First step]
+              2. [Second step]
+              3. [Continue...]
+
+              ## Expected Output
+
+              [What does a successful run look like?]
+
+              ## Known Issues
+
+              ### Silent failures
+              [Describe the silent failure issue and how to detect it]
+
+              ### Rounding rule
+              [Document the $0.50 policy]
+
+              ## Escalation
+
+              | Condition | Action | Contact |
+              |-----------|--------|---------|
+              | [condition] | [action] | [who] |
+
+              ## Changelog
+
+              | Date | Change | Author |
+              |------|--------|--------|
+              | 2026-05-04 | Initial SOP created from Marcus's exit interview | [Your name] |
+            wordCountMin: 300
+            acceptedPatterns:
+              - reconcile
+              - 1Password
+              - STRIPE
+              - rounding
+              - escalat
+              - log
+            rubric:
+              - id: r1
+                label: Complete metadata
+                description: All required front matter fields are present and correct
+                weight: 15
+              - id: r2
+                label: Prerequisites listed
+                description: Credentials, access, and system requirements are specified
+                weight: 15
+              - id: r3
+                label: Steps are actionable
+                description: Steps are numbered, specific, and usable without Marcus
+                weight: 25
+              - id: r4
+                label: Known issues documented
+                description: Silent failure detection and rounding rule are documented
+                weight: 25
+              - id: r5
+                label: Escalation path provided
+                description: Clear escalation conditions, actions, and contacts are specified
+                weight: 20
+        - id: phase-3
+          title: "Phase 3: Write the PostgreSQL ADR"
+          description: >
+            Marcus mentioned the PostgreSQL vs MongoDB decision for billing events
+            was never documented. Write the ADR from the context in his exit notes.
+          assessmentType: writing
+          xpReward: 90
+          data:
+            scenarioContext: >
+              Write ADR-018 for the PostgreSQL vs MongoDB billing events decision.
+              The context comes from Marcus's exit notes. Fill in all ADR fields.
+            docTemplate: |
+              # ADR-018: Database for Billing Events
+
+              **Status:** Accepted
+              **Date:** 2024-Q2 (reconstructed 2026-05-04)
+              **Decision owner:** Platform Engineering
+              **Reconstructed from:** Marcus Chen exit interview, May 2026
+
+              ## Context
+
+              [What problem or need prompted this decision?]
+
+              ## Options Considered
+
+              ### Option 1: PostgreSQL
+
+              **Pros:**
+              - [list]
+
+              **Cons:**
+              - [list]
+
+              ### Option 2: MongoDB
+
+              **Pros:**
+              - [list]
+
+              **Cons:**
+              - [list]
+
+              ### Option 3: [Third option from Marcus's notes]
+
+              **Rejected because:** [reason]
+
+              ## Decision
+
+              We chose [decision] because [primary reason].
+
+              ## Consequences
+
+              **Positive:**
+              - [consequence]
+
+              **Negative / tradeoffs:**
+              - [consequence]
+
+              ## Follow-up Work
+
+              - [ ] [Any open items]
+
+              ## Related Docs
+
+              - [Link to billing reconciliation SOP]
+              - [Link to billing architecture overview]
+            wordCountMin: 250
+            acceptedPatterns:
+              - ACID
+              - PostgreSQL
+              - MongoDB
+              - billing events
+              - decision
+              - Context
+            rubric:
+              - id: r1
+                label: Context section complete
+                description: Explains why the decision was needed, not just what was decided
+                weight: 25
+              - id: r2
+                label: All three options included
+                description: PostgreSQL, MongoDB, and at least one other option from Marcus's notes
+                weight: 25
+              - id: r3
+                label: Decision and reasoning stated
+                description: The decision is explicit and the primary reason is clearly stated
+                weight: 25
+              - id: r4
+                label: Consequences documented
+                description: Both positive outcomes and tradeoffs are listed
+                weight: 25
+        - id: phase-4
+          title: "Phase 4: Update the Incident Runbook"
+          description: >
+            Last week's checkout latency incident revealed a gap: nobody knew
+            to check Redis memory first. Update the runbook to include the
+            Redis diagnostic step and fix the escalation path.
+          assessmentType: writing
+          xpReward: 80
+          data:
+            scenarioContext: >
+              Update the Checkout Latency runbook to add the Redis memory diagnostic
+              step and fix the escalation section so it does not depend on Marcus.
+            docTemplate: |
+              # Runbook - Checkout Latency (Updated)
+
+              **Audience:** On-call platform engineers
+              **Owner:** Platform Engineering
+              **Last reviewed:** 2026-05-04
+              **Changelog:** Added Redis memory diagnostic (April 2026 incident learnings)
+
+              ## Symptoms
+
+              - P95 checkout latency > 2 seconds
+              - Checkout error rate > 0.5%
+              - Customer complaints about slow checkout
+
+              ## Initial Diagnosis
+
+              1. Check Datadog latency dashboard
+              2. Check application logs for errors
+              3. **[NEW] Check Redis memory utilization** — [add specific command and threshold]
+              4. Check database connection pool utilization
+              5. Check external payment processor status
+
+              ## Resolution Steps
+
+              **[NEW] If Redis memory is high (> 80%):**
+              [Add the specific resolution steps from Marcus's notes]
+              **IMPORTANT:** [Add the safety step that Marcus mentioned]
+
+              **If DB connection pool is exhausted:**
+              - Restart the application pods: `kubectl rollout restart deployment/checkout`
+
+              **If Stripe is degraded:**
+              - Enable the "graceful degradation" feature flag
+              - Notify the support team
+
+              ## Escalation
+
+              If unresolved in 30 minutes:
+
+              | Step | Action | Contact |
+              |------|--------|---------|
+              | 1 | [Primary escalation] | [Role, not name] |
+              | 2 | [Secondary escalation] | [Role, not name] |
+              | 3 | [Executive escalation] | [Role, not name] |
+
+              ## Post-Incident
+
+              - [ ] Update this runbook if any steps were missing or wrong
+              - [ ] Write postmortem within 48 hours
+            wordCountMin: 200
+            acceptedPatterns:
+              - redis
+              - memory
+              - flushdb
+              - escalat
+              - Role
+            rubric:
+              - id: r1
+                label: Redis diagnostic step added
+                description: Specific redis-cli command and 80% threshold are documented
+                weight: 30
+              - id: r2
+                label: Resolution steps specific
+                description: Resolution steps are actionable with exact commands
+                weight: 25
+              - id: r3
+                label: Safety confirmation step included
+                description: The "confirm with lead before flushing" safeguard is documented
+                weight: 20
+              - id: r4
+                label: Escalation uses roles not names
+                description: Escalation path does not depend on Marcus or any single named person
+                weight: 25
+        - id: phase-5
+          title: "Phase 5: AI-Readiness Checklist"
+          description: >
+            Leadership wants an internal AI assistant to answer process questions.
+            Create a checklist to prepare the knowledge base so the AI gives
+            accurate, safe answers.
+          assessmentType: writing
+          xpReward: 70
+          data:
+            scenarioContext: >
+              Create a practical AI-readiness checklist for the Northstar Apps knowledge base.
+              Identify which documents should be excluded and what improvements are needed.
+            docTemplate: |
+              # AI Assistant Readiness Checklist - Northstar Apps Knowledge Base
+
+              **Prepared by:** Documentation Specialist
+              **Date:** 2026-05-04
+
+              ## Documents to EXCLUDE from AI Index
+
+              The following documents should NOT be used as AI source material and why:
+
+              | Document | Reason to Exclude |
+              |----------|------------------|
+              | [Document name] | [Why it is unsafe for AI to use] |
+              | | |
+
+              ## Documents That Need Improvement Before AI Indexing
+
+              | Document | Problem | Fix Required |
+              |----------|---------|-------------|
+              | [Document name] | [Issue] | [What needs to change] |
+              | | | |
+
+              ## Required Metadata for AI-Safe Docs
+
+              For a document to be safely used by the AI assistant, it must have:
+
+              - [ ] [Required field 1]
+              - [ ] [Required field 2]
+              - [ ] [Continue list]
+
+              ## High-Risk Knowledge Areas
+
+              Areas where AI must display a warning and recommend human review:
+
+              1. [Area] — [Reason]
+              2. [Area] — [Reason]
+
+              ## Estimated Readiness
+
+              - Documents ready for AI indexing today: [X] of [total]
+              - Documents needing minor fixes: [X]
+              - Documents that must be excluded: [X]
+            wordCountMin: 200
+            acceptedPatterns:
+              - exclud
+              - stale
+              - canonical
+              - sensitiv
+              - human review
+            rubric:
+              - id: r1
+                label: Correct exclusions
+                description: The Heroku deployment doc and Marcus's notes are correctly excluded with clear reasons
+                weight: 30
+              - id: r2
+                label: Metadata requirements listed
+                description: AI-safe metadata requirements (status, canonical, sensitivity, last_reviewed) are specified
+                weight: 25
+              - id: r3
+                label: High-risk areas identified
+                description: Financial/billing and incident response are flagged as requiring human review
+                weight: 25
+              - id: r4
+                label: Readiness estimate practical
+                description: The checklist is grounded in the actual documents available, not generic
+                weight: 20

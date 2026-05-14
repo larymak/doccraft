@@ -1,0 +1,109 @@
+.panel {
+  background: var(--fcc-blue-dark);
+  border: 1px solid var(--fcc-blue-mid);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.scoreCircle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--fcc-blue-mid);
+  border-radius: 50%;
+  width: 130px;
+  height: 130px;
+  border: 3px solid var(--fcc-gold);
+  gap: 2px;
+}
+
+.scoreNumber {
+  font-size: 2.75rem;
+  font-weight: 900;
+  color: var(--fcc-gold);
+  line-height: 1;
+}
+
+.scoreMax {
+  font-size: var(--text-xs);
+  color: var(--fcc-gray-400);
+  letter-spacing: 0.05em;
+}
+
+.scoreLabel {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--fcc-gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metrics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-top: 1px solid var(--fcc-blue-mid);
+  padding-top: var(--space-4);
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metricLabel {
+  font-size: var(--text-sm);
+  color: var(--fcc-gray-300);
+}
+
+.metricValue {
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.positive { color: var(--fcc-green-light); }
+.neutral  { color: var(--fcc-text-light); }
+
+.badgeWrap {
+  border-top: 1px solid var(--fcc-blue-mid);
+  padding-top: var(--space-4);
+}
+
+.badgeTitle {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--fcc-gold);
+  margin-bottom: var(--space-3);
+  text-align: center;
+}
+
+.scoreCirclePop {
+  animation: scorePop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes scorePop {
+  from { transform: scale(0.82); }
+  to   { transform: scale(1); }
+}
+
+.metric {
+  animation: metricIn 0.3s ease both;
+  animation-delay: var(--metric-delay, 0ms);
+}
+
+@keyframes metricIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}

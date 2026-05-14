@@ -1,0 +1,165 @@
+id: u02-m03
+unitId: unit-02
+order: 3
+slug: u02-m03
+title: ADRs, Postmortems, and Choosing
+scenario: >
+  It has been a big week at Northstar Apps. The engineering team made an
+  important technology decision on Tuesday — they chose a new message queue
+  after a long debate. On Thursday night there was a small incident: the
+  checkout page was slow for about 40 minutes. Both things need to be
+  documented before everyone forgets the details. Jordan drops by your desk.
+  "I want to write up both of these, but I keep getting confused about what
+  type of document each one should be. Can you help me figure it out?"
+objectives:
+  - Understand what an ADR is and what makes it different from other docs
+  - Understand what a postmortem captures and why it matters
+  - Choose the right document type when given a real-world situation
+materials: []
+successCriteria:
+  - All three multiple-choice questions answered correctly
+estimatedMinutes: 14
+prerequisiteMissionId: u02-m02
+assessments:
+  - id: u02-m03-a1
+    type: multiple-choice
+    title: What Goes in an ADR?
+    description: >
+      Jordan needs to document Tuesday's decision. She is not sure what an
+      ADR actually captures versus a regular explanation doc.
+    xpReward: 40
+    masteryThreshold: 100
+    debtReduction: 3
+    hints:
+      - level: 1
+        text: >
+          An explanation doc tells you how something works.
+          An ADR tells you why a specific choice was made — and what alternatives
+          were considered.
+    data:
+      question: >
+        The team spent two hours deciding between RabbitMQ and Kafka for their
+        new message queue. They chose Kafka. Jordan wants to document this.
+        What makes an ADR the right choice over a regular explanation doc?
+      options:
+        - id: a
+          text: An ADR is longer and more detailed than an explanation doc
+          isCorrect: false
+          explanation: >
+            Length isn't what defines an ADR. A short ADR with good reasoning
+            is more valuable than a long explanation doc.
+        - id: b
+          text: >
+            An ADR captures the decision, the alternatives that were considered,
+            and the reasons why — so future engineers don't re-debate the same question
+          isCorrect: true
+          explanation: >
+            Exactly. An ADR prevents "decision amnesia." Without it, a new engineer
+            might propose switching back to RabbitMQ in 6 months — and nobody
+            will remember why Kafka was chosen.
+        - id: c
+          text: An ADR is only for architecture decisions, not operational ones
+          isCorrect: false
+          explanation: >
+            ADRs work for any significant decision that a team might question later
+            — technology choices, process decisions, policy choices.
+        - id: d
+          text: An explanation doc and an ADR cover the same information
+          isCorrect: false
+          explanation: >
+            An explanation doc describes how something works. An ADR records why
+            a specific option was chosen over the alternatives. Different purpose.
+  - id: u02-m03-a2
+    type: multiple-choice
+    title: What Goes in a Postmortem?
+    description: >
+      Now Jordan wants to document Thursday's checkout slowdown.
+      She asks you what a postmortem should actually contain.
+    xpReward: 40
+    masteryThreshold: 100
+    debtReduction: 3
+    hints:
+      - level: 1
+        text: >
+          A postmortem is written after an incident is resolved. What are the
+          most important things a team needs to learn from an incident?
+    data:
+      question: >
+        The checkout slowdown lasted 40 minutes. The root cause was a missing
+        database index that was dropped accidentally during a migration.
+        What should the postmortem document?
+      options:
+        - id: a
+          text: Just the steps taken to fix the incident
+          isCorrect: false
+          explanation: >
+            Fix steps alone aren't enough. Without a timeline and root cause,
+            the team can't learn from what happened or prevent it from recurring.
+        - id: b
+          text: >
+            A timeline of what happened, the root cause, what the team did to fix it,
+            and what changes will prevent it from happening again
+          isCorrect: true
+          explanation: >
+            Correct. A good postmortem answers four questions: what happened,
+            why it happened, how it was fixed, and what we're changing so it
+            doesn't happen again. All four matter.
+        - id: c
+          text: A list of people who were responsible for the incident
+          isCorrect: false
+          explanation: >
+            Postmortems are blameless. The goal is to learn from the system failure,
+            not to assign blame to individuals.
+        - id: d
+          text: Only incidents that caused revenue loss need postmortems
+          isCorrect: false
+          explanation: >
+            Any incident worth fixing is worth learning from. A 40-minute slowdown
+            might affect hundreds of customers even without direct revenue loss.
+  - id: u02-m03-a3
+    type: multiple-choice
+    title: Pick the Right Type
+    description: >
+      Jordan gives you one more scenario. You now know all eight document types.
+      Which one fits?
+    xpReward: 50
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: >
+          Think about who needs this document and when. Is it for learning,
+          doing a task, looking something up, understanding why, following a
+          process, handling an incident, or recording a decision or failure?
+    data:
+      question: >
+        A new engineer joins the billing team. They need a document that walks
+        them through their first 30 days: what tools to set up, who to meet,
+        what to read, and what to ship by end of month. What type fits best?
+      options:
+        - id: a
+          text: Tutorial — it teaches new skills through guided examples
+          isCorrect: false
+          explanation: >
+            A tutorial teaches one specific concept or skill. An onboarding journey
+            spans 30 days and multiple milestones — it needs a dedicated structure.
+        - id: b
+          text: SOP — it is a process the company follows for every new hire
+          isCorrect: false
+          explanation: >
+            An SOP is a fixed operational process. Onboarding is more like a
+            progressive learning path — it has milestones, context, and role-specific
+            content. An SOP wouldn't capture all of that.
+        - id: c
+          text: Onboarding guide — a role-specific progressive path with milestones and checkpoints
+          isCorrect: true
+          explanation: >
+            Correct. An onboarding guide is built for exactly this — role-based,
+            time-structured, with checkpoints like "by day 5" and "by end of month."
+            It's the right tool for bringing someone up to speed over time.
+        - id: d
+          text: Runbook — it is used under pressure and needs decision logic
+          isCorrect: false
+          explanation: >
+            A runbook is for operational or incident scenarios. A new hire's first
+            30 days is a learning journey, not an emergency response situation.

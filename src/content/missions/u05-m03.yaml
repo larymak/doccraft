@@ -1,0 +1,207 @@
+id: u05-m03
+unitId: unit-05
+order: 3
+slug: u05-m03
+title: Find the Misplaced Documents
+scenario: >
+  After the folder reorganization, the Northstar Apps wiki looks better — but someone
+  did a bulk import from the old Confluence instance and dropped 14 documents into
+  whatever folder seemed close enough. A postmortem ended up in Support > SOPs.
+  An onboarding guide ended up in Engineering > ADRs. Your job is to review each
+  misplaced document and identify which folder it actually belongs in.
+objectives:
+  - Determine the correct folder for a document based on its content, type, and audience
+  - Identify the specific reason each document was misplaced
+  - Distinguish between documents that look similar but belong in different locations
+materials:
+  - id: doc-misplaced-sample
+    filename: incident-2025-11-03-rate-limiter.md
+    title: Rate Limiter Incident — November 2025
+    trustScore: 55
+    findabilityScore: 15
+    issues:
+      - Currently filed in Support > SOPs — wrong audience and wrong document type
+      - Contains postmortem content (timeline, root cause, action items)
+      - Should be in Engineering > Postmortems
+    frontmatter:
+      title: Rate Limiter Incident — November 2025
+      status: Active
+      owner: Platform Engineering
+      last_reviewed: "2025-12-01"
+    body: |
+      # Rate Limiter Incident — November 2025
+
+      **Date:** November 3, 2025
+      **Duration:** 22 minutes
+      **Affected:** API clients on all tiers
+
+      ## Timeline
+
+      11:14 — Datadog alert: rate limiter queue depth exceeded 5,000
+      11:18 — On-call engineer identified Redis memory saturation as probable cause
+      11:29 — Redis memory cleared via maintenance script
+      11:36 — Queue depth returned to normal
+
+      ## Root Cause
+
+      Redis memory saturation caused rate limit counters to be evicted, allowing
+      requests that exceeded per-client limits to pass through unchecked.
+
+      ## Action Items
+
+      - [ ] Add Redis memory alert at 70% threshold
+      - [ ] Update rate limiter runbook with Redis saturation scenario
+successCriteria:
+  - All sorting items placed in the correct folder
+  - Sorting task score of 80 or higher
+  - Multiple-choice question answered correctly
+estimatedMinutes: 16
+prerequisiteMissionId: u05-m02
+assessments:
+  - id: u05-m03-a1
+    type: sorting
+    title: Return Each Document to Its Correct Folder
+    description: Each document was placed in the wrong folder during the Confluence import. Sort each into where it actually belongs.
+    xpReward: 100
+    masteryThreshold: 80
+    debtReduction: 8
+    hints:
+      - level: 1
+        text: Ignore where the document currently is — look at the content and decide from scratch which audience reads it and what type it is.
+      - level: 2
+        text: "A document that was written by engineers but is used by support belongs in Support. A document that involves a technical decision made by engineers belongs in Engineering > ADRs."
+    data:
+      instruction: >
+        Each document was placed in the wrong folder during the Confluence import.
+        Sort each one into its correct folder in the Northstar Apps wiki hierarchy.
+      categories:
+        - id: eng-platform
+          label: "Engineering > Platform"
+          description: Platform team runbooks, deployment SOPs, infrastructure operational docs
+        - id: eng-backend
+          label: "Engineering > Backend"
+          description: Backend service docs, API guides, backend-specific how-tos
+        - id: eng-adrs
+          label: "Engineering > ADRs"
+          description: Architecture Decision Records
+        - id: eng-postmortems
+          label: "Engineering > Postmortems"
+          description: All incident postmortems
+        - id: support-sops
+          label: "Support > SOPs"
+          description: Standard operating procedures for support specialists
+        - id: support-runbooks
+          label: "Support > Runbooks"
+          description: Escalation and diagnostic runbooks for support workflows
+        - id: support-reference
+          label: "Support > Reference"
+          description: Lookup reference docs for support team use
+        - id: company-policies
+          label: "Company > Policies"
+          description: Company-wide rules and compliance policies
+        - id: company-onboarding
+          label: "Company > Onboarding"
+          description: Role-based onboarding guides
+        - id: company-reports
+          label: "Company > Reports"
+          description: Quarterly reports and executive summaries
+      items:
+        - id: i1
+          text: "Rate Limiter Incident — November 2025 [currently in: Support > SOPs] — Contains timeline, root cause, and action items for a platform incident"
+          categoryId: eng-postmortems
+          explanation: >
+            This is clearly a postmortem — it has a timeline, root cause, and action items for
+            an engineering incident. It was misplaced in Support > SOPs, probably because it
+            mentions "rate limiter" which sounds support-adjacent. Owner and content confirm it
+            belongs in Engineering > Postmortems.
+        - id: i2
+          text: "New Hire Guide — First Week at Northstar Apps [currently in: Engineering > ADRs] — General orientation for all new employees: tools, systems, first-day checklist"
+          categoryId: company-onboarding
+          explanation: >
+            A general orientation guide for all new employees is a company-level onboarding document.
+            It was misplaced in ADRs, possibly because it was imported alphabetically near an ADR with
+            a similar filename. Audience is all new hires, not engineers reviewing architecture decisions.
+        - id: i3
+          text: "SOP — Refund Processing — Support Specialists [currently in: Engineering > Platform] — Step-by-step refund process for support staff using Billing Dashboard"
+          categoryId: support-sops
+          explanation: >
+            The content is unambiguously written for support specialists using Billing Dashboard.
+            It was filed under Engineering > Platform, probably because billing infrastructure is
+            owned by the platform team. But the audience — support specialists — determines the folder.
+        - id: i4
+          text: "ADR-004 — Use PostgreSQL for Billing Events [currently in: Company > Policies] — Evaluation of database options for billing audit logs with decision rationale"
+          categoryId: eng-adrs
+          explanation: >
+            An ADR documents a technical decision. It was misplaced in Company > Policies, probably
+            because the title mentions "billing" and billing has company-wide relevance. But ADRs
+            are written by and for engineers, and all ADRs belong in Engineering > ADRs.
+        - id: i5
+          text: "Reference — API Rate Limits by Tier [currently in: Engineering > Backend] — Table of rate limits for Free, Pro, and Enterprise tiers used by support during customer calls"
+          categoryId: support-reference
+          explanation: >
+            Although this document was written by engineering, it is used by support specialists
+            during customer calls. The audience determines the folder. Support > Reference is correct.
+        - id: i6
+          text: "Runbook — Deployment Failure Recovery — Platform [currently in: Support > Runbooks] — Diagnostic steps for platform engineers when a production deploy fails"
+          categoryId: eng-platform
+          explanation: >
+            A runbook for diagnosing production deployment failures is a platform engineering
+            document. It was misplaced in Support > Runbooks, probably because it was labeled
+            "runbook" and imported without content review.
+        - id: i7
+          text: "Policy — Employee Acceptable Use of AI Tools [currently in: Engineering > Backend] — Company policy on using AI coding assistants and LLMs, applies to all staff"
+          categoryId: company-policies
+          explanation: >
+            A company-wide policy on AI tool usage applies to all staff, not just backend engineers.
+            It belongs under Company > Policies.
+        - id: i8
+          text: "Report — Support Ticket Volume — Q4 2025 [currently in: Support > SOPs] — Quarterly summary of ticket volumes, categories, and escalation rates for leadership"
+          categoryId: company-reports
+          explanation: >
+            A quarterly report prepared for leadership consumption belongs in Company > Reports.
+            It was misplaced in Support > SOPs, possibly because it was authored by the support team.
+            Authorship does not determine folder — audience and document type do.
+  - id: u05-m03-a2
+    type: multiple-choice
+    title: When Authorship and Audience Conflict
+    description: If an engineer writes an SOP that support specialists use, where does it go?
+    xpReward: 45
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: Think about which person opens their wiki and needs to find this document on any given workday.
+    data:
+      question: >
+        A platform engineer writes an SOP for processing API credential rotations.
+        The actual steps are performed by support specialists using the admin dashboard.
+        The engineer wrote it and knows the process best. Where should this document be filed?
+      options:
+        - id: a
+          text: "Engineering > Platform, because a platform engineer wrote it."
+          isCorrect: false
+          explanation: >
+            Authorship does not determine the folder. The author is not the primary reader.
+            Filing by author means documents get scattered across team folders based on who
+            happened to write them, not who needs to find them.
+        - id: b
+          text: "Support > SOPs, because support specialists are the ones who perform the task and need to find it."
+          isCorrect: true
+          explanation: >
+            Correct. Folder placement follows the primary reader — the person who will open their
+            wiki looking for this document on a normal workday. Support specialists execute this
+            task, so they need to find it in their part of the wiki. The engineer can keep a link
+            to it from Engineering > Platform if needed.
+        - id: c
+          text: "Both Engineering > Platform and Support > SOPs, by creating a copy in each location."
+          isCorrect: false
+          explanation: >
+            Copies create conflicting documentation. When the SOP is updated, both copies must be
+            updated simultaneously. This is how wikis end up with two contradictory versions of the
+            same document. Use a single canonical location and link to it from other locations.
+        - id: d
+          text: "Company > Policies, because credential rotation is a company-wide concern."
+          isCorrect: false
+          explanation: >
+            Credential rotation is an operational task, not a company policy. Policies describe
+            rules and obligations. SOPs describe how to execute a specific process.

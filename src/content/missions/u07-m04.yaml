@@ -1,0 +1,414 @@
+id: u07-m04
+unitId: unit-07
+order: 4
+slug: u07-m04
+title: "Boss: Full Docs-as-Code Workflow"
+scenario: >
+  The backend engineer onboarding guide has been flagged by three new hires as
+  confusing and incomplete. It is missing a prerequisites section, links to a
+  Confluence page new hires cannot access, and the front matter review date
+  is 11 months past due. You will take this document through the full docs-as-code
+  workflow: edit the content, fix the front matter, write a proper commit message,
+  and complete the PR checklist before requesting a review from the docs team lead.
+objectives:
+  - Edit a document to fix two substantive content problems
+  - Update front matter with correct status, review dates, and owner
+  - Write a commit message that follows the Northstar Apps standard
+  - Complete a PR checklist and demonstrate understanding of the review process
+materials:
+  - id: doc-backend-onboarding
+    filename: onboarding/backend-engineer.md
+    title: Backend Engineer Onboarding Guide
+    trustScore: 38
+    findabilityScore: 45
+    issues:
+      - Missing prerequisites section — new hires do not know what to install first
+      - Confluence link on line 24 requires access new hires do not have
+      - last_reviewed is 11 months overdue — next_review passed in June 2025
+      - Status is still "active" but content has known accuracy gaps
+    frontmatter:
+      title: "Backend Engineer Onboarding Guide"
+      doc_type: "tutorial"
+      status: "active"
+      owner: "engineering-onboarding"
+      audience: "engineers"
+      last_reviewed: "2025-06-01"
+      next_review: "2025-12-01"
+      tags:
+        - onboarding
+        - backend
+        - engineering
+    body: |
+      # Backend Engineer Onboarding Guide
+
+      Welcome to Northstar Apps. This guide will help you get your development
+      environment running and make your first contribution.
+
+      ## Setting Up Your Environment
+
+      Clone the monorepo:
+
+      ```bash
+      git clone git@github.com:northstarapps/platform.git
+      cd platform
+      npm install
+      ```
+
+      Start the local stack:
+
+      ```bash
+      docker compose up -d
+      ```
+
+      For environment configuration, see the internal setup guide:
+      https://northstar.atlassian.net/wiki/spaces/ENG/pages/48291
+
+      ## Your First PR
+
+      All changes require a pull request. Branch naming convention:
+      `type/TICKET-short-description`
+
+      Open your PR on GitHub and fill in the PR template. Request review from
+      a team member before merging.
+
+      ## Getting Help
+
+      Post in #backend-eng on Slack. For urgent issues, ping the on-call engineer.
+successCriteria:
+  - Prerequisites section added with specific tool versions
+  - Confluence link replaced with inline content or a link to public docs
+  - Front matter last_reviewed and next_review updated to current and future dates
+  - Commit message uses imperative mood and describes what changed
+  - PR checklist completed with all items addressed
+estimatedMinutes: 25
+prerequisiteMissionId: u07-m03
+assessments:
+  - id: u07-m04-a1
+    type: metadata-edit
+    title: Fix the Front Matter
+    description: Update the front matter to reflect the current state of the document after your edits.
+    xpReward: 70
+    masteryThreshold: 80
+    debtReduction: 7
+    findabilityDelta: 12
+    trustDelta: 15
+    hints:
+      - level: 1
+        text: >
+          The review dates are 11 months overdue. Set last_reviewed to today and
+          next_review to six months from now — this is an onboarding doc that
+          changes whenever the stack changes.
+      - level: 2
+        text: >
+          After adding a prerequisites section and fixing the broken link, the doc
+          is more trustworthy but you have made substantive changes. Confirm the
+          status is still appropriate.
+    data:
+      scenarioContext: >
+        You have edited the onboarding guide to add a prerequisites section and
+        fix the broken Confluence link. Now update the front matter to reflect
+        the current state of the document.
+      initialFrontmatter:
+        title: "Backend Engineer Onboarding Guide"
+        doc_type: "tutorial"
+        status: "active"
+        owner: "engineering-onboarding"
+        audience: "engineers"
+        last_reviewed: "2025-06-01"
+        next_review: "2025-12-01"
+        tags:
+          - onboarding
+          - backend
+          - engineering
+      requiredFields:
+        - last_reviewed
+        - next_review
+        - status
+        - tags
+      optionalFields:
+        - description
+        - related_docs
+        - canonical
+      validationRules:
+        - field: last_reviewed
+          rule: equals
+          value: "2026-05-04"
+          feedback: Set last_reviewed to today's date (2026-05-04) since you are making changes now.
+        - field: next_review
+          rule: dateAfter
+          value: "2026-05-04"
+          feedback: next_review must be after last_reviewed. For an onboarding doc, 6 months is appropriate.
+        - field: next_review
+          rule: withinMonths
+          value: "12"
+          feedback: Onboarding docs should be reviewed at least annually — 6 months is ideal given the fast-moving stack.
+        - field: status
+          rule: oneOf
+          value: "active"
+          feedback: >
+            After fixing the broken link and adding prerequisites, the document is
+            current and accurate. Keep status as "active".
+        - field: tags
+          rule: minItems
+          value: "3"
+          feedback: Keep at least the existing tags. Add "getting-started" if the prerequisites section is new.
+  - id: u07-m04-a2
+    type: multiple-choice
+    title: Write the Commit Message
+    description: Choose the commit message that best follows the Northstar Apps standard for this change.
+    xpReward: 50
+    masteryThreshold: 100
+    debtReduction: 5
+    hints:
+      - level: 1
+        text: >
+          The commit touches two things: added a prerequisites section and fixed a broken link.
+          The best commit message covers both clearly in imperative present tense.
+    data:
+      question: >
+        You have made two changes to the backend onboarding guide: added a prerequisites
+        section with version numbers, and replaced the inaccessible Confluence link with
+        inline content. Which commit message best follows the Northstar Apps standard?
+      options:
+        - id: a
+          text: "updated backend onboarding"
+          isCorrect: false
+          explanation: >
+            Vague and past tense. "Updated" tells the reader nothing about what
+            changed or why. Every commit in a docs repo "updates" something.
+        - id: b
+          text: "Add prerequisites section and fix Confluence link in backend onboarding guide"
+          isCorrect: true
+          explanation: >
+            Correct. Imperative present tense, covers both changes, names the document,
+            and is specific about what changed. A reader running git log immediately
+            knows what happened without opening the diff.
+        - id: c
+          text: "Fix backend onboarding — add prereqs, remove dead Confluence link, update dates"
+          isCorrect: false
+          explanation: >
+            Close, but the dash-separated list format is less readable than a full sentence.
+            Also "remove dead Confluence link" slightly misrepresents the action — the link
+            was replaced with inline content, not just deleted.
+        - id: d
+          text: "Docs: onboarding improvements v2"
+          isCorrect: false
+          explanation: >
+            "improvements v2" is meaningless in a commit message — it implies versioning
+            that does not exist. It is also vague about what improved. The "Docs:" prefix
+            convention is not used at Northstar Apps.
+  - id: u07-m04-a3
+    type: writing
+    title: Edit the Document and Complete the PR Checklist
+    description: >
+      Write the updated version of the onboarding guide with the prerequisites section
+      added and the Confluence link replaced. Then complete the PR checklist.
+    xpReward: 150
+    masteryThreshold: 70
+    debtReduction: 12
+    trustDelta: 20
+    hints:
+      - level: 1
+        text: >
+          The prerequisites section should list specific versions: Git 2.40+, Node.js 20 LTS,
+          Docker Desktop 4.x. Readers install these before they can follow any other step.
+      - level: 2
+        text: >
+          To replace the Confluence link, either inline the key information (one or two
+          sentences about what the link contained) or link to the equivalent public docs page.
+      - level: 3
+        text: >
+          The PR checklist items are: doc type is correct, owner and review date are set,
+          changelog entry added, no broken links. Address each one in your checklist section.
+    data:
+      scenarioContext: >
+        Complete the full docs-as-code workflow. Rewrite the onboarding guide with the
+        two content fixes, then fill in the PR checklist below to show the change is
+        ready to merge.
+      docTemplate: |
+        ---
+        title: "Backend Engineer Onboarding Guide"
+        doc_type: tutorial
+        status: active
+        owner: engineering-onboarding
+        audience: engineers
+        last_reviewed: 2026-05-04
+        next_review: 2026-11-04
+        tags:
+          - onboarding
+          - backend
+          - engineering
+          - getting-started
+        ---
+
+        # Backend Engineer Onboarding Guide
+
+        Welcome to Northstar Apps. This guide will help you get your development
+        environment running and make your first contribution.
+
+        ## Prerequisites
+
+        [Add prerequisites section here with tool names and versions]
+
+        ## Setting Up Your Environment
+
+        Clone the monorepo:
+
+        ```bash
+        git clone git@github.com:northstarapps/platform.git
+        cd platform
+        npm install
+        ```
+
+        Start the local stack:
+
+        ```bash
+        docker compose up -d
+        ```
+
+        [Replace the Confluence link with inline content or a public docs link]
+
+        ## Your First PR
+
+        All changes require a pull request. Branch naming convention:
+        `type/TICKET-short-description`
+
+        Open your PR on GitHub and fill in the PR template. Request review from
+        a team member before merging.
+
+        ## Getting Help
+
+        Post in #backend-eng on Slack. For urgent issues, ping the on-call engineer.
+
+        ---
+
+        ## PR Checklist
+
+        - [ ] Doc type is correct: [your answer]
+        - [ ] Owner and review date are set: [your answer]
+        - [ ] Changelog entry added: [your answer]
+        - [ ] No broken links: [your answer]
+      wordCountMin: 250
+      acceptedPatterns:
+        - Prerequisites
+        - Git
+        - Node
+        - Docker
+        - "- [x]"
+        - broken link
+        - review
+        - checklist
+      rubric:
+        - id: r1
+          label: Prerequisites section added with version numbers
+          description: New section lists Git, Node.js, and Docker with specific version requirements
+          weight: 25
+        - id: r2
+          label: Confluence link replaced
+          description: The inaccessible Confluence link is replaced with either inline content or a public docs link
+          weight: 25
+        - id: r3
+          label: PR checklist completed
+          description: All four checklist items are addressed with a yes/no and brief explanation
+          weight: 25
+        - id: r4
+          label: Document structure and formatting preserved
+          description: The rest of the document retains its original structure and correct Markdown formatting
+          weight: 25
+gitWorkflow:
+  changedFiles:
+    - filename: "onboarding/backend-engineer.md"
+      before: |
+        # Backend Engineer Onboarding Guide
+
+        Welcome to Northstar Apps. This guide will help you get your development
+        environment running and make your first contribution.
+
+        ## Setting Up Your Environment
+
+        Clone the monorepo:
+
+        ```bash
+        git clone git@github.com:northstarapps/platform.git
+        cd platform
+        npm install
+        ```
+
+        Start the local stack:
+
+        ```bash
+        docker compose up -d
+        ```
+
+        For environment configuration, see the internal setup guide:
+        https://northstar.atlassian.net/wiki/spaces/ENG/pages/48291
+
+        ## Your First PR
+
+        All changes require a pull request. Branch naming convention:
+        `type/TICKET-short-description`
+
+        Open your PR on GitHub and fill in the PR template. Request review from
+        a team member before merging.
+
+        ## Getting Help
+
+        Post in #backend-eng on Slack. For urgent issues, ping the on-call engineer.
+      after: |
+        # Backend Engineer Onboarding Guide
+
+        Welcome to Northstar Apps. This guide will help you get your development
+        environment running and make your first contribution.
+
+        ## Prerequisites
+
+        Before you start, install the following:
+
+        - **Git** 2.40 or higher
+        - **Node.js** 20 LTS
+        - **Docker Desktop** 4.x
+        - Your SSH key added to your GitHub account
+
+        ## Setting Up Your Environment
+
+        Clone the monorepo:
+
+        ```bash
+        git clone git@github.com:northstarapps/platform.git
+        cd platform
+        npm install
+        ```
+
+        Start the local stack:
+
+        ```bash
+        docker compose up -d
+        ```
+
+        Once the stack is running, visit `http://localhost:3000` to see the local
+        Northstar Apps dashboard. For detailed environment configuration options,
+        see [Local Environment Configuration](/docs/engineering/local-env-config).
+
+        ## Your First PR
+
+        All changes require a pull request. Branch naming convention:
+        `type/TICKET-short-description`
+
+        Open your PR on GitHub and fill in the PR template. Request review from
+        a team member before merging.
+
+        ## Getting Help
+
+        Post in #backend-eng on Slack. For urgent issues, ping the on-call engineer.
+  commitMessageHints:
+    - "Use present tense, imperative mood"
+    - "Describe what changed, not just that you changed it"
+    - "Cover both changes: the prerequisites section and the link fix"
+  prChecklistItems:
+    - "Doc type is correct"
+    - "Owner and review date are set"
+    - "Changelog entry added"
+    - "No broken links"
+  reviewerComments:
+    - "The prerequisites section is missing. Please add what the new hire should know before starting."
+    - "Line 24: The Confluence link requires access that new hires don't have yet."

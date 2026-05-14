@@ -1,0 +1,269 @@
+id: u09-m04
+unitId: unit-09
+order: 4
+slug: u09-m04
+title: "Boss: Write a Complete ADR from Scratch"
+scenario: >
+  The Northstar Apps data team has just completed a two-week technical evaluation
+  and decided to use PostgreSQL as the primary database for a new analytics
+  pipeline service — after seriously considering MongoDB. The decision was made in
+  a meeting attended by the Head of Engineering, the data team lead, and two senior
+  engineers. You were not in the meeting, but you have been given a briefing
+  document with all the relevant context. Write a complete ADR that captures this
+  decision for the architecture decision log. It will be ADR-042 and it needs to
+  be detailed enough that an engineer joining the company in 2029 can understand
+  why this choice was made without having to ask anyone.
+objectives:
+  - Write a complete ADR from a briefing document without a template to fill in
+  - Produce a context section that captures both technical and business constraints
+  - Write clear consequences covering benefits, trade-offs, and future implications
+  - Demonstrate that an ADR can capture institutional memory for future readers
+materials:
+  - id: doc-adr-briefing
+    filename: analytics-db-decision-briefing.md
+    title: Analytics Pipeline Database Decision — Briefing
+    trustScore: 0
+    findabilityScore: 0
+    issues:
+      - Raw briefing document — not structured as an ADR; needs to be converted
+    frontmatter: {}
+    body: |
+      # Analytics Pipeline DB Decision — Briefing for ADR Author
+
+      **Decision date:** 2026-04-30
+      **Decision made by:** Priya Mehta (Head of Engineering), Carlos Santos (Data lead),
+        Ananya Krishnan (Senior Engineer), James Park (Senior Engineer)
+
+      ## Background
+
+      We are building a new analytics pipeline service that will ingest event data
+      from all Northstar Apps services and expose it for reporting and alerting.
+      Expected volume at launch: 50,000 events/day. Expected volume at 12 months: 5M events/day.
+
+      The service needs to:
+      - Store time-series event data efficiently
+      - Support complex aggregation queries (counts, sums, percentiles by time window)
+      - Join with existing customer and payment data (all in PostgreSQL)
+      - Be operated by the data team who currently has strong PostgreSQL expertise
+
+      ## Options Evaluated
+
+      **Option A — PostgreSQL with JSONB + table partitioning**
+      - Our existing stack — team knows it deeply
+      - JSONB allows semi-structured event payloads
+      - Table partitioning handles time-series volume growth
+      - TimescaleDB extension available for advanced time-series queries
+      - All data in one place — joins with customer/payment data are trivial
+      - Risk: may not scale beyond ~500M events without significant sharding work
+
+      **Option B — MongoDB**
+      - Flexible document storage for varied event schemas
+      - Horizontal scaling is more straightforward than PostgreSQL sharding
+      - BUT: complex aggregation pipeline syntax is harder to use than SQL
+      - AND: the team has minimal MongoDB experience
+      - AND: joining event data with PostgreSQL customer/payment data would require
+        application-level joins — already a pain point we have with ADR-008/ADR-031
+
+      **Option C — ClickHouse**
+      - Purpose-built for analytics at high volume
+      - Columnar storage, extremely fast aggregations
+      - BUT: no one on the team has ClickHouse experience
+      - AND: would require a second database system to operate and monitor
+      - AND: still need application-level joins with PostgreSQL for customer context
+
+      ## Decision
+
+      PostgreSQL with table partitioning and the TimescaleDB extension.
+
+      The rationale: the team has strong PostgreSQL expertise. The volume (5M events/day
+      at 12 months) is well within PostgreSQL's range with proper partitioning.
+      TimescaleDB handles time-series query patterns efficiently. Co-locating with
+      existing customer and payment data eliminates application-level joins.
+      MongoDB was rejected primarily because of the team's existing pain with
+      cross-database joins (see ADR-008, ADR-031). ClickHouse was rejected because
+      the operational cost and learning curve exceed the benefits at current and
+      projected scale.
+
+      ## Known trade-offs accepted
+
+      - If event volume exceeds 500M events, significant sharding work will be required
+        and ClickHouse may need to be reconsidered at that time
+      - TimescaleDB adds an extension dependency — must be maintained with PostgreSQL upgrades
+      - Schema must be designed carefully upfront — JSONB provides some flexibility
+        but is not a substitute for proper schema design
+successCriteria:
+  - ADR numbered ADR-042 with correct title, date, status, and deciders
+  - Context captures volume projections, query complexity, join requirements, and team expertise constraint
+  - Decision is clearly stated in one or two sentences
+  - All three rejected options are documented with specific rejection reasons
+  - Consequences include both the positive case and all three known trade-offs
+  - Writing score of 70 or higher
+estimatedMinutes: 25
+prerequisiteMissionId: u09-m03
+assessments:
+  - id: u09-m04-a1
+    type: multiple-choice
+    title: What Makes This Context Field Strong?
+    description: Identify the strongest version of the Context field for ADR-042.
+    xpReward: 50
+    masteryThreshold: 100
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: >
+          A strong Context field explains the constraints that made one option better
+          than another at this point in time. Volume numbers, team expertise, and
+          existing tech debt are all constraints.
+    data:
+      question: >
+        Which version of the Context field for ADR-042 is strongest?
+      options:
+        - id: a
+          text: >
+            "We need a database for the analytics pipeline service. We looked at
+            PostgreSQL, MongoDB, and ClickHouse and decided PostgreSQL was best."
+          isCorrect: false
+          explanation: >
+            This context tells the reader nothing about why PostgreSQL was best.
+            A reader in 2029 cannot evaluate whether the decision still makes sense
+            without knowing the constraints that drove it.
+        - id: b
+          text: >
+            "The new analytics pipeline must store 50K–5M events/day, support complex
+            time-series aggregations, join with existing PostgreSQL data, and be operated
+            by a team with deep PostgreSQL expertise but minimal MongoDB or ClickHouse
+            experience. Previous cross-database join pain (ADR-008, ADR-031) rules out
+            any solution that requires application-level joins with PostgreSQL."
+          isCorrect: true
+          explanation: >
+            Correct. This context includes volume bounds, query requirements, the join
+            constraint, the team expertise constraint, and a reference to previous
+            pain points. A reader in 2029 can evaluate whether these constraints
+            still hold and whether the decision should be revisited.
+        - id: c
+          text: >
+            "PostgreSQL is a mature, reliable relational database with strong community
+            support. It has been used successfully in many analytics applications."
+          isCorrect: false
+          explanation: >
+            This is marketing copy, not architectural context. It describes PostgreSQL
+            in general terms without explaining why PostgreSQL was the right choice
+            for this specific situation with these specific constraints.
+        - id: d
+          text: >
+            "The data team evaluated three database options over two weeks and reached
+            consensus. All team members agreed with the final decision."
+          isCorrect: false
+          explanation: >
+            Process description (how long the evaluation took, that consensus was reached)
+            is not architectural context. Context should describe the technical and business
+            constraints that constrained the decision space.
+  - id: u09-m04-a2
+    type: writing
+    title: Write ADR-042 in Full
+    description: >
+      Write a complete ADR for the PostgreSQL vs MongoDB decision using the briefing
+      document. Write it to be understood by an engineer joining the company in 2029
+      with no prior context about this decision.
+    xpReward: 160
+    masteryThreshold: 70
+    debtReduction: 12
+    trustDelta: 20
+    hints:
+      - level: 1
+        text: >
+          Write the Context field first — it is the hardest and most valuable section.
+          Include the volume projections (50K → 5M events/day), the join requirement,
+          and the team expertise constraint. These are the three constraints that
+          determined the outcome.
+      - level: 2
+        text: >
+          For Options Considered, do not just list the options — explain specifically
+          why each rejected option was rejected for this situation. "MongoDB was rejected
+          because..." is more useful than "MongoDB was considered."
+      - level: 3
+        text: >
+          The Consequences section needs a future-facing sentence: "If event volume
+          exceeds 500M events, this decision should be revisited." That is exactly
+          the kind of institutional memory an ADR is designed to preserve.
+    data:
+      scenarioContext: >
+        Write ADR-042 for the Northstar Apps analytics pipeline database decision.
+        Use the briefing document as your source. Write it to be self-contained
+        and understandable by an engineer reading it in 2029 without any other context.
+      docTemplate: |
+        # ADR-042: [Title]
+
+        **Date:** [Date]
+        **Status:** Accepted
+        **Deciders:** [Names from briefing]
+
+        ## Context
+
+        [What problem are we solving? What constraints exist? What technical and business
+        forces shaped the decision? Be specific — include numbers and references to
+        prior decisions.]
+
+        ## Decision
+
+        [One or two clear sentences. What was decided?]
+
+        ## Consequences
+
+        **Positive:**
+        - [Expected benefit 1]
+        - [Expected benefit 2]
+
+        **Negative / Trade-offs accepted:**
+        - [Trade-off 1]
+        - [Trade-off 2]
+
+        **Future trigger:**
+        - [Under what condition should this decision be revisited?]
+
+        ## Options Considered
+
+        | Option | Why Rejected |
+        |--------|-------------|
+        | MongoDB | [Specific reason for rejection] |
+        | ClickHouse | [Specific reason for rejection] |
+
+        ## References
+
+        - [Related ADRs or documents]
+      wordCountMin: 300
+      acceptedPatterns:
+        - PostgreSQL
+        - MongoDB
+        - ClickHouse
+        - TimescaleDB
+        - partitioning
+        - join
+        - events
+        - ADR-008
+        - consequence
+        - trade-off
+        - 500M
+      rubric:
+        - id: r1
+          label: Context is specific and constraint-driven
+          description: >
+            Context includes volume projections, the join requirement with existing PostgreSQL
+            data, team expertise, and references to prior cross-database join pain (ADR-008/031)
+          weight: 30
+        - id: r2
+          label: Decision is unambiguous
+          description: Decision field states clearly PostgreSQL with table partitioning and TimescaleDB — not a hedged statement
+          weight: 15
+        - id: r3
+          label: Both rejected options are explained specifically
+          description: >
+            MongoDB and ClickHouse are both listed with the specific reasons they were rejected
+            for this situation — not generic drawbacks of the technology
+          weight: 25
+        - id: r4
+          label: Consequences include trade-offs and a future trigger
+          description: >
+            Consequences name at least two positive outcomes and include the 500M event
+            threshold as a future decision trigger
+          weight: 30

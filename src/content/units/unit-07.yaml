@@ -1,0 +1,39 @@
+id: unit-07
+order: 7
+title: Docs-as-Code with Git and Markdown
+description: >
+  Use a simulated Git workflow to write, review, version, and merge documentation
+  changes. Learn why treating docs like code improves quality and accountability.
+goal: >
+  Complete a full docs-as-code cycle: edit Markdown, write a commit message,
+  open a pull request, resolve reviewer comments, and merge.
+prerequisiteUnitId: unit-05
+tier: advanced
+badge:
+  id: badge-markdown-maintainer
+  label: Markdown Maintainer
+  description: Completed a full docs-as-code review cycle with clean commit history
+  color: "#6366f1"
+  iconSlug: markdown-maintainer
+  earnedCondition: Complete the Unit 7 boss mission with score >= 80
+totalXP: 440
+missions:
+  - u07-m01
+  - u07-m02
+  - u07-m03
+  - u07-m04
+bossMissionId: u07-m04
+contentBlocks:
+  - type: text
+    content: >
+      Docs-as-code means documentation lives in version-controlled files
+      alongside the product. Every change has a commit message, a reviewer,
+      and a history. Stale docs become visible because the last commit date
+      is always visible.
+  - type: callout
+    variant: tip
+    content: >
+      A good commit message for docs follows the same rules as code: present
+      tense, imperative mood, explains the why not just the what.
+      "Update refund SOP to reflect new 48-hour processing window" is better
+      than "fixed docs" or "SOP changes."

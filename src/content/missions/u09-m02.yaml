@@ -1,0 +1,224 @@
+id: u09-m02
+unitId: unit-09
+order: 2
+slug: u09-m02
+title: "Write an ADR from Meeting Notes"
+scenario: >
+  You have just been given access to the notes from last Tuesday's architecture
+  review meeting at Northstar Apps. The team spent 90 minutes debating whether to
+  use a message queue for the new notifications service. They reached a clear
+  decision: use RabbitMQ over a direct HTTP polling approach. But the notes are
+  messy, full of tangents, action items, and opinions — everything except a
+  structured ADR. Your job is to extract the decision and its context from the
+  noise and write a clean, properly structured ADR.
+objectives:
+  - Extract a clear architectural decision from unstructured meeting notes
+  - Write a properly structured ADR using the Northstar Apps template
+  - Separate the decision context from implementation details and action items
+  - State consequences clearly, including both the benefits and the accepted trade-offs
+materials:
+  - id: doc-meeting-notes
+    filename: arch-review-2026-04-28-notes.md
+    title: Architecture Review Meeting Notes — 2026-04-28
+    trustScore: 0
+    findabilityScore: 0
+    issues:
+      - Raw meeting notes — not structured as an ADR
+      - Contains decision, context, and rationale buried in discussion tangents
+      - Also contains unrelated action items and personal opinions to be filtered out
+    frontmatter: {}
+    body: |
+      # Arch Review Notes — April 28, 2026
+
+      Attendees: Priya (platform lead), Tom (backend), Yuki (mobile), Dara (product)
+
+      ## Agenda: Notifications service architecture
+
+      **Tom:** We need to decide how the new notifications service sends events to
+      subscribers. Right now we are doing direct HTTP calls from the monolith to
+      each subscriber endpoint. It works for 3 subscribers but we are adding 8 more
+      this quarter and the synchronous calls are causing latency spikes on checkout.
+
+      **Priya:** The latency issue is real. Last Thursday the payments flow had a
+      350ms spike because the email notification service was slow. We cannot have
+      payments waiting on email.
+
+      **Yuki:** Can we just retry on failure? The mobile push endpoint times out
+      sometimes.
+
+      **Tom:** We could but then checkout is still blocked waiting to see if it needs
+      to retry. The real fix is decoupling.
+
+      **Dara:** What does "decoupling" actually mean here from a product perspective?
+
+      **Priya:** It means the checkout flow does not wait for notifications to finish.
+      It puts a message on a queue and moves on. The notification workers consume
+      from the queue independently.
+
+      **Dara:** OK so customers would not see any difference?
+
+      **Tom:** Correct. We looked at three options: (1) keep HTTP polling with retries,
+      (2) use a managed queue like SQS, (3) self-host RabbitMQ on our existing k8s cluster.
+
+      **Priya:** SQS is tempting but we are trying to reduce AWS spend this year.
+      Dara, did finance sign off on the cloud cost targets?
+
+      **Dara:** Yes, the Q2 target is -15% on AWS. RabbitMQ self-hosted fits better.
+
+      **Tom:** RabbitMQ on k8s is more ops work than SQS. We need to own the availability.
+      But we already have the k8s expertise and the cluster has headroom.
+
+      **Priya:** Decision: we go with RabbitMQ on the existing k8s cluster for the
+      notifications service. Tom to lead implementation. Yuki to update the mobile
+      SDK to use the new event model by end of May.
+
+      **Action items:**
+      - Tom: spike RabbitMQ deployment by May 7
+      - Yuki: review mobile SDK event model
+      - Priya: write the ADR (assigning to docs systems instead)
+      - Dara: confirm Q3 roadmap includes notifications dashboard
+successCriteria:
+  - ADR includes all required fields — number, title, date, status, context, decision, consequences
+  - Context explains the latency spike problem and the growth from 3 to 11 subscribers
+  - Decision clearly states RabbitMQ on k8s (not SQS, not HTTP polling)
+  - Consequences include both the decoupling benefit and the self-hosting operational trade-off
+estimatedMinutes: 20
+prerequisiteMissionId: u09-m01
+assessments:
+  - id: u09-m02-a1
+    type: multiple-choice
+    title: What Goes in the Context Field?
+    description: Identify which information from the meeting notes belongs in the ADR's Context field.
+    xpReward: 45
+    masteryThreshold: 75
+    debtReduction: 4
+    hints:
+      - level: 1
+        text: >
+          Context answers: "What forced this decision?" It is about the problem and
+          constraints, not about the options considered or the implementation plan.
+    data:
+      question: >
+        You are writing the Context field for ADR-017. Which combination of information
+        from the meeting notes should go in the Context field?
+      options:
+        - id: a
+          text: >
+            The three options evaluated (HTTP polling, SQS, RabbitMQ) and the team's
+            opinions about each one.
+          isCorrect: false
+          explanation: >
+            The options comparison belongs in the "Options Considered" section, not
+            Context. Context describes the problem that forced the decision, not the
+            solution space that was explored.
+        - id: b
+          text: >
+            The latency spike (350ms on checkout due to synchronous notification calls),
+            the scale change (3 → 11 subscribers this quarter), and the AWS cost reduction target.
+          isCorrect: true
+          explanation: >
+            Correct. These three facts describe the forces that constrained the decision:
+            a real performance problem, a growth event that would make it worse, and a
+            business constraint that ruled out the simplest cloud solution (SQS).
+        - id: c
+          text: >
+            Tom's spike deliverable (due May 7) and Yuki's mobile SDK update timeline.
+          isCorrect: false
+          explanation: >
+            Implementation timelines and action items are project management context,
+            not architectural context. They belong in a ticket, not in an ADR.
+        - id: d
+          text: >
+            Dara's question about whether customers would notice a difference.
+          isCorrect: false
+          explanation: >
+            A meeting participant's question is not architectural context. It is useful
+            background for understanding the discussion, but the ADR Context field should
+            describe objective facts about the situation, not questions that were asked.
+  - id: u09-m02-a2
+    type: writing
+    title: Write ADR-017 from the Meeting Notes
+    description: >
+      Write a complete, properly structured ADR from the architecture review meeting notes.
+      Use the Northstar Apps ADR template and extract only what belongs in each field.
+    xpReward: 130
+    masteryThreshold: 70
+    debtReduction: 10
+    trustDelta: 15
+    hints:
+      - level: 1
+        text: >
+          Start with the Context field — it is the hardest and most important. Write
+          one paragraph that explains the problem (latency spikes on checkout) and the
+          forces that constrained the decision (growth, AWS cost target).
+      - level: 2
+        text: >
+          The Decision field should be one clear sentence: "We will use RabbitMQ,
+          self-hosted on the existing Kubernetes cluster, as the message broker for
+          the notifications service."
+      - level: 3
+        text: >
+          Consequences need both sides. The benefit is checkout latency decoupling.
+          The trade-off is self-hosting operational burden. Name both.
+    data:
+      scenarioContext: >
+        Write ADR-017 for the Northstar Apps decision to use RabbitMQ for the
+        notifications service. Use the meeting notes as your source. Filter out
+        action items, personal opinions, and product questions.
+      docTemplate: |
+        # ADR-017: [Title]
+
+        **Date:** [Date from meeting notes]
+        **Status:** Accepted
+        **Deciders:** [Names from notes]
+
+        ## Context
+
+        [What was the problem? What constraints existed?]
+
+        ## Decision
+
+        [What was decided? One or two clear sentences.]
+
+        ## Consequences
+
+        **Positive:**
+        - [Expected benefit]
+
+        **Negative / Trade-offs:**
+        - [Accepted trade-off]
+
+        ## Options Considered
+
+        | Option | Why Rejected |
+        |--------|-------------|
+        | [option] | [reason] |
+
+      wordCountMin: 200
+      acceptedPatterns:
+        - RabbitMQ
+        - latency
+        - Kubernetes
+        - decouple
+        - SQS
+        - HTTP
+        - notification
+        - checkout
+        - consequence
+      rubric:
+        - id: r1
+          label: All required ADR fields present and complete
+          description: ADR includes number/title, date, status, context, decision, and consequences
+          weight: 25
+        - id: r2
+          label: Context accurately captures the problem and constraints
+          description: Context mentions the latency issue, the subscriber growth, and the AWS cost constraint
+          weight: 30
+        - id: r3
+          label: Decision is unambiguous
+          description: Decision field clearly states RabbitMQ on Kubernetes — not a hedge or a proposal
+          weight: 20
+        - id: r4
+          label: Consequences include both sides
+          description: Names the decoupling benefit AND the self-hosting operational trade-off
+          weight: 25
