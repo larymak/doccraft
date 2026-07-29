@@ -1,8 +1,8 @@
 # DocCraft
 
-> Learn documentation systems by doing — a gamified curriculum that takes you from total beginner to documentation lead.
+> Learn documentation by doing a gamified curriculum that takes you from total beginner to documentation lead.
 
-DocCraft is an interactive web app where you complete missions across 10 units and 4 tiers, earning XP and badges as you master the skills that separate good engineers from great ones: writing clear docs, choosing the right format, building governance systems, and reducing knowledge debt.
+DocCraft is an interactive web app where you complete missions, earning XP and badges as you master the skills that separate good engineers from great ones: writing clear docs, choosing the right format, building governance systems, and reducing knowledge debt.
 
 ## What you'll learn
 
@@ -72,7 +72,7 @@ src/
 
 Each mission has:
 1. **Scenario** — a workplace situation delivered by a character (Jordan, Marcus, etc.)
-2. **Assessment** — multiple choice, sorting task, writing task, review task, or simulation
+2. **Assessment** — multiple-choice, sorting task, writing task, review task, or simulation
 3. **Scoring** — rubric-based, 70% to pass; XP awarded on success
 4. **Knowledge Debt** — a game mechanic that rises when you skip or fail and falls when you pass
 
